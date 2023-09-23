@@ -2,13 +2,15 @@
     min-height: 79vh;
     max-height: 80vh;
     display: flex;
+	justify-content: space-between;
   }
 .left-info{
-    position: absolute;
+    position: relative;
     height: 40rem;
     width: 60 vw;
 }
 .right-login-form{
+	
 }
 
 /*bubbles*/
