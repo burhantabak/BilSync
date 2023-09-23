@@ -1,0 +1,7 @@
+:root{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 10px;
+  background: linear-gradient(116deg, rgba(40, 94, 244, 0.70) 2.06%, rgba(85, 124, 255, 0.60) 32.15%, rgba(238, 140, 163, 0.62) 63.27%, rgba(122, 7, 14, 0.86) 97%);
+}

@@ -1,0 +1,56 @@
+.main{
+    min-height: 79vh;
+    max-height: 80vh;
+    display: flex;
+  }
+.left-info{
+    position: absolute;
+    height: 40rem;
+    width: 60 vw;
+}
+.right-login-form{
+}
+
+/*bubbles*/
+
+.bubble-big-white{
+    position: relative;
+    bottom:67rem;
+    left: -6rem;
+    z-index: -1;
+    width:50rem;
+    height: 50rem;
+    border-radius: 50%;
+    background-color: white;
+}
+.bubble-colorful{
+    position: relative;
+    border-radius: 50%;
+background: linear-gradient(138deg, rgba(17, 51, 164, 0.75) -15.61%, rgba(3, 50, 208, 0.75) 15.07%, rgba(53, 87, 202, 0.75) 39.65%, rgba(230, 107, 107, 0.75) 71.34%, rgba(172, 9, 58, 0.75) 140.42%);
+}
+.big{
+    border-radius: 34.375rem;
+background: linear-gradient(138deg, rgba(17, 51, 164, 0.75) -15.61%, rgba(3, 50, 208, 0.75) 15.07%, rgba(53, 87, 202, 0.75) 39.65%, rgba(230, 107, 107, 0.75) 71.34%, rgba(172, 9, 58, 0.75) 140.42%);  
+    bottom:8.2rem;
+    left:30rem;
+    width:30rem;
+    height: 30rem;
+    transform: rotate(180deg);
+}
+.medium{
+    top: 2rem;
+    left: 20rem;
+    width: 10rem;
+    height: 10rem;
+}
+.small{
+    top: 4.7rem;
+    left: 30.2rem;
+    width: 5rem;
+    height: 5rem;
+}
+.info-heading{
+    position: relative;
+    bottom:90rem;
+    left:0;
+}
