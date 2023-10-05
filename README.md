@@ -11,7 +11,16 @@
 ## Motivation
 
 The motivation is the need for a web application where every Bilkenter can share their thoughts anonymously or publicly. 
-Not only can they share their opinions, but also this app will be the platform of exchange and solidarity in Bilkent.
+Not only can they share their opinions, but this app will also be the platform of exchange and solidarity in Bilkent.
+
+## Problem
+
+Bilkent members use many apps to share their thoughts, notify the community, and cooperate. 
+Our application provides a single platform for Bilkenters to connect in various ways.
+Bilkenters use a so-called Instagram confession page where people send messages to the page admin, and the admin posts the sent messages to a public page.
+Bilkenters also use letgo, Facebook, this Instagram page, or Sahibinden to sell their used materials to other users, probably from Bilkent.
+This all-over-the-place communication style sometimes disserves the community and inhibits effective interaction, and thus, the Bilkent community needs a united page for Bilkenters only in which people can do all of these in one place.
+
 
 ## Goals
 
@@ -35,13 +44,6 @@ Instead of instructors having their inboxes filled with student questions, they 
 Different from the direct messaging feature, the students can send what they want through a private request to the
 instructor. This will save time and space usage for each instructor and student.
 Also, if possible, we plan to publish our web application in mobile platforms as well!
-
-
-## Problem
-
-Bilkent members use many apps to share their thoughts, notify the community, and cooperate. 
-This all-over-the-place style of communication sometimes disserves the community and inhibits effective interaction. 
-Our application provides a single platform for Bilkenters to connect in various ways.
 
 ## Selling Points
 
