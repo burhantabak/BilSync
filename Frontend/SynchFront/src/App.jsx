@@ -14,7 +14,7 @@ function App() {
             <Route path="/login" element={<LoginForm/>}/>
             <Route path="/mainPage" element={<MainPage/>}/>
             <Route path="/commentScreen" element={<CommentScreen/>}/>
-            <Route path="/*" element={<Login/>}/>
+            <Route path="/*" element={<LoginForm/>}/>
           </Routes>
         </BrowserRouter>
       </div>
