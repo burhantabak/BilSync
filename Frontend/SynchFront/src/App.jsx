@@ -1,3 +1,4 @@
+import CommentScreen from "./Components/CommentScreen"
 import LoginForm from "./Components/Login"
 import MainPage from "./Components/MainPage"
 import Navbar from "./Components/Navbar"
@@ -12,6 +13,8 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginForm/>}/>
             <Route path="/mainPage" element={<MainPage/>}/>
+            <Route path="/commentScreen" element={<CommentScreen/>}/>
+            <Route path="/*" element={<Login/>}/>
           </Routes>
         </BrowserRouter>
       </div>
