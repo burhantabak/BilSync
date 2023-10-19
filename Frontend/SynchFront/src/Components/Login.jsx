@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export default function LoginForm() {
+export default function LoginForm({handleLogin}) {
+  const nav = useNavigate();
   return (
     <div className=' p-5 py-3 mx-auto mt-10 w-1/3 md:w-2/3 lg:w-2/3 bg-white rounded-xl flex justify-evenly divide-x-4'>
         <div className='flex-1'>
@@ -28,7 +30,7 @@ export default function LoginForm() {
                       </div>
                       <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
                   </div>
-                  <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+                  <button onClick={()=>{handleLogin();nav("/mainPage");}} type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
               </form>
     </div>
     </div>

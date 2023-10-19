@@ -36,7 +36,7 @@ export default function Dropdown() {
                     'block px-4 py-2 text-sm text-right'
                   )}
                 >
-                  Account settings
+                  Search By UserName
                 </a>
               )}
             </Menu.Item>
@@ -49,7 +49,7 @@ export default function Dropdown() {
                     'block px-4 py-2 text-sm text-right'
                   )}
                 >
-                  By Username
+                  Search By Label
                 </a>
               )}
             </Menu.Item>
@@ -62,7 +62,7 @@ export default function Dropdown() {
                     'block px-4 py-2 text-sm text-right'
                   )}
                 >
-                  By Label
+                  Search By Description
                 </a>
               )}
             </Menu.Item>
