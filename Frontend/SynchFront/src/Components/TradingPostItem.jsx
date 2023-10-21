@@ -1,32 +1,34 @@
 import React, { useState } from 'react'
 import Drowpdown from '../statics/DropDown';
-import { Disclosure } from '@headlessui/react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import Dropdown from '../statics/DropDown';
+import CommentComponent from './CommentComponent';
 
-export default function PostItem(props) {
+export default function TradingPostItem({post}) {
     const [isStarred,setStarred] = useState(false);
-    const [vote, setVotes] = useState(props.vote);
+    const [vote, setVotes] = useState(post.vote);
     const [isUpvote, setUpvote] = useState(false);
     const [isDownvote,setDownvote] = useState(false)
   return (
     <div className='mx-5 my-4 flex flex-col items-center bg-gray-100 rounded-lg divide-y'>
-        <div className='flex w-full'>
-            <div className='flex w-1/2 grow-1 justify-end rounded-lg py-2 my-2'>
-                <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
-                <div>
-                    <p>{props.nameUser}</p>
+        <div className='flex justify-between w-full items-center px-2'>
+                <div className='flex items-center'>
+                    <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
+                    <div>
+                    <p className='font-semibold'>{post.nameUser}</p>
+                    <small>Trading Post</small>
+                    </div>
                 </div>
-            </div>
-            <div className='grow-1 w-1/2 flex justify-end pr-3 py-2'>
-                <div className='text-center'>
+                <h2 className='text-xl text-gray-900 font-bold'>{post.title}</h2>
+                <div className='flex justify-end pr-3 py-2'>
+                    <div className='text-center'>
                     <h2 className='text-sm font-semibold'>17th October 2023</h2>
                     <p className='text-sm'>17:54</p>
+                    </div>
                 </div>
             </div>
-        </div>
         <div className='w-full text-center'>
-            Basys3. Satıyom yarı fiyatınaa patron çıldırdııııı.
+            {post.description}
         </div>
         <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
             <div className='font-bold grow-1 text-3xl flex flex-col justify-center items-center gap-2'>
@@ -44,10 +46,10 @@ export default function PostItem(props) {
             </div>
             <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-1/2 h-1/2 overflow-hidden'></img>
             <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
-                <h2>{props.price}TL</h2>
+                <h2>{post.price}TL</h2>
                 <div className='flex gap-5'>
                 <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    {props.isBuy ? "Buy":"Borrow"}
+                    {post.isBuy ? "Buy":"Borrow"}
                 </button>
                 <button onClick={()=>{setStarred(!isStarred)}}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill={isStarred?"rgb(246,190,0)":"none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="rgb(246,190,0)" className="w-6 h-6">
@@ -58,7 +60,7 @@ export default function PostItem(props) {
             </div>
         </div>
         <div className='w-full'>
-            <CommentListDisclosure/>
+            <CommentComponent commentList={post.comments}/>
         </div>
         <div className='w-full'>
         <div className="relative my-2 px-4 pr-8">
@@ -75,56 +77,56 @@ export default function PostItem(props) {
     </div>
   )
 }
-function CommentListDisclosure(){
-  return (
-    <Disclosure>
-      {({ open }) => (
-        <>
-      <Disclosure.Button className={"py-2 w-full hover:bg-gray-200 flex justify-center"}>
-        <ChevronRightIcon className={`${open ? 'rotate-90 transform' : ''} h-6 w-6`}/>
-        Wiew Comments
-      </Disclosure.Button>
-      <Disclosure.Panel className={`text-gray-900`}>
-        <CommentItem likeNo={2} isReplyComment={false} commenterName={"Tuna"} commenterText={"Sağlam iş çıkartıyor."}/>
-        <CommentItem likeNo={1} isReplyComment={true} commenterName={"Ahmet Tarık"} commenterText={"Aynen abi."}/>
-      </Disclosure.Panel>
-      </>)}
-    </Disclosure>
-  )
-}
+// function CommentListDisclosure(){
+//   return (
+//     <Disclosure>
+//       {({ open }) => (
+//         <>
+//       <Disclosure.Button className={"py-2 w-full hover:bg-gray-200 flex justify-center"}>
+//         <ChevronRightIcon className={`${open ? 'rotate-90 transform' : ''} h-6 w-6`}/>
+//         Wiew Comments
+//       </Disclosure.Button>
+//       <Disclosure.Panel className={`text-gray-900`}>
+//         <CommentItem likeNo={2} isReplyComment={false} commenterName={"Tuna"} commenterText={"Sağlam iş çıkartıyor."}/>
+//         <CommentItem likeNo={1} isReplyComment={true} commenterName={"Ahmet Tarık"} commenterText={"Aynen abi."}/>
+//       </Disclosure.Panel>
+//       </>)}
+//     </Disclosure>
+//   )
+// }
 
-function CommentItem({isReplyComment, commenterName, commenterText,likeNo}){
-    const [isLiked, setisLiked] = useState(false);
-    const [like, setLikeNo] = useState(likeNo);
-    return(
-        <div className={`${isReplyComment?"pl-8":"pl-2"} py-2 pr-2 flex items-center justify-between`}>
-            <div className='flex gap-3'>
-                <div className='h-8 w-8 rounded-full bg-gray-300'></div>
-                <div>
-                    <h2 className='test-sm font-semibold'>{commenterName}</h2>
-                    <p className='text-sm'>{commenterText}</p>
-                    <div class="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
-                        <button onClick={()=>{if(isLiked){setisLiked(false);setLikeNo(like-1);}else{setisLiked(true);setLikeNo(like+1)}}} href="#" class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill={isLiked?"red" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                            </svg>
-                            <small>{like}</small>
-                        </button>
-                        <button href="#" class="hover:underline">
-                            <small>Reply</small>
-                        </button>
-                        <small class="self-center">.</small>
-                        <button href="#" class="hover:underline">
-                            <small>Report</small>
-                        </button>
-                        <small class="self-center">.</small>
-                </div>
-                </div>
-                </div>
-            <div className='text-center'>
-                    <h2 className='text-sm font-semibold'>17th October 2023</h2>
-                    <p className='text-sm'>17:54</p>
-            </div>
-        </div>
-    );
-}
+// function CommentItem({isReplyComment, commenterName, commenterText,likeNo}){
+//     const [isLiked, setisLiked] = useState(false);
+//     const [like, setLikeNo] = useState(likeNo);
+//     return(
+//         <div className={`${isReplyComment?"pl-8":"pl-2"} py-2 pr-2 flex items-center justify-between`}>
+//             <div className='flex gap-3'>
+//                 <div className='h-8 w-8 rounded-full bg-gray-300'></div>
+//                 <div>
+//                     <h2 className='test-sm font-semibold'>{commenterName}</h2>
+//                     <p className='text-sm'>{commenterText}</p>
+//                     <div class="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
+//                         <button onClick={()=>{if(isLiked){setisLiked(false);setLikeNo(like-1);}else{setisLiked(true);setLikeNo(like+1)}}} href="#" class="flex items-center">
+//                             <svg xmlns="http://www.w3.org/2000/svg" fill={isLiked?"red" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+//                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+//                             </svg>
+//                             <small>{like}</small>
+//                         </button>
+//                         <button href="#" class="hover:underline">
+//                             <small>Reply</small>
+//                         </button>
+//                         <small class="self-center">.</small>
+//                         <button href="#" class="hover:underline">
+//                             <small>Report</small>
+//                         </button>
+//                         <small class="self-center">.</small>
+//                 </div>
+//                 </div>
+//                 </div>
+//             <div className='text-center'>
+//                     <h2 className='text-sm font-semibold'>17th October 2023</h2>
+//                     <p className='text-sm'>17:54</p>
+//             </div>
+//         </div>
+//     );
+// }
