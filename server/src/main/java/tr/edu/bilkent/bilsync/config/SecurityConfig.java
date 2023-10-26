@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,30 +25,63 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception{
-        return security.csrf().disable()
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+
+        // InMemoryUserDetailsManager
+        UserDetails admin = User.withUsername("Kenan")
+                .password(encoder.encode("111"))
+                .roles("ADMIN", "USER")
+                .build();
+
+        UserDetails user = User.withUsername("Tuna")
+                .password(encoder.encode("000"))
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, user);
+    }
+
+    /*@Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/weather", "/auth/addNewUser", "/auth/generateToken").permitAll()
+                .requestMatchers("/auth/weather", "/auth/addNewUser", "/auth/generateToken", "/auth/**").permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/auth/user/**").authenticated()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/auth/admin/**").authenticated()
+                .authorizeHttpRequests().requestMatchers("/auth/admin/**    ").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider())
                 .build();
-    }
+    }*/
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/auth/welcome").permitAll()
+                .and()
+                .authorizeHttpRequests().requestMatchers("/auth/user/**").authenticated()
+                .and()
+                .authorizeHttpRequests().requestMatchers("/auth/admin/**").authenticated()
+                .and().formLogin()
+                .and().build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
+
+
 }
