@@ -18,12 +18,8 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
     }
-    public boolean checkCred(String claimedEmail, String claimedPassword){
-        if(email.equals(claimedEmail) && password.equals(claimedPassword)){
-            return true;
-        }
-        return false;
-    }
+    public String getName(){return name;}
+    public String getSurname() {return surname;}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

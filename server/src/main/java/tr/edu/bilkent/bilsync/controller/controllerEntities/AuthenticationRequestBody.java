@@ -1,9 +1,10 @@
 package tr.edu.bilkent.bilsync.controller.controllerEntities;
 
-public class AuthenticationRequestBody {
-    private String email;
-    private String password;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public String getPassword(){return password;}
-    public String getEmail(){return email;}
+public class AuthenticationRequestBody {
+    @JsonProperty("email")
+    public String email;
+    @JsonProperty("password")
+    public String password;
 }
