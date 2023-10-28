@@ -8,8 +8,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class User implements UserDetails {
+    long id;
     String name;
-    String surname;
+    String surname; //todo surname can be merged w/ name.
     String email;
     String password;
     public User(String name, String surname, String email, String password){
