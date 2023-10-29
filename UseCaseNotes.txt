@@ -27,8 +27,8 @@ CreateStaffAccount
 CreateInstructorAccount
 
 ------------------------------------------
-"Label" kelimeleri "Tag" ile değiştirildi (Package isimleri hariç)
-
+//"Label" kelimeleri "Tag" ile değiştirildi (Package isimleri hariç)-discarded
+Tagler create post olarak değiştirildi-isil
 ------------------------------------------
 "SearchByLabel", "SearchByHashtag" ile değiştirildi
 
@@ -38,7 +38,7 @@ CreateInstructorAccount
 ------------------------------------------
 "CreateGroupChat", "SendChatRequest"i includelayacak şekilde değiştirildi
 ---------------NOTLAR---------------
-
+isil:user has 2 inherited new types giver taker: and buyer seller are a type of giver or taker
 UserNoLongerExists belki kalkabilir (hesap silme diye bir şeyimiz yok)
 Tagleri seçme işini "System" gibi bir aktör oluşturup ona bağlayabiliriz
 ApproveTransaction fonksiyonuna hem 3rdPartyBankAccount hem de User bağlanmış. Değişmeli mi?
