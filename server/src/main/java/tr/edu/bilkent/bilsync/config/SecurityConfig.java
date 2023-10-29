@@ -29,14 +29,11 @@ public class SecurityConfig  {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { // todo lots deprecated
-        http.csrf().disable()
-                .authorizeRequests()
-                .requestMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+        http.csrf(csrf->csrf.disable())
+                .authorizeHttpRequests(req->req.requestMatchers("/auth/**").permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(sess->sess
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

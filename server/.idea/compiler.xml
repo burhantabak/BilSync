@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="server" />
         <module name="bilsync" />
       </profile>
     </annotationProcessing>
@@ -13,6 +14,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="bilsync" options="-parameters" />
+      <module name="server" options="-parameters" />
     </option>
   </component>
 </project>
