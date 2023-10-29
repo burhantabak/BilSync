@@ -1,5 +1,6 @@
 package tr.edu.bilkent.bilsync.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationRequestBody;
@@ -18,6 +19,9 @@ public class AuthController {
     @PostMapping(value = "/login",produces = "application/json")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequestBody body) {
         AuthenticationResponse response = authService.authenticate(body);
+        if (response == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok(response);
     }
     @GetMapping("/weather")
