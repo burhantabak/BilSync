@@ -7,15 +7,12 @@ public class AuthenticationResponse {
     public String token;
     @JsonProperty("name")
     public String name;
-    @JsonProperty("surname")
-    public String surname;
     @JsonProperty("email")
     public String email;
 
-    public AuthenticationResponse(String token, String name, String surname, String email){
+    public AuthenticationResponse(String token, String name, String email){
         this.token = token;
         this.name = name;
-        this.surname = surname;
         this.email = email;
     }
 }
