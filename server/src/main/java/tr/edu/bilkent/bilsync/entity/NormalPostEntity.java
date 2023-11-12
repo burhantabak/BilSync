@@ -4,6 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "app_normal_post")
+@Table(name = "normal_post")
 public class NormalPostEntity extends ForumPostEntity{
 }

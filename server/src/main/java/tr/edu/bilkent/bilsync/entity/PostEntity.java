@@ -2,6 +2,9 @@ package tr.edu.bilkent.bilsync.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -24,13 +27,13 @@ public class PostEntity {
     private String imageID;
 
     @Column(nullable = false)
-    private long votes;
+    private long votes = 0;
 
     @Column(nullable = false)
-    private long views;
+    private long views = 0;
 
-    @Column(nullable = false)
-    private String commentListID;
+    @OneToMany(targetEntity = CommentEntity.class)
+    private Set<CommentEntity> commentList = new HashSet<>();
 
     @Column(nullable = false)
     private String taggedUserListID;
@@ -47,7 +50,6 @@ public class PostEntity {
     // Constructors
     public PostEntity() {
     }
-
 
     // Getters and Setters
     public long getId() {
@@ -106,12 +108,12 @@ public class PostEntity {
         this.views = views;
     }
 
-    public String getCommentListID() {
-        return commentListID;
+    public Set<CommentEntity> getCommentList() {
+        return commentList;
     }
 
-    public void setCommentListID(String commentListID) {
-        this.commentListID = commentListID;
+    public void setCommentList(Set<CommentEntity> commentList) {
+        this.commentList = commentList;
     }
 
     public String getTaggedUserListID() {

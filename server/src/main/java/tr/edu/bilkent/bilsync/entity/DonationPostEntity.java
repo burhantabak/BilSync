@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "app_donation_post")
+@Table(name = "donation_post")
 public class DonationPostEntity extends TradingPostEntity {
     public DonationPostEntity() {}
 }
