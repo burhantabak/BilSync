@@ -67,11 +67,12 @@ export const DataProvider = ({ children }) => {
     {
       userName: "Burhan Tabak",
       title: "Basys Satıyom",
-      description: "2 dönem kullanılmış 2. el basys. CS223 ve Cs 224'cüler için",
-      vote: 3,
+      description: "2 dönem kullanılmış 2. el basys. CS223 ve Cs 224'cüler için.",
+      vote: 10000,
       isTrading: true,
       isLostnFound: false,
       price: 30000,
+      isBuy: true,
       IBAN: "TR 203094090030",
       comments: [
         {

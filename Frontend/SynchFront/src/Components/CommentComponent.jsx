@@ -8,7 +8,7 @@ export default function CommentComponent({commentList}){
           <>
         <Disclosure.Button className={"py-2 w-full hover:bg-gray-200 flex justify-center"}>
           <ChevronRightIcon className={`${open ? 'rotate-90 transform' : ''} h-6 w-6`}/>
-          Wiew Comments
+          View Comments
         </Disclosure.Button>
         <Disclosure.Panel className={`text-gray-900`}>
           {/* <CommentItem likeNo={2} isReplyComment={false} commenterName={"Tuna"} commenterText={"Sağlam iş çıkartıyor."}/>

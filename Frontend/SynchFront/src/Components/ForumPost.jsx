@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import CommentComponent from './CommentComponent';
+import CommentCreate from '../statics/CommentCreate';
 export default function ForumPost({post,isLostnFound}) {
     console.log("entered Forum Post");
     if(post==null){
@@ -34,19 +35,6 @@ export default function ForumPost({post,isLostnFound}) {
                 {post.description}
             </div>
             <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
-                <div className='font-bold grow-1 text-3xl flex flex-col justify-center items-center gap-2'>
-                    <button onClick={()=>{if(isUpvote){setUpvote(false);setVotes(vote-1);}else{setUpvote(true);isDownvote?setVotes(vote+2):setVotes(vote+1);setDownvote(false);}}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={isUpvote? 3:1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
-                        </svg>
-                    </button>
-                    <h2>{vote}</h2>
-                    <button onClick={()=>{if(isDownvote){setDownvote(false);setVotes(vote+1);}else{setDownvote(true);isUpvote?setVotes(vote-2):setVotes(vote-1);setUpvote(false);}}}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={isDownvote? 3:1.5} stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-                        </svg>
-                    </button>
-                </div>
                 <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-1/2 h-1/2 overflow-hidden'></img>
                 <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
                     <div className='flex gap-5'>
@@ -62,14 +50,9 @@ export default function ForumPost({post,isLostnFound}) {
                 <CommentComponent commentList={post.comments}/>
             </div>
             <div className='w-full'>
-            <div className="relative my-2 px-4 pr-8">
-                <input type="search" id="search-dropdown" className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write a comment" required/>
-                <button type="submit" className="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                </svg>
-                </button>
-            </div>
+            <CommentCreate isUpvote={isUpvote} isDownvote={isDownvote} vote={vote} 
+        setDownvote={()=>{if(isDownvote){setDownvote(false);setVotes(vote+1);}else{setDownvote(true);isUpvote?setVotes(vote-2):setVotes(vote-1);setUpvote(false);}}} 
+        setUpvote={()=>{if(isUpvote){setUpvote(false);setVotes(vote-1);}else{setUpvote(true);isDownvote?setVotes(vote+2):setVotes(vote+1);setDownvote(false);}}}/>
             </div>
         </div>
   )
