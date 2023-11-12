@@ -11,7 +11,7 @@ export async function authUser(userName, password){
             'Content-Type':'application/json',
         },
         body: JSON.stringify({
-            userName:userName,
+            email:userName,
             password:password,
         })
         });

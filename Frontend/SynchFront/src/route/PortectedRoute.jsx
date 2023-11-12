@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { useData } from "../Context/DataContext";
 
 export default function ProtectedRoute({children}){
-    const context = useAuth();
-    console.log(context);
-    if(!context.user){
+    const {user} = useData();
+    console.log(user);
+    if(!user){
         return <Navigate to="login"/>;
     }
     return children;
