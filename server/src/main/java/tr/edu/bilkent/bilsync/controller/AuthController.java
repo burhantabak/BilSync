@@ -32,7 +32,9 @@ public class AuthController {
 
     @PostMapping("/registerUser")
     public ResponseEntity register(@RequestBody UserEntity user) {
-        if(authService.register(user)) return (ResponseEntity) ResponseEntity.ok().build();
-        else return ResponseEntity.badRequest().build();
+        if(authService.register(user)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 }
