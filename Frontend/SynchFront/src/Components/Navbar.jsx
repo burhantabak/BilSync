@@ -20,10 +20,11 @@ export default function Navbar() {
   )
 }
 function Profile(){
+  const {user} = useData();
     return(
       <div className='flex items-center'>
           <div className='mr-2 rounded-full h-8 w-8 bg-gray-500'></div>
-          <h2 className='inline-block'> Eray Tüzün</h2>
+          <h2 className='inline-block'> {user.name}</h2>
           <ChevronDownIcon className='w-5 h-5'/>
       </div>
     );
