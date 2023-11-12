@@ -7,7 +7,7 @@ const DataContext = createContext();
 export const DataProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", {});
   const login = async (userName, password) =>{
-    claimedUser = await authUser(userName, password);
+    let claimedUser = await authUser(userName, password);
     setUser(claimedUser);
   }
   const logout = ()=>{
@@ -158,7 +158,7 @@ export const DataProvider = ({ children }) => {
     },
     // Add more entries as needed
   ];
-  const value = useMemo(() => ({ postList, chatList, user }), [postList,chatList,user]);
+  const value = useMemo(() => ({ postList, chatList, user, login, logout }), [postList,chatList,user,login,logout]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

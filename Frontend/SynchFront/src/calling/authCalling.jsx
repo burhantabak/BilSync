@@ -1,6 +1,6 @@
 const backendBaseUrl = "http://localhost:8080";
 const login = "/auth/login";
-export async function authUser(username, password){
+export async function authUser(userName, password){
     try 
     {
         const loginUrl = backendBaseUrl + login;
@@ -11,8 +11,8 @@ export async function authUser(username, password){
             'Content-Type':'application/json',
         },
         body: JSON.stringify({
-            userName:userNameInput,
-            password:passwordInput,
+            userName:userName,
+            password:password,
         })
         });
         console.log("finished fetch")

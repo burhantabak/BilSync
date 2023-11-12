@@ -14,7 +14,7 @@ export default function LoginForm({handleLogin}) {
     console.log(password);
     await login(userName,password);
     handleLogin();
-    navigate("/mainPage");
+    nav("/mainPage");
   }
   return (
     <div className=' p-5 py-3 mx-auto mt-10 w-1/3 md:w-2/3 lg:w-2/3 bg-white rounded-xl flex justify-evenly divide-x-4'>
@@ -26,12 +26,12 @@ export default function LoginForm({handleLogin}) {
         <form className="space-y-4 md:space-y-6" action="#">
                   <div>
                       <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                      <input type="email" name="email" id="email" onChange={(event)=>props.setUserName(event.target.value)}
+                      <input type="email" name="email" id="email" onChange={(event)=>setUserName(event.target.value)}
                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline focus:outline-2 focus:border-sky-500 block w-full p-2.5" placeholder="username" required=""/>
                   </div>
                   <div>
                       <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                      <input type="password" name="password" onChange={(event)=>props.setPassword(event.target.value)}
+                      <input type="password" name="password" onChange={(event)=>setPassword(event.target.value)}
                        id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-sky-300 focus:border-primary-600 block w-full p-2.5" required=""/>
                   </div>
                   <div className="flex items-center justify-between">
