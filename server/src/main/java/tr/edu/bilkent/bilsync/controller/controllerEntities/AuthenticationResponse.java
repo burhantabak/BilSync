@@ -13,6 +13,6 @@ public class AuthenticationResponse {
     public AuthenticationResponse(String token, String name, String email){
         this.token = token;
         this.name = name;
-        this.email = this.email;
+        this.email = email;
     }
 }
