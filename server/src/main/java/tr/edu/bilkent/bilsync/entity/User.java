@@ -10,17 +10,14 @@ import java.util.List;
 public class User implements UserDetails {
     long id;
     String name;
-    String surname; //todo surname can be merged w/ name.
     String email;
     String password;
-    public User(String name, String surname, String email, String password){
+    public User(String name, String email, String password){
         this.name = name;
-        this.surname = surname;
         this.email = email;
         this.password = password;
     }
     public String getName(){return name;}
-    public String getSurname() {return surname;}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

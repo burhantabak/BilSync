@@ -20,8 +20,18 @@ public class AuthService {
         UserEntity userEntity = userRepository.findByEmail(request.email);
         if(userEntity != null && userEntity.getPassword().equals(request.password)){
             return new AuthenticationResponse(tokenService.generateToken(userEntity.getEmail()),
-                    userEntity.getName(), userEntity.getSurname(), userEntity.getEmail());
+                    userEntity.getName(), userEntity.getEmail());
         }
         return null;
+    }
+
+    public boolean register(UserEntity user) {
+        try {
+            userRepository.save(user);
+            return true;
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

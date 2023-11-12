@@ -21,19 +21,15 @@ public class UserEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String surname;
-
     @Column(unique = true, nullable = false)
     private String email;
 
     // Constructors
     public UserEntity() {}
 
-    public UserEntity(String email, String password, String name, String surname) {
+    public UserEntity(String email, String password, String name) {
         this.password = password;
         this.name = name;
-        this.surname = surname;
         this.email = email;
     }
 
@@ -59,14 +55,6 @@ public class UserEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getEmail() {

@@ -12,7 +12,7 @@ public class AuthenticationResponse {
     @JsonProperty("email")
     public String email;
 
-    public AuthenticationResponse(String token, String name, String surname, String email){
+    public AuthenticationResponse(String token, String name, String surname){
         this.token = token;
         this.name = name;
         this.surname = surname;

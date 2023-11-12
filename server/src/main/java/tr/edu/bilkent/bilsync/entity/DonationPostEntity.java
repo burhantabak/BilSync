@@ -7,11 +7,5 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "app_donation_post")
 public class DonationPostEntity extends TradingPostEntity {
-    @Column(nullable = false)
-    private long donorID;
-
-    @Column(nullable = false)
-    private long receiverID;
-
     public DonationPostEntity() {}
 }

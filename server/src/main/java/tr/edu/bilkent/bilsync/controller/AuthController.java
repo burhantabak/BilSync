@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationRequestBody;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationResponse;
+import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.service.AuthService;
 
 @RestController
@@ -27,5 +28,11 @@ public class AuthController {
     @GetMapping("/weather")
     public String weather(){
         return "Hava karanlık";
+    }
+
+    @PostMapping("/registerUser")
+    public ResponseEntity register(@RequestBody UserEntity user) {
+        if(authService.register(user)) return (ResponseEntity) ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 }
