@@ -1,7 +1,7 @@
 import React from 'react'
 import TradingPostItem from './TradingPostItem'
 import ForumPost from './ForumPost'
-import SearchBar from '../statics/SearchBar'
+import { SearchBar }from '../statics/SearchBar'
 export default function FeedPage({postList, filterTrading, filterForum, filterLostnFound}) {
   return (
     <div className='mx-auto w-3/4 overflow-y-auto px-2 divide-y'>

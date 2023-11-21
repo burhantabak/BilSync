@@ -6,7 +6,14 @@ import Navbar from "./Components/Navbar"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { DataProvider } from "./Context/DataContext"
 import ProtectedRoute from "./route/PortectedRoute"
+import { SearchBar } from "./statics/SearchBar.jsx"
+import { SearchResultList } from "./statics/SearchResultList.jsx"
+
+
+
+
 function App() {
+  const [results, setResults] = useState([]);
   const [isLoggedIn,setLoggedIn] = useState(false);
   return (
     <>
@@ -16,7 +23,11 @@ function App() {
             <Navbar isLoggedIn={isLoggedIn}/>
             <Routes>
               <Route path="/login" element={<LoginForm handleLogin={()=>{setLoggedIn(true)}}/>}/>
-              <Route path="/mainPage" element={<ProtectedRoute><MainPage/></ProtectedRoute>}/>
+              <Route path="/mainPage" element={<ProtectedRoute>
+                <SearchBar setResults={setResults} />
+                <SearchResultList results={results} />
+                <MainPage/>
+                </ProtectedRoute>}/>
               <Route path="/commentScreen" element={<CommentScreen/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>

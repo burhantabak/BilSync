@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import SearchBar from '../statics/SearchBar'
+import {SearchBar} from '../statics/SearchBar'
 import Post from '../model/Post.js'
 import CommentData from '../model/CommentData.js'
 import TradingPostItem from './TradingPostItem';
