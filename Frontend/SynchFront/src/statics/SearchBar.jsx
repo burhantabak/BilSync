@@ -7,7 +7,7 @@ import { useState } from "react";
 
 import { useSearchResults } from './useSearchResults'; // Import the custom hook
 
-
+{/**kardeşim elinden öper */}
 
 export const  SearchBar = ({setResult}) => {
   

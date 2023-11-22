@@ -27,6 +27,7 @@ function App() {
                 <MainPage/>
                 </ProtectedRoute>}/>
               <Route path="/commentScreen" element={<CommentScreen/>}/>
+              <Route path="/editAccount" element={<CommentScreen/>}/>{/**Kardeşim elinden öper */}
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
           </BrowserRouter>
