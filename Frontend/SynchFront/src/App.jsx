@@ -24,8 +24,6 @@ function App() {
             <Routes>
               <Route path="/login" element={<LoginForm handleLogin={()=>{setLoggedIn(true)}}/>}/>
               <Route path="/mainPage" element={<ProtectedRoute>
-                <SearchBar setResults={setResults} />
-                <SearchResultList results={results} />
                 <MainPage/>
                 </ProtectedRoute>}/>
               <Route path="/commentScreen" element={<CommentScreen/>}/>

@@ -9,7 +9,7 @@ import { useSearchResults } from './useSearchResults'; // Import the custom hook
 
 
 
-export const  SearchBar = () => {
+export const  SearchBar = ({setResult}) => {
   
     const [input, setInput] = useState("");
     const { postList, chatList } = useData();
@@ -31,7 +31,7 @@ export const  SearchBar = () => {
 
     }, []);
     const handleChange = (value) =>{
-        setInput(value);
+        setResult(value);
     };
     
   
@@ -49,7 +49,6 @@ export const  SearchBar = () => {
             <input type="search" id="search-dropdown" 
                 className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus: outline-none" 
                 placeholder="Search Mockups, Logos, Design Templates..."
-                value = {input}
                 onChange= {(e) => handleChange(e.target.value)} required/>
             <button type="submit" 
                 className="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
