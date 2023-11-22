@@ -21,6 +21,7 @@ export const DataProvider = ({ children }) => {
       vote: 16,
       isTrading: false,
       isLostnFound: false,
+      label: "Forum",
       price: null,
       IBAN: null,
       comments: [
@@ -51,6 +52,7 @@ export const DataProvider = ({ children }) => {
       vote: 3,
       isTrading: false,
       isLostnFound: true,
+      label: "Lost",
       price: null,
       IBAN: null,
       comments: [
@@ -81,6 +83,7 @@ export const DataProvider = ({ children }) => {
       vote: 10000,
       isTrading: true,
       isLostnFound: false,
+      label: "Trading",
       price: 30000,
       isBuy: true,
       IBAN: "TR 203094090030",

@@ -9,13 +9,15 @@ import { useSearchResults } from './useSearchResults'; // Import the custom hook
 
 {/**kardeşim elinden öper */}
 
-export const  SearchBar = ({setResult}) => {
+export const  SearchBar = ({setResult, onCategoryChange}) => {
   
     const [input, setInput] = useState("");
     const { postList, chatList } = useData();
-     const { updateResults } = useSearchResults(); // Call the custom hook
+    const { updateResults } = useSearchResults(); // Call the custom hook
 
-    useEffect(() => {
+   
+
+    const filterResults = () => {
         // Lets filter data 
        
         const filtered = postList.filter((post) => {
@@ -27,11 +29,29 @@ export const  SearchBar = ({setResult}) => {
         });
 
         const combinedResults = [...filtered, ...filteredChat];
-        updateResults(combinedResults);
 
+        
+        updateResults(combinedResults);
+        
+
+    };
+    useEffect(() => { 
+        filterResults();
     }, []);
+
+
     const handleChange = (value) =>{
-        setResult(value);
+        const lowerCaseValue = value.toLowerCase(); // make insensitive 
+        setResult(lowerCaseValue);
+    };
+
+    const handleCategoryChange = (category) =>{
+        onCategoryChange(category);
+        };
+
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+        filterResults();
     };
     
   
@@ -41,10 +61,10 @@ export const  SearchBar = ({setResult}) => {
   
     return (
     
-<form className='mb-2'>
+<form className='mb-2' onSubmit={handleSubmit}>
     <div className="flex items-center gap-1">
         <label htmlFor="search-dropdown" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your Email</label>
-        <Dropdown/>
+        <Dropdown onCategoryChange={handleCategoryChange}/>
         <div className="relative w-3/4">
             <input type="search" id="search-dropdown" 
                 className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus: outline-none" 
