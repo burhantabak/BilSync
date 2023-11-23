@@ -8,6 +8,7 @@ import { DataProvider } from "./Context/DataContext"
 import ProtectedRoute from "./route/PortectedRoute"
 import { SearchBar } from "./statics/SearchBar.jsx"
 import { SearchResultList } from "./statics/SearchResultList.jsx"
+import AboutUs from "./Components/AboutUs.jsx"
 
 
 
@@ -28,6 +29,7 @@ function App() {
                 </ProtectedRoute>}/>
               <Route path="/commentScreen" element={<CommentScreen/>}/>
               <Route path="/editAccount" element={<CommentScreen/>}/>{/**Kardeşim elinden öper */}
+              <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
           </BrowserRouter>

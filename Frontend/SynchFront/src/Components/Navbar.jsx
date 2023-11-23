@@ -11,7 +11,7 @@ export default function Navbar() {
         <h1 className='text-3xl text-white font-bold font-mono py-3'>BilSync</h1>
         <div>
             <ul className='flex gap-5'>
-                <li className='text-white text-xl mr-4 hover:bg-gray-400 py-4 px-1'><a href="#">About Us</a></li>
+                <li className='text-white text-xl mr-4 hover:bg-gray-400 py-4 px-1'><a href="/aboutUs">About Us</a></li>
                 {isLoggedIn||<li className='text-white py-4 text-xl mr-4 hover:bg-gray-400'><a href="/login">Login</a></li>}
                 {isLoggedIn&&<li className='h-full text-white text-xl mr-4 py-4 hover:bg-gray-400'><DropdownProfile itemList={itemList}/></li>}
             </ul>
