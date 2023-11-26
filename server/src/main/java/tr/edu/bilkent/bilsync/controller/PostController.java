@@ -1,15 +1,32 @@
 package tr.edu.bilkent.bilsync.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import tr.edu.bilkent.bilsync.entity.DonationPostEntity;
+import tr.edu.bilkent.bilsync.entity.UserEntity;
+import tr.edu.bilkent.bilsync.service.AuthService;
+import tr.edu.bilkent.bilsync.service.PostService;
 
 @RestController
 @RequestMapping("/post")
 public class PostController {
+    private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
+
     @GetMapping()
     public String welcome() {
         return "Welcome this endpoint is not secure";
+    }
+
+    @PostMapping("/createPost/createDonationPost")
+    public ResponseEntity register(@RequestBody DonationPostEntity donationPost) {
+        if(postService.register(donationPost)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
     /*
     @GetMapping("/create")
