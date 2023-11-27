@@ -1,10 +1,9 @@
 package tr.edu.bilkent.bilsync.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.entity.DonationPostEntity;
-import tr.edu.bilkent.bilsync.entity.UserEntity;
-import tr.edu.bilkent.bilsync.service.AuthService;
 import tr.edu.bilkent.bilsync.service.PostService;
 
 @RestController

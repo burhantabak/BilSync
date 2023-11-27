@@ -139,4 +139,8 @@ public class PostEntity {
     public void setAnonymous(boolean anonymous) {
         isAnonymous = anonymous;
     }
+
+    public String getPostDate() { return postDate; }
+
+    public void setPostDate(String postDate) { this.postDate = postDate; }
 }

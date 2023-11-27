@@ -1,10 +1,12 @@
 package tr.edu.bilkent.bilsync.service;
 
+import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.DonationPostEntity;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.PostRepository;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
+@Service
 public class PostService {
 
     private final PostRepository postRepository;
@@ -16,7 +18,7 @@ public class PostService {
         this.donationPostService = donationPostService;
     }
 
-    //public boolean register(DonationPostEntity donationPost) {
-    //    return donationPostService.register(donationPost);
-    //}
+    public boolean register(DonationPostEntity donationPost) {
+        return donationPostService.register(donationPost);
+    }
 }
