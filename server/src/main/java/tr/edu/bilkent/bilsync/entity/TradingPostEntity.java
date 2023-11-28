@@ -9,7 +9,7 @@ public class TradingPostEntity  extends PostEntity{
     @Column(nullable = false)
     private long giverID;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private long takerID;
 
     @Column(nullable = false)

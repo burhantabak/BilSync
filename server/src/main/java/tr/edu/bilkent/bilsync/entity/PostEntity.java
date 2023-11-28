@@ -35,10 +35,10 @@ public class PostEntity {
     @OneToMany(targetEntity = CommentEntity.class)
     private Set<CommentEntity> commentList = new HashSet<>();
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String taggedUserListID;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String hashtagListID;
 
     @Column(nullable = false)
