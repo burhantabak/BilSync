@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "comment")
-public class CommentEntity {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,8 +16,8 @@ public class CommentEntity {
     @Column(nullable = false)
     private long authorID;
 
-    @OneToMany(targetEntity = CommentEntity.class)
-    private Set<CommentEntity> commentReplyList = new HashSet<>();
+    @OneToMany(targetEntity = Comment.class)
+    private Set<Comment> commentReplyList = new HashSet<>();
 
     @Column(nullable = false)
     private boolean isReply;
@@ -25,8 +25,8 @@ public class CommentEntity {
     @Column(nullable = false)
     private long likeCount = 0;
 
-    @OneToMany(targetEntity = UserEntity.class)
-    private Set<UserEntity> taggedUserList = new HashSet<>();
+    @OneToMany(targetEntity = User.class)
+    private Set<User> taggedUserList = new HashSet<>();
 
     @Column(length = 1000, nullable = false)
     private String text;
@@ -42,11 +42,11 @@ public class CommentEntity {
         this.authorID = authorID;
     }
 
-    public Set<CommentEntity> getCommentReplyList() {
+    public Set<Comment> getCommentReplyList() {
         return commentReplyList;
     }
 
-    public void setCommentReplyList(Set<CommentEntity> commentReplyList) {
+    public void setCommentReplyList(Set<Comment> commentReplyList) {
         this.commentReplyList = commentReplyList;
     }
 
@@ -66,11 +66,11 @@ public class CommentEntity {
         this.likeCount = likeCount;
     }
 
-    public Set<UserEntity> getTaggedUserList() {
+    public Set<User> getTaggedUserList() {
         return taggedUserList;
     }
 
-    public void setTaggedUserList(Set<UserEntity> taggedUserList) {
+    public void setTaggedUserList(Set<User> taggedUserList) {
         this.taggedUserList = taggedUserList;
     }
 

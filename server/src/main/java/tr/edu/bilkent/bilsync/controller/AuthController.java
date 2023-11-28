@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationRequestBody;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationResponse;
-import tr.edu.bilkent.bilsync.entity.UserEntity;
+import tr.edu.bilkent.bilsync.entity.User;
 import tr.edu.bilkent.bilsync.service.AuthService;
 
 @RestController
@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/registerUser")
-    public ResponseEntity register(@RequestBody UserEntity user) {
+    public ResponseEntity register(@RequestBody User user) {
         if(authService.register(user)){
             return ResponseEntity.ok().build();
         }

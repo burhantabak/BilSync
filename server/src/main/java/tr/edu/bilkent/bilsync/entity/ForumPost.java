@@ -5,6 +5,6 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table
-public class ForumPostEntity extends PostEntity{
-    public ForumPostEntity() {}
+public class ForumPost extends Post {
+    public ForumPost() {}
 }

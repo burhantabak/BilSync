@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PostEntity {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -32,8 +32,8 @@ public class PostEntity {
     @Column(nullable = false)
     private long views = 0;
 
-    @OneToMany(targetEntity = CommentEntity.class)
-    private Set<CommentEntity> commentList = new HashSet<>();
+    @OneToMany(targetEntity = Comment.class)
+    private Set<Comment> commentList = new HashSet<>();
 
     @Column(nullable = true)
     private String taggedUserListID;
@@ -48,7 +48,7 @@ public class PostEntity {
     private String postDate;
 
     // Constructors
-    public PostEntity() {
+    public Post() {
     }
 
     // Getters and Setters
@@ -108,11 +108,11 @@ public class PostEntity {
         this.views = views;
     }
 
-    public Set<CommentEntity> getCommentList() {
+    public Set<Comment> getCommentList() {
         return commentList;
     }
 
-    public void setCommentList(Set<CommentEntity> commentList) {
+    public void setCommentList(Set<Comment> commentList) {
         this.commentList = commentList;
     }
 

@@ -5,6 +5,6 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "donation_post")
-public class DonationPostEntity extends TradingPostEntity {
-    public DonationPostEntity() {}
+public class DonationPost extends TradingPost {
+    public DonationPost() {}
 }

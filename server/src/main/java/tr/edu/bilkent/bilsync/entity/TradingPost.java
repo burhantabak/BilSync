@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table
-public class TradingPostEntity  extends PostEntity{
+public class TradingPost extends Post {
 
     @Column(nullable = false)
     private long giverID;

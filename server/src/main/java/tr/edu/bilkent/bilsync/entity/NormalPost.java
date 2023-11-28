@@ -5,5 +5,5 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "normal_post")
-public class NormalPostEntity extends ForumPostEntity{
+public class NormalPost extends ForumPost {
 }

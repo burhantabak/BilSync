@@ -3,7 +3,7 @@ package tr.edu.bilkent.bilsync.service;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationRequestBody;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationResponse;
-import tr.edu.bilkent.bilsync.entity.UserEntity;
+import tr.edu.bilkent.bilsync.entity.User;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
 @Service
@@ -17,15 +17,15 @@ public class AuthService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequestBody request){
-        UserEntity userEntity = userRepository.findByEmail(request.email);
-        if(userEntity != null && userEntity.getPassword().equals(request.password)){
-            return new AuthenticationResponse(tokenService.generateToken(userEntity.getEmail()),
-                    userEntity.getName(), userEntity.getEmail());
+        User user = userRepository.findByEmail(request.email);
+        if(user != null && user.getPassword().equals(request.password)){
+            return new AuthenticationResponse(tokenService.generateToken(user.getEmail()),
+                    user.getName(), user.getEmail());
         }
         return null;
     }
 
-    public boolean register(UserEntity user) {
+    public boolean register(User user) {
         try {
             userRepository.save(user);
             return true;
