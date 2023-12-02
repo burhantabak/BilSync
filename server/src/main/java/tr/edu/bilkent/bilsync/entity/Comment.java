@@ -98,17 +98,4 @@ public class Comment {
         this.id = id;
     }
 
-    // need help from DB team to correct these
-    @ManyToMany(targetEntity = User.class)
-    private Set<User> reporters = new HashSet<>();
-
-    public Set<User> getReporters() {
-        return reporters;
-    }
-
-    public void setReporters(Set<User> reporters) {
-        this.reporters = reporters;
-    }
-
-
 }
