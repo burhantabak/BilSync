@@ -47,6 +47,18 @@ public class Post {
     @Column(nullable = false)
     private String postDate;
 
+    /*
+    0 = AnnouncementPost
+    1 = BorrowAndLendPost
+    2 = DonationPost
+    3 = LostAndFoundPost
+    4 = NormalPost
+    5 = SectionExchangePost
+    6 = SecondHandTradingPost
+    */
+    @Column(nullable = false)
+    private byte postType;
+
     // Constructors
     public Post() {
     }
@@ -141,6 +153,10 @@ public class Post {
     }
 
     public String getPostDate() { return postDate; }
+
+    public byte getPostType() { return postType; }
+
+    public void setPostType(byte postType) { this.postType = postType; }
 
     public void setPostDate(String postDate) { this.postDate = postDate; }
 }

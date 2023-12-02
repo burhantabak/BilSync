@@ -1,11 +1,12 @@
 package tr.edu.bilkent.bilsync.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import tr.edu.bilkent.bilsync.entity.DonationPost;
-import tr.edu.bilkent.bilsync.entity.User;
+import tr.edu.bilkent.bilsync.entity.*;
 import tr.edu.bilkent.bilsync.service.PostService;
 
 @RestController
@@ -23,16 +24,46 @@ public class PostController {
     }
 
     @PostMapping("/createPost/createDonationPost")
-    public ResponseEntity createPost(@RequestBody DonationPost donationPost) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        Long userId = Long.valueOf(user.getId());
+    public ResponseEntity createPost(@RequestBody JsonNode postNode) {
+        int postType = postNode.get("postType").asInt();
+        Object post;
 
-        donationPost.setAuthorID(userId);
-        if(postService.register(donationPost)){
+        switch (postType) {
+            case 0:
+                post = new ObjectMapper().convertValue(postNode, AnnouncementPost.class);
+                break;
+            case 1:
+                post = new ObjectMapper().convertValue(postNode, BorrowAndLendPost.class);
+                break;
+            case 2:
+                post = new ObjectMapper().convertValue(postNode, DonationPost.class);
+                break;
+            case 3:
+                post = new ObjectMapper().convertValue(postNode, LostAndFoundPost.class);
+                break;
+            case 4:
+                post = new ObjectMapper().convertValue(postNode, NormalPost.class);
+                break;
+            case 5:
+                post = new ObjectMapper().convertValue(postNode, SectionExchangePost.class);
+                break;
+            case 6:
+                post = new ObjectMapper().convertValue(postNode, SecondHandTradingPost.class);
+                break;
+            default:
+                return ResponseEntity.badRequest().build();
+        }
+        setCommonPostFields((Post) post);
+        if(postService.register(post)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
+    }
+    private void setCommonPostFields(Post post) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Long userId = Long.valueOf(user.getId());
+        post.setAuthorID(userId);
     }
     /*
     @GetMapping("/create")

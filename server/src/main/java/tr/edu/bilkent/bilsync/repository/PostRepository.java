@@ -1,10 +1,15 @@
 package tr.edu.bilkent.bilsync.repository;
 
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import tr.edu.bilkent.bilsync.entity.Post;
 
 @Repository
-public interface PostRepository extends CrudRepository<Post, Long> {
-    Post findById(long id);
+public interface PostRepository  {
+    //private final PostRepository postRepository;
+    //private final DonationPostService donationPostService;
+
+    /* // TODO: Divide-conquer logic
+    Set<Post> getAllPosts() {
+
+    }
+     */
 }
