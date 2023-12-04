@@ -15,7 +15,7 @@ public class LostAndFoundPostService {
         this.lostAndFoundPostRepository = lostAndFoundPostRepository;
     }
 
-    public boolean register(LostAndFoundPost lostAndFoundPost) {
+    public boolean createPost(LostAndFoundPost lostAndFoundPost) {
         try {
             ZonedDateTime currentTime = ZonedDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

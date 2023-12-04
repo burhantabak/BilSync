@@ -11,7 +11,8 @@ import java.util.Set;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "post_sequence")
+    @TableGenerator(name = "post_sequence", table = "post_sequence_table", allocationSize = 1)
     private long id;
 
     @Column(length = 100, nullable = false)

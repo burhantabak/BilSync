@@ -16,7 +16,7 @@ public class NormalPostService {
         this.normalPostRepository = normalPostRepository;
     }
 
-    public boolean register(NormalPost normalPost) {
+    public boolean createPost(NormalPost normalPost) {
         try {
             ZonedDateTime currentTime = ZonedDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

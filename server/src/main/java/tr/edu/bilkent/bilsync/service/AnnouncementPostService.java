@@ -16,7 +16,7 @@ public class AnnouncementPostService {
         this.announcementPostRepository = announcementPostRepository;
     }
 
-    public boolean register(AnnouncementPost announcementPost) {
+    public boolean createPost(AnnouncementPost announcementPost) {
         try {
             ZonedDateTime currentTime = ZonedDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

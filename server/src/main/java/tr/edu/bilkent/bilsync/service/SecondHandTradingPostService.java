@@ -16,7 +16,7 @@ public class SecondHandTradingPostService {
         this.secondHandTradingPostRepository = secondHandTradingPostRepository;
     }
 
-    public boolean register(SecondHandTradingPost secondHandTradingPost) {
+    public boolean createPost(SecondHandTradingPost secondHandTradingPost) {
         try {
             ZonedDateTime currentTime = ZonedDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

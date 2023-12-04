@@ -16,7 +16,7 @@ public class SectionExchangePostService {
         this.sectionExchangePostRepository = sectionExchangePostRepository;
     }
 
-    public boolean register(SectionExchangePost sectionExchangePost) {
+    public boolean createPost(SectionExchangePost sectionExchangePost) {
         try {
             ZonedDateTime currentTime = ZonedDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

@@ -17,7 +17,7 @@ public class DonationPostService {
         this.donationPostRepository = donationPostRepository;
     }
 
-    public boolean register(DonationPost donationPost) {
+    public boolean createPost(DonationPost donationPost) {
         try {
             donationPost.setCommentList(new HashSet<>());
             donationPost.setViews(0);

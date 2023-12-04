@@ -31,43 +31,25 @@ public class PostService {
         this.secondHandTradingPostService = secondHandTradingPostService;
     }
 
-    public boolean register(Object post) {
-        switch (getPostType(post)) {
+    public boolean createPost(Object post) {
+        Post postObj = (Post) post;
+        switch (postObj.getPostType()) {
             case 0:
-                return announcementPostService.register((AnnouncementPost) post);
+                return announcementPostService.createPost((AnnouncementPost) post);
             case 1:
-                return borrowAndLendPostService.register((BorrowAndLendPost) post);
+                return borrowAndLendPostService.createPost((BorrowAndLendPost) post);
             case 2:
-                return donationPostService.register((DonationPost) post);
+                return donationPostService.createPost((DonationPost) post);
             case 3:
-                return lostAndFoundPostService.register((LostAndFoundPost) post);
+                return lostAndFoundPostService.createPost((LostAndFoundPost) post);
             case 4:
-                return normalPostService.register((NormalPost) post);
+                return normalPostService.createPost((NormalPost) post);
             case 5:
-                return sectionExchangePostService.register((SectionExchangePost) post);
+                return sectionExchangePostService.createPost((SectionExchangePost) post);
             case 6:
-                return secondHandTradingPostService.register((SecondHandTradingPost) post);
+                return secondHandTradingPostService.createPost((SecondHandTradingPost) post);
             default:
                 return false;
-        }
-    }
-    private int getPostType(Object post) {
-        if (post instanceof AnnouncementPost) {
-            return 0;
-        } else if (post instanceof BorrowAndLendPost) {
-            return 1;
-        } else if (post instanceof DonationPost) {
-            return 2;
-        } else if (post instanceof LostAndFoundPost) {
-            return 3;
-        } else if (post instanceof NormalPost) {
-            return 4;
-        } else if (post instanceof SectionExchangePost) {
-            return 5;
-        } else if (post instanceof SecondHandTradingPost) {
-            return 6;
-        } else {
-            return -1;
         }
     }
 }

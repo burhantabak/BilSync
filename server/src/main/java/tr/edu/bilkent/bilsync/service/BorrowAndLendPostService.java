@@ -15,7 +15,7 @@ public class BorrowAndLendPostService {
         this.borrowAndLendPostRepository = borrowAndLendPostRepository;
     }
 
-    public boolean register(BorrowAndLendPost borrowAndLendPost) {
+    public boolean createPost(BorrowAndLendPost borrowAndLendPost) {
         try {
             ZonedDateTime currentTime = ZonedDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

@@ -23,10 +23,10 @@ public class PostController {
         return "Welcome this endpoint is not secure";
     }
 
-    @PostMapping("/createPost/createDonationPost")
-    public ResponseEntity createPost(@RequestBody JsonNode postNode) {
+    @PostMapping("/createPost")
+    public ResponseEntity<?> createPost(@RequestBody JsonNode postNode) {
         int postType = postNode.get("postType").asInt();
-        Object post;
+        Post post;
 
         switch (postType) {
             case 0:
@@ -53,8 +53,8 @@ public class PostController {
             default:
                 return ResponseEntity.badRequest().build();
         }
-        setCommonPostFields((Post) post);
-        if(postService.register(post)){
+        setCommonPostFields(post);
+        if(postService.createPost(post)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -62,7 +62,7 @@ public class PostController {
     private void setCommonPostFields(Post post) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Long userId = Long.valueOf(user.getId());
+        long userId = user.getId();
         post.setAuthorID(userId);
     }
     /*
