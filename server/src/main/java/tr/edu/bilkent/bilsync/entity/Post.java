@@ -144,11 +144,11 @@ public class Post {
         this.hashtagListID = hashtagListID;
     }
 
-    public boolean isAnonymous() {
+    public boolean getIsAnonymous() {
         return isAnonymous;
     }
 
-    public void setAnonymous(boolean anonymous) {
+    public void setIsAnonymous(boolean anonymous) {
         isAnonymous = anonymous;
     }
 

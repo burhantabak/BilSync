@@ -43,23 +43,23 @@ public class TradingPost extends Post {
         return isResolved;
     }
 
-    public void setResolved(boolean resolved) {
+    public void setIsResolved(boolean resolved) {
         isResolved = resolved;
     }
 
-    public boolean isMissedOut() {
+    public boolean getIsMissedOut() {
         return isMissedOut;
     }
 
-    public void setMissedOut(boolean missedOut) {
+    public void setIsMissedOut(boolean missedOut) {
         isMissedOut = missedOut;
     }
 
-    public boolean isHeld() {
+    public boolean getIsHeld() {
         return isHeld;
     }
 
-    public void setHeld(boolean held) {
+    public void setIsHeld(boolean held) {
         isHeld = held;
     }
 

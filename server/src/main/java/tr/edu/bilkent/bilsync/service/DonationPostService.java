@@ -22,12 +22,11 @@ public class DonationPostService {
             donationPost.setCommentList(new HashSet<>());
             donationPost.setViews(0);
             donationPost.setVotes(0);
-            donationPost.setResolved(false);
+            donationPost.setIsResolved(false);
             donationPost.setTakerID(-1);
             donationPost.setGiverID(donationPost.getAuthorID());
-            donationPost.setResolved(false);
-            donationPost.setMissedOut(false);
-            donationPost.setHeld(false);
+            donationPost.setIsMissedOut(false);
+            donationPost.setIsHeld(false);
             ZonedDateTime currentTime = ZonedDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedTime = currentTime.format(formatter);
