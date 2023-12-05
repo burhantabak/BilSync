@@ -2,6 +2,8 @@ package tr.edu.bilkent.bilsync.entity;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
+import java.time.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,7 +48,7 @@ public class Post {
     private boolean isAnonymous;
 
     @Column(nullable = false)
-    private String postDate;
+    private Timestamp postDate;
 
     /*
     0 = AnnouncementPost
@@ -153,11 +155,21 @@ public class Post {
         isAnonymous = anonymous;
     }
 
-    public String getPostDate() { return postDate; }
+    public Timestamp getPostDate() { return postDate; }
 
     public byte getPostType() { return postType; }
 
     public void setPostType(byte postType) { this.postType = postType; }
 
-    public void setPostDate(String postDate) { this.postDate = postDate; }
+    public void setPostDate(Timestamp postDate) { this.postDate = postDate; }
+
+    public void prePersist() {
+        this.votes = 0;
+        this.views = 0;
+        this.commentList = new HashSet<Comment>();
+        // Get the current time in UTC+3
+        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.ofHours(3));
+        // Convert OffsetDateTime to Timestamp
+        this.postDate = Timestamp.from(offsetDateTime.toInstant());
+    }
 }

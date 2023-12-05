@@ -4,9 +4,6 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.SectionExchangePost;
 import tr.edu.bilkent.bilsync.repository.SectionExchangePostRepository;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Service
 public class SectionExchangePostService {
 
@@ -18,10 +15,7 @@ public class SectionExchangePostService {
 
     public boolean createPost(SectionExchangePost sectionExchangePost) {
         try {
-            ZonedDateTime currentTime = ZonedDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedTime = currentTime.format(formatter);
-            sectionExchangePost.setPostDate(formattedTime);
+            sectionExchangePost.setGiverID(sectionExchangePost.getAuthorID());
             sectionExchangePostRepository.save(sectionExchangePost);
             return true;
         } catch(Exception e) {

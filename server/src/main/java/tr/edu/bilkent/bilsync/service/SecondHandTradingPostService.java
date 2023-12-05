@@ -4,9 +4,6 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.SecondHandTradingPost;
 import tr.edu.bilkent.bilsync.repository.SecondHandTradingPostRepository;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Service
 public class SecondHandTradingPostService {
 
@@ -18,10 +15,7 @@ public class SecondHandTradingPostService {
 
     public boolean createPost(SecondHandTradingPost secondHandTradingPost) {
         try {
-            ZonedDateTime currentTime = ZonedDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedTime = currentTime.format(formatter);
-            secondHandTradingPost.setPostDate(formattedTime);
+            secondHandTradingPost.setGiverID(secondHandTradingPost.getAuthorID());
             secondHandTradingPostRepository.save(secondHandTradingPost);
             return true;
         } catch(Exception e) {

@@ -64,5 +64,13 @@ public class TradingPost extends Post {
         isHeld = held;
     }
 
-
+    @Override
+    @PrePersist
+    public void prePersist() {
+        super.prePersist();
+        this.takerID = -1;
+        this.isResolved = false;
+        this.isMissedOut = false;
+        this.isHeld = false;
+    }
 }
