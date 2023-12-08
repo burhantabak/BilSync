@@ -29,13 +29,15 @@ public class ChatDto {
     public ChatDto(Chat chat) {
         this(chat.getChatName(),
                 chat.getUsers().stream().map(ChatUser::getUser).map(UserEntity::getId).toList(),
-                chat.getId());
+                chat.getId(),
+                chat.isGroupChat());
     }
 
-    public ChatDto(String chatName, List<Long> userIds, Long chatId) {
+    public ChatDto(String chatName, List<Long> userIds, Long chatId, boolean isGroupChat) {
         this.chatName = chatName;
         this.userIds = userIds;
         this.chatId = chatId;
+        this.isGroupChat = isGroupChat;
     }
     public boolean isGroupChat() {
         return isGroupChat;

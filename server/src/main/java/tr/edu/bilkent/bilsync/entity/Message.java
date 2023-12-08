@@ -13,9 +13,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity sender; // todo change to id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chatuser_id")
+    private ChatUser sender;
 
     private String body;
     private String imagePath;
@@ -29,20 +29,20 @@ public class Message {
         this.id = id;
     }
 
-    public UserEntity getSender() {
-        return sender;
-    }
-
-    public void setSender(UserEntity sender) {
-        this.sender = sender;
-    }
-
     public String getBody() {
         return body;
     }
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public ChatUser getSender() {
+        return sender;
+    }
+
+    public void setSender(ChatUser sender) {
+        this.sender = sender;
     }
 
     public String getImagePath() {
