@@ -13,15 +13,11 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany
-    private List<Message> messages = new ArrayList<>(); // todo change to id
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages = new ArrayList<>();
 
-    @ManyToMany
-    private List<UserEntity> users = new ArrayList<>(); // todo change to id
-
-    @ManyToOne
-    @JoinColumn(name = "group_admin_id")
-    private UserEntity groupAdmin; // todo change to id
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "chat")
+    private List<ChatUser> users = new ArrayList<>();
 
     private boolean isGroupChat;
 
@@ -43,20 +39,12 @@ public class Chat {
         this.messages = messages;
     }
 
-    public List<UserEntity> getUsers() {
+    public List<ChatUser> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserEntity> users) {
+    public void setUsers(List<ChatUser> users) {
         this.users = users;
-    }
-
-    public UserEntity getGroupAdmin() {
-        return groupAdmin;
-    }
-
-    public void setGroupAdmin(UserEntity groupAdmin) {
-        this.groupAdmin = groupAdmin;
     }
 
     public boolean isGroupChat() {
@@ -73,9 +61,5 @@ public class Chat {
 
     public void setChatName(String chatName) {
         this.chatName = chatName;
-    }
-
-    public void addUser(UserEntity user){
-        this.users.add(user);
     }
 }

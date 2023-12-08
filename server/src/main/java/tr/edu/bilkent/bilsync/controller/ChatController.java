@@ -30,14 +30,16 @@ public class ChatController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createChat(@RequestBody ChatDto chatDto) {
-        chatService.createChat(chatDto);
+    public ResponseEntity<String> createChat(
+            @RequestBody ChatDto chatDto,
+            @AuthenticationPrincipal UserEntity currentUser) {
+        chatService.createChat(chatDto, currentUser);
         return ResponseEntity.ok("Chat created successfully");
     }
 
     @GetMapping("/chats")
-    public ResponseEntity<List<Chat>> getUserChats(@AuthenticationPrincipal UserEntity user) {
-        List<Chat> userChats = chatService.getChatsByUser(user);
+    public ResponseEntity<List<ChatDto>> getUserChats(@AuthenticationPrincipal UserEntity currentUser) {
+        List<ChatDto> userChats = chatService.getChatsByUser(currentUser).stream().map(ChatDto::new).toList();
         return ResponseEntity.ok(userChats);
     }
 }
