@@ -13,7 +13,7 @@ export default function Dropdown({onCategoryChange}) {
   const handleCategoryChange = (category) =>{
     setSelectedCategory(category);
     onCategoryChange(category);
-    console.log('Selected Category OF THIS SHIT :', category); // test
+    console.log('Selected Category OF THIS SHIT :', category); // test //sakin abi sakin DEMO'da gösterecez
 
   };
 
