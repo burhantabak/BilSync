@@ -2,20 +2,26 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useData } from '../Context/DataContext';
 
+
 export default function LoginForm({handleLogin}) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const {login} = useData(); 
+  const { login , error} = useData(); // Access error from the data context
+
   const nav = useNavigate();
   const handleAuth = async (event)=> {
     event.preventDefault();
-    console.log("called");
-    console.log(userName);
-    console.log(password);
-    await login(userName,password);
-    handleLogin();
-    nav("/mainPage");
-  }
+      await login(userName, password);
+      handleLogin();
+      console.log("called");
+      console.log(userName);
+      console.log(password);
+      nav("/mainPage");
+}
+
+
+
+
   return (
     <div className=' p-5 py-3 mx-auto mt-10 w-1/3 md:w-2/3 lg:w-2/3 bg-white rounded-xl flex justify-evenly divide-x-4'>
         <div className='flex-1'>
@@ -23,6 +29,7 @@ export default function LoginForm({handleLogin}) {
         </div>
         <div className='flex-1 p-10'>
         <h1 className='text-gray-900 text-3xl font-bold'> Login to your account</h1>
+        {error && <p className="text-red-500">{error}</p>}
         <form className="space-y-4 md:space-y-6" action="#">
                   <div>
                       <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
@@ -46,6 +53,7 @@ export default function LoginForm({handleLogin}) {
                       <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
                   </div>
                   <button onClick={handleAuth} type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+
               </form>
     </div>
     </div>

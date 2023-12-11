@@ -21,10 +21,12 @@ export async function authUser(userName, password){
             return await response.json();
         }
         else{
-            return null;
+            throw new Error(`Failed to authenticate. Status: ${response.status}`);
         }
     }catch(err){
         console.log("Error:",err);
+            throw err;
+
     }
     return null;
 } 

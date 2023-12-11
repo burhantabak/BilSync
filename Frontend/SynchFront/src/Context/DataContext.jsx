@@ -1,14 +1,26 @@
 import { createContext, useContext, useMemo } from "react";
 import { authUser } from "../calling/authCalling";
 import { useLocalStorage } from "./useLocalStorage";
+import { useState } from "react";
 
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", {});
+  const [error, setError] = useState(""); // New state to store authentication error
+
   const login = async (userName, password) =>{
-    let claimedUser = await authUser(userName, password);
-    setUser(claimedUser);
+
+    try{
+      let claimedUser = await authUser(userName, password);
+      setUser(claimedUser);
+      setError(""); // Reset error state on successful login
+    }
+    catch(error){
+      setError("Invalid username or password"); // Set error state on unsuccessful login
+      console.log("are we in datacontext")
+      error = "Invalid username or password"; 
+    }
   }
   const logout = ()=>{
     setUser(null);
