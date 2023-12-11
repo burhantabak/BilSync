@@ -2,20 +2,26 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useData } from '../Context/DataContext';
 
+
 export default function LoginForm({handleLogin}) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const {login} = useData(); 
+  const { login , error} = useData(); // Access error from the data context
+
   const nav = useNavigate();
   const handleAuth = async (event)=> {
     event.preventDefault();
-    console.log("called");
-    console.log(userName);
-    console.log(password);
-    await login(userName,password);
-    handleLogin();
-    nav("/mainPage");
-  }
+      await login(userName, password);
+      handleLogin();
+      console.log("called");
+      console.log(userName);
+      console.log(password);
+      nav("/mainPage");
+}
+
+
+
+
   return (
     <div className=' p-5 py-3 mx-auto mt-10 w-1/3 md:w-2/3 lg:w-2/3 bg-white rounded-xl flex justify-evenly divide-x-4'>
         <div className='flex-1'>
@@ -34,6 +40,7 @@ export default function LoginForm({handleLogin}) {
                       <input type="password" name="password" onChange={(event)=>setPassword(event.target.value)}
                        id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-sky-300 focus:border-primary-600 block w-full p-2.5" required=""/>
                   </div>
+                  {error && <p className="text-red-500">{error}</p>}
                   <div className="flex items-center justify-between">
                       <div className="flex items-start">
                           <div className="flex items-center h-5">
@@ -46,6 +53,7 @@ export default function LoginForm({handleLogin}) {
                       <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
                   </div>
                   <button onClick={handleAuth} type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+
               </form>
     </div>
     </div>

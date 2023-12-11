@@ -9,6 +9,7 @@ import ProtectedRoute from "./route/PortectedRoute"
 import { SearchBar } from "./statics/SearchBar.jsx"
 import { SearchResultList } from "./statics/SearchResultList.jsx"
 import AboutUs from "./Components/AboutUs.jsx"
+import EditAccount from "./Components/EditAccount.jsx"
 import CreatePost from "./Components/CreatePostPage.jsx"
 
 
@@ -29,7 +30,8 @@ function App() {
                 <MainPage/>
                 </ProtectedRoute>}/>
               <Route path="/commentScreen" element={<CommentScreen/>}/>
-              <Route path="/editAccount" element={<CommentScreen/>}/>{/**Kardeşim elinden öper */}
+              <Route path="/editAccount" element={<EditAccount/>}/>{/**Kardeşim elinden öper */}
+              <Route path="/editProfile" element={<CommentScreen/>}/>{/**Kardeşim elinden öper */}
               <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>

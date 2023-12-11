@@ -1,9 +1,4 @@
 import React, { useState } from 'react'
-import {SearchBar} from '../statics/SearchBar'
-import Post from '../model/Post.js'
-import CommentData from '../model/CommentData.js'
-import TradingPostItem from './TradingPostItem';
-import ForumPost from './ForumPost';
 import FeedPage from './FeedPage';
 import { useData } from '../Context/DataContext';
 import ChatScreen from './ChatScreen.jsx';
