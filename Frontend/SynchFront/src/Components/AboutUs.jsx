@@ -70,7 +70,7 @@
                     {/* Team Member 3 */}
                     <div className="text-center">
                         <img
-                            src="https://media.licdn.com/dms/image/D4D03AQHyFv91mjciAw/profile-displayphoto-shrink_200_200/0/1692299115939?e=1706140800&v=beta&t=hpYiydgp_Q1ZFoVYQwY-cLi4C6hUEKSO_2S0GdUw9q8"
+                            src="https://media.licdn.com/dms/image/D4D03AQE9ip_PWaWaCA/profile-displayphoto-shrink_800_800/0/1702173044193?e=1707955200&v=beta&t=ozf-9tLZhMY5ZlOj0wJY8PC-fPxaoZf89ueyTUyHnME"
                             alt="Team Member 3"
                             className="rounded-full w-32 h-32 mx-auto mb-2"
                         />

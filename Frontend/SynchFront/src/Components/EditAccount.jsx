@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 
 const EditAccount = () => {
     const [name, setName] = useState('');
@@ -6,6 +7,12 @@ const EditAccount = () => {
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate(); // Call the hook
+
+
+    const handleGoBack = () => { // Create a handler function
+        navigate(-1); // Navigate back to the previous page
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -48,7 +55,16 @@ const EditAccount = () => {
     };
 
     return (
+        
         <div className=" w-full h-full">
+            <div className="flex items-center mb-4">
+                     <button
+                        className="text-blue-500 hover:underline"
+                        onClick={handleGoBack}
+                     >
+                        &larr; Back
+                    </button>
+                </div>
             <div className="container mx-auto px-4 py-4">
                 <h1 className="text-black text-2xl font-bold">Edit Account</h1>
 
