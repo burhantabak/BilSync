@@ -15,7 +15,7 @@ import ResetPassword from "./Components/ResetPassword.jsx"
 import ForgetPassword from "./Components/ForgetPassword.jsx"
 import ChangePassword from "./Components/ChangePassword.jsx"
 import EditProfile from "./Components/EditProfile.jsx"
-
+import AdminPanel from "./Components/AdminPanel.jsx"
 
 function App() {
   const [results, setResults] = useState([]);
@@ -32,7 +32,9 @@ function App() {
               <Route path="/mainPage" element={<ProtectedRoute>
                 <MainPage/>
                 </ProtectedRoute>}/>
+
               <Route path="/commentScreen" element={<CommentScreen/>}/>
+              <Route path="/admin/adminPanel" element={<AdminPanel/>}/>
               <Route path="/editAccount" element={<ProtectedRoute><EditAccount/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
               <Route path="/editProfile" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
               <Route path="/aboutUs" element = {<AboutUs/>}/>

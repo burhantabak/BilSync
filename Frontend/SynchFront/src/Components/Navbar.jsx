@@ -60,7 +60,7 @@ function DropdownProfile({itemList, handleItemClick}){
     const navigate = useNavigate();
 
     return(
-      <Menu as={"div"}>
+      <Menu as={"div"} zIndex={100}>
         <Menu.Button>
           <Profile/>
         </Menu.Button>
@@ -73,7 +73,7 @@ function DropdownProfile({itemList, handleItemClick}){
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
         >
-           <Menu.Items className="absolute right-8 z-10 mt-2 w-[12%] origin-top-right bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+           <Menu.Items className="absolute right-8 z-10 mt-2 w-[12%] origin-top-right bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
           {itemList.map((item, index) => {
             return (
               <div key={index} className="py-1">

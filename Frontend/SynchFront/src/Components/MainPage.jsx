@@ -37,12 +37,13 @@ export default function MainPage() {
         </div>
         <div className='  px-2 pt-5 flex-1 divide-y'>
             <h2 className='mt-4 font-bold text-center text-xl'>Chat</h2>
-            <div className='flex items-center'>
+            <div className='flex items-center '>
         <input
           type='search'
           id='search-dropdown'
           className='block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:outline-none'
           placeholder='Search'
+          style={{ zIndex: 0 }} // z index helps to show the dropdown menu on top of other elements
           required
         /> 
         <button 
