@@ -30,8 +30,8 @@ function App() {
                 <MainPage/>
                 </ProtectedRoute>}/>
               <Route path="/commentScreen" element={<CommentScreen/>}/>
-              <Route path="/editAccount" element={<EditAccount/>}/>{/**Kardeşim elinden öper */}
-              <Route path="/editProfile" element={<CommentScreen/>}/>{/**Kardeşim elinden öper */}
+              <Route path="/editAccount" element={<ProtectedRoute><EditAccount/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
+              <Route path="/editProfile" element={<ProtectedRoute><CommentScreen/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
               <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>

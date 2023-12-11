@@ -48,27 +48,13 @@ const EditAccount = () => {
     };
 
     return (
-        <div className="bg-blue-500 w-full h-full">
+        <div className=" w-full h-full">
             <div className="container mx-auto px-4 py-4">
-                <h1 className="text-white text-2xl font-bold">Edit Account</h1>
+                <h1 className="text-black text-2xl font-bold">Edit Account</h1>
 
                 <form className="mt-8" onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="text-white block mb-2" htmlFor="name">
-                            Name
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            className="bg-white border border-gray-300 rounded px-4 py-2 w-full"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="text-white block mb-2" htmlFor="email">
+                        <label className="text-black block mb-2" htmlFor="email">
                             Email
                         </label>
                         <input
@@ -82,7 +68,7 @@ const EditAccount = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="text-white block mb-2" htmlFor="password">
+                        <label className="text-black block mb-2" htmlFor="password">
                             Old Password
                         </label>
                         <input
@@ -96,7 +82,7 @@ const EditAccount = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="text-white block mb-2" htmlFor="newPassword">
+                        <label className="text-black block mb-2" htmlFor="newPassword">
                             New Password
                         </label>
                         <input
@@ -110,7 +96,7 @@ const EditAccount = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="text-white block mb-2" htmlFor="confirmPassword">
+                        <label className="text-black block mb-2" htmlFor="confirmPassword">
                             Confirm Password
                         </label>
                         <input
@@ -125,7 +111,7 @@ const EditAccount = () => {
 
                     <button
                         type="submit"
-                        className="bg-white text-blue-500 font-bold py-2 px-4 rounded"
+                        className="text-white bg-blue-500 font-bold py-2 px-4 rounded"
                     >
                         Update Account
                     </button>
