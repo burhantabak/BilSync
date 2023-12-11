@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import SearchBar from '../statics/SearchBar'
+import {SearchBar} from '../statics/SearchBar'
 import Post from '../model/Post.js'
 import CommentData from '../model/CommentData.js'
 import TradingPostItem from './TradingPostItem';
 import ForumPost from './ForumPost';
 import FeedPage from './FeedPage';
 import { useData } from '../Context/DataContext';
+import ChatScreen from './ChatScreen.jsx';
 
 export default function MainPage() {
     const {postList,chatList} = useData();
@@ -14,6 +15,7 @@ export default function MainPage() {
     const [filterForum, setFilterForum] = useState(true);
     const [filterLostnFound, setFilterLostnFound] = useState(true);
     const [selectedChat, setSelectedChat] = useState(null);
+    console.log("selected chat" + selectedChat)
   return (
     <div className='flex w-full divide-x-2 mt-4'>
         <div className='sticky  pt-5 px-2 divide-y'>
@@ -35,17 +37,18 @@ export default function MainPage() {
             <TradingPostItem vote={11} title="Basys3 Sale" isBuy={true} nameUser="Kenan Zeynalov" price={2700}/>
             <TradingPostItem vote={3} title="Basys3 Sale" nameUser="Anıl Hoca" price={150}/>
             <TradingPostItem vote={2} title="Basys3 Sale" isBuy={true} nameUser="12344" price={3000}/> */}
-            <FeedPage postList={postList} filterForum={filterForum} filterLostnFound={filterLostnFound} filterTrading={filterTrading}/>
+            {!selectedChat ? <FeedPage postList={postList} filterForum={filterForum} filterLostnFound={filterLostnFound} filterTrading={filterTrading}/>
+            :<ChatScreen chat={selectedChat} setSelectedChat={setSelectedChat}/>}
         </div>
         <div className='  px-2 pt-5 flex-1 divide-y'>
             <h2 className='mt-4 font-bold text-center text-xl'>Chat</h2>
-            {chatList.map((chat,index)=><ChatItem key={index} chat={chat}/>)}
+            {chatList.map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)}
         </div>
     </div>
   )
 }
 
-function ChatItem({chat}){
+function ChatItem({chat,handleChat}){
     console.log(chat)
     const {isGroupChat,userName} = chat;
     console.log(`isGroupChat=${isGroupChat}`)
@@ -53,7 +56,8 @@ function ChatItem({chat}){
         return <div>Loading..</div>
     }
     return(
-        <div className='flex rounded-lg py-3 my-2 items-center hover:bg-gray-200'>
+        <div onClick={()=>{handleChat();console.log("Clicked chat")}} 
+        className='flex rounded-lg py-3 my-2 items-center hover:bg-gray-200'>
             <div>{isGroupChat ? <img className='w-4 h-4 mr-1' alt='group-icon' src='./group.svg'/>:
             <img className='w-4 h-4 mr-1' alt='person-icon' src='./person.svg'/>}</div>
             <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>

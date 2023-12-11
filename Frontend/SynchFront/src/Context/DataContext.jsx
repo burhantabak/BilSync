@@ -1,8 +1,18 @@
 import { createContext, useContext, useMemo } from "react";
+import { authUser } from "../calling/authCalling";
+import { useLocalStorage } from "./useLocalStorage";
 
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
+  const [user, setUser] = useLocalStorage("user", {});
+  const login = async (userName, password) =>{
+    let claimedUser = await authUser(userName, password);
+    setUser(claimedUser);
+  }
+  const logout = ()=>{
+    setUser(null);
+  }
   const postList = [
     {
       userName: "Tuna Saygın",
@@ -11,6 +21,7 @@ export const DataProvider = ({ children }) => {
       vote: 16,
       isTrading: false,
       isLostnFound: false,
+      label: "Forum",
       price: null,
       IBAN: null,
       comments: [
@@ -41,6 +52,7 @@ export const DataProvider = ({ children }) => {
       vote: 3,
       isTrading: false,
       isLostnFound: true,
+      label: "Lost",
       price: null,
       IBAN: null,
       comments: [
@@ -71,6 +83,7 @@ export const DataProvider = ({ children }) => {
       vote: 10000,
       isTrading: true,
       isLostnFound: false,
+      label: "Trading",
       price: 30000,
       isBuy: true,
       IBAN: "TR 203094090030",
@@ -148,7 +161,7 @@ export const DataProvider = ({ children }) => {
     },
     // Add more entries as needed
   ];
-  const value = useMemo(() => ({ postList, chatList }), [postList,chatList]);
+  const value = useMemo(() => ({ postList, chatList, user, login, logout }), [postList,chatList,user,login,logout]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

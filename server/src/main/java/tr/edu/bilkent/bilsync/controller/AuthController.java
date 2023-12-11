@@ -17,6 +17,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @CrossOrigin
     @PostMapping(value = "/login",produces = "application/json")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequestBody body) {
         AuthenticationResponse response = authService.authenticate(body);
@@ -25,11 +26,14 @@ public class AuthController {
         }
         return ResponseEntity.ok(response);
     }
+
+    @CrossOrigin
     @GetMapping("/weather")
     public String weather(){
         return "Hava karanlık";
     }
 
+    @CrossOrigin
     @PostMapping("/registerUser")
     public ResponseEntity register(@RequestBody UserEntity user) {
         if(authService.register(user)){
