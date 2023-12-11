@@ -10,10 +10,13 @@ import tr.edu.bilkent.bilsync.repository.UserRepository;
 public class AuthService {
     private final TokenService tokenService;
     private final UserRepository userRepository;
+    private final MailService mailService;
 
-    public AuthService(TokenService tokenService, UserRepository userRepository) {
+    public AuthService(TokenService tokenService,
+                       UserRepository userRepository, MailService mailService) {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
+        this.mailService = mailService;
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequestBody request){
@@ -40,16 +43,20 @@ public class AuthService {
      * @param claimedEmail
      * @return Url of the createNewPassword page, and givenClaimedEmail is false it will return Null
      */
-    public String forgotPasswordUrl(String claimedEmail){
+    public boolean forgotPasswordUrl(String claimedEmail){
         UserEntity user = userRepository.findByEmail(claimedEmail);
         if(user==null){//if there is no user with this name it is null
-            return null;
+            return false;
         }
         //token creation
         String tokenCreated = tokenService.generateToken(claimedEmail);
         String baseUrl = "http://127.0.0.1:5173";
         String endpoint = "/changePassword?ticket=";
-        return baseUrl+endpoint+tokenCreated;//here the token is returned
+        String mailLink =  baseUrl+endpoint+tokenCreated;//here the token is returned
+        //mail title
+        String mailTitle = "Reset Password Link at Bilsync";
+        String mailBody = "Hello,\n Here is your password reset link:\n" + mailLink +"\n Bilsync Team :)";
+        return mailService.sendMail(mailTitle,mailBody, claimedEmail);
     }
 
     /**
@@ -63,6 +70,7 @@ public class AuthService {
      * @return
      */
     public boolean changePassword(String token, String newPassword){
+        //prechecking the token
         String username = tokenService.extractUsername(token);
         UserEntity user = userRepository.findByEmail(username);
         if(user == null){
@@ -71,6 +79,7 @@ public class AuthService {
 
         user.setPassword(newPassword);
         userRepository.save(user);
+        //user's change is commited to db.
         return true;
     }
 }
