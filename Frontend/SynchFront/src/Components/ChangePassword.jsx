@@ -5,3 +5,4 @@ export default function ChangePassword() {
     <div>ChangePassword</div>
   )
 }
+
