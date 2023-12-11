@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.NormalPost;
 import tr.edu.bilkent.bilsync.repository.NormalPostRepository;
 
+import java.util.List;
+
 @Service
 public class NormalPostService {
 
@@ -21,5 +23,9 @@ public class NormalPostService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public List<NormalPost> getPostsSortedByDate() {
+        return normalPostRepository.findNormalPostsSortedByDate();
     }
 }

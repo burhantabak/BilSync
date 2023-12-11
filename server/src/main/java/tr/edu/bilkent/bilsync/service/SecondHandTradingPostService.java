@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.SecondHandTradingPost;
 import tr.edu.bilkent.bilsync.repository.SecondHandTradingPostRepository;
 
+import java.util.List;
+
 @Service
 public class SecondHandTradingPostService {
 
@@ -22,5 +24,9 @@ public class SecondHandTradingPostService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public List<SecondHandTradingPost> getPostsSortedByDate() {
+        return secondHandTradingPostRepository.findSecondHandTradingPostsSortedByDate();
     }
 }

@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.AnnouncementPost;
 import tr.edu.bilkent.bilsync.repository.AnnouncementPostRepository;
 
+import java.util.List;
+
 @Service
 public class AnnouncementPostService {
 
@@ -21,5 +23,8 @@ public class AnnouncementPostService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+    public List<AnnouncementPost> getPostsSortedByDate() {
+        return announcementPostRepository.findAnnouncementPostsSortedByDate();
     }
 }

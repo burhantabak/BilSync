@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.BorrowAndLendPost;
 import tr.edu.bilkent.bilsync.repository.BorrowAndLendPostRepository;
 
+import java.util.List;
+
 @Service
 public class BorrowAndLendPostService {
     private final BorrowAndLendPostRepository borrowAndLendPostRepository;
@@ -21,5 +23,9 @@ public class BorrowAndLendPostService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public List<BorrowAndLendPost> getPostsSortedByDate() {
+        return borrowAndLendPostRepository.findBorrowAndLendPostsSortedByDate();
     }
 }

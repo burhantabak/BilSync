@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.SectionExchangePost;
 import tr.edu.bilkent.bilsync.repository.SectionExchangePostRepository;
 
+import java.util.List;
+
 @Service
 public class SectionExchangePostService {
 
@@ -22,5 +24,9 @@ public class SectionExchangePostService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public List<SectionExchangePost> getPostsSortedByDate() {
+        return sectionExchangePostRepository.findSectionExchangePostsSortedByDate();
     }
 }

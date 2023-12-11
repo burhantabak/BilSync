@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.DonationPost;
 import tr.edu.bilkent.bilsync.repository.DonationPostRepository;
 
+import java.util.List;
+
 @Service
 public class DonationPostService {
 
@@ -22,5 +24,9 @@ public class DonationPostService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public List<DonationPost> getPostsSortedByDate() {
+        return donationPostRepository.findDonationPostsSortedByDate();
     }
 }

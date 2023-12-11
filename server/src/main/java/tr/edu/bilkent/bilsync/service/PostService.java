@@ -3,6 +3,10 @@ package tr.edu.bilkent.bilsync.service;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.*;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+
 @Service
 public class PostService {
 
@@ -51,5 +55,25 @@ public class PostService {
             default:
                 return false;
         }
+    }
+
+    public HashSet<Post> getPostsSortedByDate() {
+        HashSet<Post> allPosts = new HashSet<Post>();
+
+        // Add posts of each type to the set, sorted by date
+        addSortedPosts(allPosts, announcementPostService.getPostsSortedByDate());
+        addSortedPosts(allPosts, borrowAndLendPostService.getPostsSortedByDate());
+        addSortedPosts(allPosts, donationPostService.getPostsSortedByDate());
+        addSortedPosts(allPosts, lostAndFoundPostService.getPostsSortedByDate());
+        addSortedPosts(allPosts, normalPostService.getPostsSortedByDate());
+        addSortedPosts(allPosts, sectionExchangePostService.getPostsSortedByDate());
+        addSortedPosts(allPosts, secondHandTradingPostService.getPostsSortedByDate());
+
+        return allPosts;
+    }
+
+    private <T extends Post> void addSortedPosts(HashSet<Post> allPosts, List<T> posts) {
+        posts.sort(Comparator.comparing(Post::getPostDate).reversed());
+        allPosts.addAll(posts);
     }
 }

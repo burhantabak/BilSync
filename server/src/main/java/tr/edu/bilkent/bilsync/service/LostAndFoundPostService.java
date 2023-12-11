@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.LostAndFoundPost;
 import tr.edu.bilkent.bilsync.repository.LostAndFoundPostRepository;
 
+import java.util.List;
+
 @Service
 public class LostAndFoundPostService {
     private final LostAndFoundPostRepository lostAndFoundPostRepository;
@@ -21,5 +23,9 @@ public class LostAndFoundPostService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public List<LostAndFoundPost> getPostsSortedByDate() {
+        return lostAndFoundPostRepository.findLostAndFoundPostsSortedByDate();
     }
 }

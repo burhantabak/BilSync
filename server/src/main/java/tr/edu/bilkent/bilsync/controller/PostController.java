@@ -2,12 +2,15 @@ package tr.edu.bilkent.bilsync.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.entity.*;
 import tr.edu.bilkent.bilsync.service.PostService;
+
+import java.util.HashSet;
 
 @RestController
 @RequestMapping("/post")
@@ -64,6 +67,18 @@ public class PostController {
         User user = (User) authentication.getPrincipal();
         long userId = user.getId();
         post.setAuthorID(userId);
+    }
+
+    @GetMapping("/getAllPosts")
+    public ResponseEntity<HashSet<Post>> getAllPosts() {
+        try {
+            HashSet<Post> allPosts = postService.getPostsSortedByDate();
+            return ResponseEntity.ok(allPosts);
+        } catch(Exception e) {
+            System.out.println(e);
+            HashSet<Post> allPosts = new HashSet<Post>();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
     /*
     @GetMapping("/create")
