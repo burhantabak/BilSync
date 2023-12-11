@@ -29,7 +29,6 @@ export default function LoginForm({handleLogin}) {
         </div>
         <div className='flex-1 p-10'>
         <h1 className='text-gray-900 text-3xl font-bold'> Login to your account</h1>
-        {error && <p className="text-red-500">{error}</p>}
         <form className="space-y-4 md:space-y-6" action="#">
                   <div>
                       <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
@@ -41,6 +40,7 @@ export default function LoginForm({handleLogin}) {
                       <input type="password" name="password" onChange={(event)=>setPassword(event.target.value)}
                        id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-sky-300 focus:border-primary-600 block w-full p-2.5" required=""/>
                   </div>
+                  {error && <p className="text-red-500">{error}</p>}
                   <div className="flex items-center justify-between">
                       <div className="flex items-start">
                           <div className="flex items-center h-5">
