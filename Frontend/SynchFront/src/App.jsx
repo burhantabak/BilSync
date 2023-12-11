@@ -11,6 +11,7 @@ import { SearchResultList } from "./statics/SearchResultList.jsx"
 import AboutUs from "./Components/AboutUs.jsx"
 import EditAccount from "./Components/EditAccount.jsx"
 import CreatePost from "./Components/CreatePostPage.jsx"
+import ResetPassword from "./Components/ResetPassword.jsx"
 
 
 
@@ -34,6 +35,8 @@ function App() {
               <Route path="/editProfile" element={<ProtectedRoute><CommentScreen/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
               <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
+              <Route path="/resetPassword" element = {<ResetPassword/>}/>
+              <Route path="/changePassword" element = {<ChangePassword/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
           </BrowserRouter>
