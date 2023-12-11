@@ -173,7 +173,7 @@ export const DataProvider = ({ children }) => {
     },
     // Add more entries as needed
   ];
-  const value = useMemo(() => ({ postList, chatList, user, login, logout }), [postList,chatList,user,login,logout]);
+  const value = useMemo(() => ({ postList, chatList, user, login, logout, error}), [postList,chatList,user,login,logout, error]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
