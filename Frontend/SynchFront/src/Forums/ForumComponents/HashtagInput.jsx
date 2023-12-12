@@ -14,7 +14,7 @@ export const HashtagInput = (props) => {
     };
   
     return (
-      <div className="mx-2">
+      <div className="mx-2 mb-2">
         <div className='flex'>
             <label htmlFor="" className='w-28 font-semibold'> Hashtags: </label>
             <input
