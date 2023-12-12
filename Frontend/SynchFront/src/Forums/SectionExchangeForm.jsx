@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ImageInput from './ForumComponents/ImageInput'
 import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
-export default function SecondHandForum() {
+export default function SectionExchangeForm() {
     const [hashtags,setHashtags] = useState([]);
     const addTag= (event)=>{
         if (event.target.value !== "") {
@@ -17,7 +17,7 @@ export default function SecondHandForum() {
   return (
     <div>
         <div className='flex justify-center mb-5'>
-            <h1 className='font-bold text-2xl'>Second Hand Trading Post Creation</h1>
+            <h1 className='font-bold text-2xl'>Second Exchange Post Creation</h1>
         </div>
         <form>
             <HashtagInput tags={hashtags} setTags={setHashtags}/>

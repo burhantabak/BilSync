@@ -31,7 +31,8 @@ export default function Navbar() {
 
   return (
     <div className='flex bg-sky-600 justify-between px-4'>
-        <h1 className='text-3xl text-white font-bold font-mono py-3'>BilSync</h1>
+        <h1 onClick={()=>navigate("/mainPage")}
+        className='text-3xl text-white font-bold font-mono py-3'>BilSync</h1>
         <div>
             <ul className='flex gap-5'>
                 <li className='text-white text-xl mr-4 hover:bg-gray-400 py-4 px-1'><a href="/aboutUs">About Us</a></li>
