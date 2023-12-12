@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.entity.*;
+import tr.edu.bilkent.bilsync.service.AuthService;
 import tr.edu.bilkent.bilsync.service.PostService;
 
 import java.util.HashSet;
@@ -16,9 +17,11 @@ import java.util.HashSet;
 @RequestMapping("/post")
 public class PostController {
     private final PostService postService;
+    private final AuthService authService; //TODO: we should somehow separate authservice from this controller
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, AuthService authService) {
         this.postService = postService;
+        this.authService = authService;
     }
 
     @GetMapping()
@@ -57,7 +60,10 @@ public class PostController {
                 return ResponseEntity.badRequest().build();
         }
         setCommonPostFields(post);
-        if(postService.createPost(post)){
+        if(postService.createPost(post)) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User user = (User) authentication.getPrincipal();
+            authService.addPost(user, post);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
@@ -80,9 +86,4 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-    /*
-    @GetMapping("/create")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public boolean createPost{}
-    */ // todo
 }

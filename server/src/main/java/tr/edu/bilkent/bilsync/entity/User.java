@@ -1,17 +1,14 @@
 package tr.edu.bilkent.bilsync.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "app_user")
@@ -29,6 +26,10 @@ public class User implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    //TODO: Check if FetchType.EAGER is appropriate to use
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Post> postList = new HashSet<Post>();
 
     // Constructors
     public User() {}
@@ -101,4 +102,10 @@ public class User implements UserDetails {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void setPostList(Set<Post> postList) { this.postList = postList; }
+
+    public Set<Post> getPostList() { return this.postList; }
+
+    public void addPost(Post post) { this.postList.add(post); }
 }
