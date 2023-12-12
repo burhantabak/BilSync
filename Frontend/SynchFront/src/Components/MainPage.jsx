@@ -46,7 +46,7 @@ export default function MainPage() {
           id='search-dropdown'
           className='block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:outline-none'
           placeholder='Search'
-          style={{ Index: 0 }} // z index helps to show the dropdown menu on top of other elements
+          style={{ zIndex: 0 }} // z index helps to show the dropdown menu on top of other elements
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           required
