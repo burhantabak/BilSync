@@ -1,11 +1,8 @@
 package tr.edu.bilkent.bilsync.service;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationRequestBody;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationResponse;
-import tr.edu.bilkent.bilsync.entity.Post;
 import tr.edu.bilkent.bilsync.entity.User;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
@@ -36,15 +33,5 @@ public class AuthService {
             System.out.println(e.getMessage());
             return false;
         }
-    }
-
-    public boolean addPost(User user, Post post){
-        if(user == null){
-            return false;
-        }
-        user.addPost(post);
-        userRepository.save(user);
-        System.out.println(user.getPostList());
-        return true;
     }
 }
