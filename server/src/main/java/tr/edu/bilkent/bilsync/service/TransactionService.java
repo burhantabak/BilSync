@@ -73,6 +73,7 @@ public class TransactionService {
         transaction.setTransactionAmount(trDto.getTransactionAmount());
         transaction.setTakerId(currentUser.getId());
         transaction.setGiverId(trDto.getGiverId());
+        transaction.setPostId(trDto.getPostId());
         transaction.setMoneyFetchDate(new Date()) ;
         transaction.setStatus(TransactionState.PENDING_GIVER_APPROVAL);
         return transactionRepository.save(transaction);
