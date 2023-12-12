@@ -64,8 +64,8 @@ public class PostController {
     }
     private void setCommonPostFields(Post post) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        long userId = user.getId();
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+        long userId = userEntity.getId();
         post.setAuthorID(userId);
     }
 

@@ -4,7 +4,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tr.edu.bilkent.bilsync.entity.User;
+import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
 @RestController
@@ -12,8 +12,8 @@ import tr.edu.bilkent.bilsync.repository.UserRepository;
 public class UserController {
     UserRepository repo;
     @GetMapping("/users")
-    public Iterable<User> listUsers(){
-        Iterable<User> users = repo.findAll();
+    public Iterable<UserEntity> listUsers(){
+        Iterable<UserEntity> users = repo.findAll();
         return users;
     }
     @GetMapping("/welcome")

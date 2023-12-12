@@ -25,8 +25,8 @@ public class Comment {
     @Column(nullable = false)
     private long likeCount = 0;
 
-    @OneToMany(targetEntity = User.class)
-    private Set<User> taggedUserList = new HashSet<>();
+    @OneToMany(targetEntity = UserEntity.class)
+    private Set<UserEntity> taggedUserListEntity = new HashSet<>();
 
     @Column(length = 1000, nullable = false)
     private String text;
@@ -66,12 +66,12 @@ public class Comment {
         this.likeCount = likeCount;
     }
 
-    public Set<User> getTaggedUserList() {
-        return taggedUserList;
+    public Set<UserEntity> getTaggedUserList() {
+        return taggedUserListEntity;
     }
 
-    public void setTaggedUserList(Set<User> taggedUserList) {
-        this.taggedUserList = taggedUserList;
+    public void setTaggedUserList(Set<UserEntity> taggedUserListEntity) {
+        this.taggedUserListEntity = taggedUserListEntity;
     }
 
     public String getText() {

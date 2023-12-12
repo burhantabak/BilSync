@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "app_user")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +31,9 @@ public class User implements UserDetails {
     private String email;
 
     // Constructors
-    public User() {}
+    public UserEntity() {}
 
-    public User(String email, String password, String name) {
+    public UserEntity(String email, String password, String name) {
         this.password = password;
         this.name = name;
         this.email = email;
