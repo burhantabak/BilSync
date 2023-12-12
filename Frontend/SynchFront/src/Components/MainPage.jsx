@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
-import SearchBar from '../statics/SearchBar'
-import Post from '../model/Post.js'
-import CommentData from '../model/CommentData.js'
-import TradingPostItem from './TradingPostItem';
-import ForumPost from './ForumPost';
 import FeedPage from './FeedPage';
 import { useData } from '../Context/DataContext';
+import ChatScreen from './ChatScreen.jsx';
 
 export default function MainPage() {
     const {postList,chatList} = useData();
@@ -14,7 +10,11 @@ export default function MainPage() {
     const [filterForum, setFilterForum] = useState(true);
     const [filterLostnFound, setFilterLostnFound] = useState(true);
     const [selectedChat, setSelectedChat] = useState(null);
-  return (
+    const [searchInput, setSearchInput] = useState('');
+
+  
+    console.log("selected chat" + selectedChat)
+  return (  
     <div className='flex w-full divide-x-2 mt-4'>
         <div className='sticky  pt-5 px-2 divide-y'>
             <h2 className='font-bold text-center text-xl py-2'>Categories</h2>
@@ -35,17 +35,48 @@ export default function MainPage() {
             <TradingPostItem vote={11} title="Basys3 Sale" isBuy={true} nameUser="Kenan Zeynalov" price={2700}/>
             <TradingPostItem vote={3} title="Basys3 Sale" nameUser="Anıl Hoca" price={150}/>
             <TradingPostItem vote={2} title="Basys3 Sale" isBuy={true} nameUser="12344" price={3000}/> */}
-            <FeedPage postList={postList} filterForum={filterForum} filterLostnFound={filterLostnFound} filterTrading={filterTrading}/>
+            {!selectedChat ? <FeedPage postList={postList} filterForum={filterForum} filterLostnFound={filterLostnFound} filterTrading={filterTrading}/>
+            :<ChatScreen chat={selectedChat} setSelectedChat={setSelectedChat}/>}
         </div>
         <div className='  px-2 pt-5 flex-1 divide-y'>
             <h2 className='mt-4 font-bold text-center text-xl'>Chat</h2>
-            {chatList.map((chat,index)=><ChatItem key={index} chat={chat}/>)}
+            <div className='flex items-center '>
+        <input
+          type='search'
+          id='search-dropdown'
+          className='block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:outline-none'
+          placeholder='Search'
+          style={{ Index: 0 }} // z index helps to show the dropdown menu on top of other elements
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          required
+        /> 
+        <button 
+            type = 'button'
+            className='ml-4 bg-blue-400 text-white text-sm font-medium px-4 py-2 rounded-lg'>
+            <svg 
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth='1.5'
+            stroke='currentColor'
+            className='w-6 h-6'>
+                <path 
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M12 6v12m6-6H6'
+                    />
+            </svg>
+          </button>
+        </div>
+            {chatList.filter((chat) => chat.userName.toLowerCase().includes(searchInput.toLowerCase())
+            ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)}
         </div>
     </div>
   )
 }
 
-function ChatItem({chat}){
+function ChatItem({chat,handleChat}){
     console.log(chat)
     const {isGroupChat,userName} = chat;
     console.log(`isGroupChat=${isGroupChat}`)
@@ -53,7 +84,8 @@ function ChatItem({chat}){
         return <div>Loading..</div>
     }
     return(
-        <div className='flex rounded-lg py-3 my-2 items-center hover:bg-gray-200'>
+        <div onClick={()=>{handleChat();console.log("Clicked chat")}} 
+        className='flex rounded-lg py-3 my-2 items-center hover:bg-gray-200'>
             <div>{isGroupChat ? <img className='w-4 h-4 mr-1' alt='group-icon' src='./group.svg'/>:
             <img className='w-4 h-4 mr-1' alt='person-icon' src='./person.svg'/>}</div>
             <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>

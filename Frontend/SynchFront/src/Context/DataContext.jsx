@@ -1,8 +1,30 @@
 import { createContext, useContext, useMemo } from "react";
+import { authUser } from "../calling/authCalling";
+import { useLocalStorage } from "./useLocalStorage";
+import { useState } from "react";
 
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
+  const [user, setUser] = useLocalStorage("user", {});
+  const [error, setError] = useState(""); // New state to store authentication error
+
+  const login = async (userName, password) =>{
+
+    try{
+      let claimedUser = await authUser(userName, password);
+      setUser(claimedUser);
+      setError(""); // Reset error state on successful login
+    }
+    catch(error){
+      setError("Invalid username or password"); // Set error state on unsuccessful login
+      console.log("are we in datacontext")
+      error = "Invalid username or password"; 
+    }
+  }
+  const logout = ()=>{
+    setUser(null);
+  }
   const postList = [
     {
       userName: "Tuna Saygın",
@@ -11,6 +33,7 @@ export const DataProvider = ({ children }) => {
       vote: 16,
       isTrading: false,
       isLostnFound: false,
+      label: "Forum",
       price: null,
       IBAN: null,
       comments: [
@@ -41,6 +64,7 @@ export const DataProvider = ({ children }) => {
       vote: 3,
       isTrading: false,
       isLostnFound: true,
+      label: "Lost",
       price: null,
       IBAN: null,
       comments: [
@@ -71,6 +95,7 @@ export const DataProvider = ({ children }) => {
       vote: 10000,
       isTrading: true,
       isLostnFound: false,
+      label: "Trading",
       price: 30000,
       isBuy: true,
       IBAN: "TR 203094090030",
@@ -148,7 +173,7 @@ export const DataProvider = ({ children }) => {
     },
     // Add more entries as needed
   ];
-  const value = useMemo(() => ({ postList, chatList }), [postList,chatList]);
+  const value = useMemo(() => ({ postList, chatList, user, login, logout, error}), [postList,chatList,user,login,logout, error]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
