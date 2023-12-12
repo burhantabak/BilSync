@@ -1,10 +1,13 @@
 package tr.edu.bilkent.bilsync.service;
 
 import org.springframework.stereotype.Service;
+import tr.edu.bilkent.bilsync.dto.TransactionDto;
 import tr.edu.bilkent.bilsync.entity.Transaction;
+import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.NormalPostRepository;
 import tr.edu.bilkent.bilsync.repository.TransactionRepository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,10 +64,15 @@ public class TransactionService {
     /**
      * Creates a new transaction.
      *
-     * @param transaction The transaction to create.
+     * @param trDto The transaction data object to turned into transaction.
      * @return The created {@link Transaction}.
      */
-    public Transaction createTransaction(Transaction transaction) {
+    public Transaction createTransaction(TransactionDto trDto,UserEntity currentUser) {
+        Transaction transaction=new Transaction();
+        transaction.setTransactionAmount(trDto.getTransactionAmount());
+        transaction.setTakerId(currentUser.getId());
+        transaction.setGiverId(trDto.getGiverId());
+        transaction.setMoneyFetchDate(new Date()) ;
         return transactionRepository.save(transaction);
     }
 

@@ -1,8 +1,11 @@
 package tr.edu.bilkent.bilsync.controller.controllerEntities;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import tr.edu.bilkent.bilsync.dto.TransactionDto;
 import tr.edu.bilkent.bilsync.entity.Transaction;
+import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.service.TransactionService;
 
 import java.util.List;
@@ -41,12 +44,13 @@ public class TransactionController {
     /**
      * Creates a new transaction.
      *
-     * @param transaction The transaction to create.
+     * @param transaction The transaction to create. Notice the giverId should be in the DTO!
+     * @param currentUser The current user is always accepted as TAKER!
      * @return The created {@link Transaction}.
      */
-    @PostMapping
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
-        return transactionService.createTransaction(transaction);
+    @PostMapping("/create")
+    public Transaction createTransaction(@RequestBody TransactionDto transaction, @AuthenticationPrincipal UserEntity currentUser) {
+        return transactionService.createTransaction(transaction,currentUser);
     }
 
     /**
@@ -56,7 +60,7 @@ public class TransactionController {
      * @param transaction The updated transaction data.
      * @return The updated {@link Transaction}, or {@code null} if the transaction with the given ID is not found.
      */
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     public Transaction updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
         return transactionService.updateTransaction(id, transaction);
     }
