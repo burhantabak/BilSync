@@ -17,7 +17,7 @@ export default function SectionExchangeForm() {
   return (
     <div>
         <div className='flex justify-center mb-5'>
-            <h1 className='font-bold text-2xl'>Second Exchange Post Creation</h1>
+            <h1 className='font-bold text-2xl'>Borrow Creation</h1>
         </div>
         <form>
             <HashtagInput tags={hashtags} setTags={setHashtags}/>
