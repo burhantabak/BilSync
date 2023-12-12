@@ -8,7 +8,7 @@ export default function AddAccount() {
   const [profileImage, setProfileImage] = useState(null);
   const [email, setEmail] = useState('');
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const handleAccountTypeChange = (event) => {
     setAccountType(event.target.value);
