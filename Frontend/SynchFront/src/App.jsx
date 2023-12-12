@@ -16,6 +16,7 @@ import ForgetPassword from "./Components/ForgetPassword.jsx"
 import ChangePassword from "./Components/ChangePassword.jsx"
 import EditProfile from "./Components/EditProfile.jsx"
 import AdminPanel from "./Components/AdminPanel.jsx"
+import AddAccount from "./statics/AddAccount.jsx"
 
 function App() {
   const [results, setResults] = useState([]);
@@ -41,6 +42,7 @@ function App() {
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
               <Route path="/resetPassword" element = {<ResetPassword/>}/>
               <Route path="/changePassword" element = {<ChangePassword/>}/>
+              <Route path="/addAccount" element = {<AddAccount/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
           </BrowserRouter>
