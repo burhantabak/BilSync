@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.dto.ChatDto;
+import tr.edu.bilkent.bilsync.dto.ChatMessageDto;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.service.ChatService;
 
@@ -44,4 +45,13 @@ public class ChatController {
         chatService.inviteUsers(chatId, inviteeIds, currentUser);
         return ResponseEntity.ok("Invite sent successfully.");
     }
+
+    @PostMapping("/{chatId}/sendMessage")
+    public ResponseEntity<String> sendMessageToChat(@PathVariable Long chatId, @RequestBody ChatMessageDto chatMessageDto, @AuthenticationPrincipal UserEntity currentUser){
+        chatService.sendMessageToChat(chatId, chatMessageDto, currentUser);
+        return ResponseEntity.ok("Message sent successfully.");
+    }
+
+//    @GetMapping("/{chatId}")
+//    public ResponseEntity<>
 }

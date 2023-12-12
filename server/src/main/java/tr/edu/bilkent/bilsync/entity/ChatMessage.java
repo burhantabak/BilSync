@@ -3,23 +3,26 @@ package tr.edu.bilkent.bilsync.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "message")
-public class Message {
+public class ChatMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chatuser_id")
-    private ChatUser sender;
+    @JoinColumn(name = "user_id")
+    private UserEntity sender;
 
     private String body;
-    private String imagePath;
+    private String imagePath; // todo may be multiple images?
     private Date date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
 
     public long getId() {
         return id;
@@ -37,11 +40,19 @@ public class Message {
         this.body = body;
     }
 
-    public ChatUser getSender() {
+    public UserEntity getSender() {
         return sender;
     }
 
-    public void setSender(ChatUser sender) {
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public void setSender(UserEntity sender) {
         this.sender = sender;
     }
 

@@ -2,15 +2,14 @@ package tr.edu.bilkent.bilsync.service;
 
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.dto.ChatDto;
-import tr.edu.bilkent.bilsync.entity.Chat;
-import tr.edu.bilkent.bilsync.entity.ChatUser;
-import tr.edu.bilkent.bilsync.entity.ChatUserStatus;
-import tr.edu.bilkent.bilsync.entity.UserEntity;
+import tr.edu.bilkent.bilsync.dto.ChatMessageDto;
+import tr.edu.bilkent.bilsync.entity.*;
+import tr.edu.bilkent.bilsync.repository.ChatMessageRepository;
 import tr.edu.bilkent.bilsync.repository.ChatRepository;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,9 +18,12 @@ public class ChatService {
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
 
-    public ChatService(UserRepository userRepository, ChatRepository chatRepository) {
+    private final ChatMessageRepository chatMessageRepository;
+
+    public ChatService(UserRepository userRepository, ChatRepository chatRepository, ChatMessageRepository chatMessageRepository) {
         this.userRepository = userRepository;
         this.chatRepository = chatRepository;
+        this.chatMessageRepository = chatMessageRepository;
     }
 
     public void createChat(ChatDto chatDto, UserEntity currentUser) {
@@ -100,5 +102,16 @@ public class ChatService {
                 .map(e->e.orElseThrow(() -> new RuntimeException("User not found.")))
                 .forEach(e -> addUserToChat(chat, e, ChatUserStatus.PENDING_REQUEST));
         chatRepository.save(chat);
+    }
+
+    public void sendMessageToChat(Long chatId, ChatMessageDto chatMessageDto, UserEntity currentUser) {
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setSender(currentUser);
+        chatMessage.setBody(chatMessageDto.getBody());
+        chatMessage.setImagePath(null); // todo to be changed later
+        chatMessage.setDate(new Date());
+        chatMessage.setChat(chat);
+        chatMessageRepository.save(chatMessage);
     }
 }

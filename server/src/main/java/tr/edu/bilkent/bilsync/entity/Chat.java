@@ -13,8 +13,8 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Message> messages = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "chat")
+    private List<ChatMessage> chatMessages = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "chat")
     private List<ChatUser> users = new ArrayList<>();
@@ -22,6 +22,14 @@ public class Chat {
     private boolean isGroupChat;
 
     private String chatName;
+
+    public List<ChatMessage> getChatMessages() {
+        return chatMessages;
+    }
+
+    public void setChatMessages(List<ChatMessage> chatMessages) {
+        this.chatMessages = chatMessages;
+    }
 
     public long getId() {
         return id;
@@ -31,12 +39,12 @@ public class Chat {
         this.id = id;
     }
 
-    public List<Message> getMessages() {
-        return messages;
+    public List<ChatMessage> getMessages() {
+        return chatMessages;
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public void setMessages(List<ChatMessage> chatMessages) {
+        this.chatMessages = chatMessages;
     }
 
     public List<ChatUser> getUsers() {
