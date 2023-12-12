@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const mockUsers = [
   { id: 1, name: 'Tuna Saygin', email: 'tuna.saygin@ug.bilkent.edu.tr' , isBanned: false,   imageUrl: 'https://media.licdn.com/dms/image/C4D03AQFnedyongjCEw/profile-displayphoto-shrink_800_800/0/1668101973946?e=1706140800&v=beta&t=Rrw9xDrS-k7l0eLVvwz5VmWuNslnoFhzLlqQi6QfdAI' },
@@ -9,6 +10,8 @@ const mockUsers = [
 export default function AdminPanel() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState(mockUsers);
+
+  const navigate = useNavigate();
   
 
   const handleChangeEmail = (userId) => {
@@ -24,9 +27,11 @@ export default function AdminPanel() {
   };
 
   const handleAddAccount = () => {
-    console.log('Navigate to add account page'); // Replace with actual navigation logic
+
+    navigate("/admin/addAccount");
   };
 
+ 
   const handleSearch = (event) => {
     const searchValue = event.target.value.toLowerCase();
     setSearchTerm(searchValue);

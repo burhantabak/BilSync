@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddAccount() {
   const [accountType, setAccountType] = useState('');
@@ -6,6 +7,8 @@ export default function AddAccount() {
   const [surname, setSurname] = useState('');
   const [profileImage, setProfileImage] = useState(null);
   const [email, setEmail] = useState('');
+
+  const navigate = useNavigate();
 
   const handleAccountTypeChange = (event) => {
     setAccountType(event.target.value);
@@ -31,8 +34,22 @@ export default function AddAccount() {
     event.preventDefault();
   };
 
+  const handleGoBack = () => { // This function is used to navigate back to the previous page
+    navigate(-1); // Navigate back to the previous page
+};
+
+
   return (
     <div className="flex flex-col h-full bg-gray-100">
+        <div className="flex items-center mb-4">
+                     <button
+                        className="text-blue-500 hover:underline"
+                        onClick={handleGoBack}
+                     >
+                        &larr; Back
+                    </button>
+                </div>
+        
       <div className="flex flex-row justify-between px-4 py-2 bg-gray-200">
         <h1 className="text-xl font-bold">Add Account</h1>
       </div>
@@ -96,3 +113,4 @@ export default function AddAccount() {
       </form>
     </div>
 )};
+

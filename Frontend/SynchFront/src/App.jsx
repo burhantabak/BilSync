@@ -42,7 +42,7 @@ function App() {
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
               <Route path="/resetPassword" element = {<ResetPassword/>}/>
               <Route path="/changePassword" element = {<ChangePassword/>}/>
-              <Route path="/addAccount" element = {<AddAccount/>}/>
+              <Route path="/admin/addAccount" element = {<AddAccount/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
           </BrowserRouter>
