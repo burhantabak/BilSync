@@ -1,11 +1,17 @@
 package tr.edu.bilkent.bilsync.dto;
 
 import tr.edu.bilkent.bilsync.entity.Transaction;
+import tr.edu.bilkent.bilsync.entity.TransactionState;
 
 /**
  * Data Transfer Object (DTO) representing a simplified view of a {@link Transaction}.
  */
 public class TransactionDto {
+
+    /**
+     * The current state of the transaction.
+     */
+    private TransactionState status;
 
     /**
      * ID of the taker in the transaction.
@@ -18,16 +24,12 @@ public class TransactionDto {
     private Long giverId;
 
     /**
-     * Retrieves the ID of the post in the transaction.
-     *
-     * @return The post's ID.
+     * ID of the post the transaction is based on.
      */
-    public Long getPostId() {
-        return postId;
-    }
+    private Long postId;
 
     /**
-     * Sets the ID of the taker in the transaction.
+     * Sets the ID of the post in the transaction.
      *
      * @param postId The post's ID to set.
      */
@@ -35,10 +37,15 @@ public class TransactionDto {
         this.postId = postId;
     }
 
+
     /**
-     * ID of the post the transaction is based on.
+     * Retrieves the ID of the post in the transaction.
+     *
+     * @return The post's ID.
      */
-    private Long postId;
+    public Long getPostId() {
+        return postId;
+    }
 
     /**
      * Amount of the transaction.
@@ -100,6 +107,26 @@ public class TransactionDto {
     public void setGiverId(Long giverId) {
         this.giverId = giverId;
     }
+
+
+    /**
+     * Retrieves the current status of the transaction.
+     *
+     * @return The current {@link TransactionState} of the transaction.
+     */
+    public TransactionState getStatus() {
+        return status;
+    }
+
+    /**
+     * Sets the status of the transaction to the specified {@link TransactionState}.
+     *
+     * @param status The new {@link TransactionState} to set for the transaction.
+     */
+    public void setStatus(TransactionState status) {
+        this.status = status;
+    }
+
 
     /**
      * Sets the amount of the transaction.

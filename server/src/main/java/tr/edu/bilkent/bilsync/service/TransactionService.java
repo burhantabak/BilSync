@@ -3,6 +3,7 @@ package tr.edu.bilkent.bilsync.service;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.dto.TransactionDto;
 import tr.edu.bilkent.bilsync.entity.Transaction;
+import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.NormalPostRepository;
 import tr.edu.bilkent.bilsync.repository.TransactionRepository;
@@ -73,6 +74,7 @@ public class TransactionService {
         transaction.setTakerId(currentUser.getId());
         transaction.setGiverId(trDto.getGiverId());
         transaction.setMoneyFetchDate(new Date()) ;
+        transaction.setStatus(TransactionState.PENDING_GIVER_APPROVAL);
         return transactionRepository.save(transaction);
     }
 

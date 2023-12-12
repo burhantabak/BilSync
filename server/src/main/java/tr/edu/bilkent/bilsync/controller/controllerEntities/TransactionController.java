@@ -64,7 +64,7 @@ public class TransactionController {
     public Transaction updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
         return transactionService.updateTransaction(id, transaction);
     }
-
+//todo multiple endpoint okey
     /**
      * Deletes a transaction by its ID.
      *
