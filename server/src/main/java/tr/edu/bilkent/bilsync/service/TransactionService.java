@@ -85,11 +85,10 @@ public class TransactionService {
      * @param updatedTransaction The updated transaction data.
      * @return The updated {@link Transaction}, or {@code null} if the transaction with the given ID is not found.
      */
-    public Transaction updateTransaction(Long id, Transaction updatedTransaction) {
+    public Transaction updateTransaction(Long id, Transaction updatedTransaction, TransactionState newState) {
         Transaction existingTransaction = transactionRepository.findById(id).orElse(null);
         if (existingTransaction != null) {
-            // Update the fields of existingTransaction with the fields of updatedTransaction
-
+           updatedTransaction.setStatus(newState);
             return transactionRepository.save(existingTransaction);
         }
         return null;

@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.dto.TransactionDto;
 import tr.edu.bilkent.bilsync.entity.Transaction;
+import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.service.TransactionService;
 
@@ -12,6 +13,11 @@ import java.util.List;
 
 /**
  * Controller class for handling HTTP requests related to transactions.
+ * The expected flow of transactions:
+ * 1-Taker clicks to buy:  transaction in PENDING_GIVER_APPROVAL state (for delivery)
+ * 2-Giver approves that they delivered the item, transaction in  PENDING_TAKER_APPROVAL (for getting the delivery safely)
+ * 3.1- if Taker approves that they took the item transaction in DEPOSITED state (successful ending)
+ * 3.2- else transaction in REFUNDED state (unsuccessful ending)
  */
 @RestController
 @RequestMapping("/transactions")
@@ -50,21 +56,49 @@ public class TransactionController {
      */
     @PostMapping("/create")
     public Transaction createTransaction(@RequestBody TransactionDto transaction, @AuthenticationPrincipal UserEntity currentUser) {
-        return transactionService.createTransaction(transaction,currentUser);
+        return transactionService.createTransaction(transaction, currentUser);
+    }
+
+
+    /**
+     * Updates the state of a transaction to "Giver Approved".
+     *
+     * @param id          The ID of the transaction to be updated.
+     * @param transaction The updated transaction details.
+     * @return The updated {@link Transaction} with the state set to {@link TransactionState#PENDING_TAKER_APPROVAL}.
+     */
+    @PutMapping("update/giverApproved/{id}")
+    public Transaction updateToGiverApproved(@PathVariable Long id, @RequestBody Transaction transaction) {
+        return transactionService.updateTransaction(id, transaction, TransactionState.PENDING_TAKER_APPROVAL);
     }
 
     /**
-     * Updates an existing transaction by its ID.
+     * Updates the state of a transaction to "Taker Approved".
      *
-     * @param id          The ID of the transaction to update.
-     * @param transaction The updated transaction data.
-     * @return The updated {@link Transaction}, or {@code null} if the transaction with the given ID is not found.
+     * @param id          The ID of the transaction to be updated.
+     * @param transaction The updated transaction details.
+     * @return The updated {@link Transaction} with the state set to {@link TransactionState#DEPOSITED}.
      */
-    @PutMapping("update/{id}")
-    public Transaction updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, transaction);
+    @PutMapping("update/takerApproved/{id}")
+    public Transaction updateToTakerApproved(@PathVariable Long id, @RequestBody Transaction transaction) {
+        return transactionService.updateTransaction(id, transaction, TransactionState.DEPOSITED);
     }
-//todo multiple endpoint okey
+
+    /**
+     * Updates the state of a transaction to "Refunded".
+     *
+     * @param id          The ID of the transaction to be updated.
+     * @param transaction The updated transaction details.
+     * @return The updated {@link Transaction} with the state set to {@link TransactionState#REFUNDED}.
+     */
+    @PutMapping("update/refund/{id}")
+    public Transaction updateToRefund(@PathVariable Long id, @RequestBody Transaction transaction) {
+        return transactionService.updateTransaction(id, transaction, TransactionState.REFUNDED);
+    }
+
+    //todo giving out dto or real obj?
+    //todo refund durumuna end point yazmak mantıklı mı ama: çünkü zamana göre refund automated olmalı
+
     /**
      * Deletes a transaction by its ID.
      *
