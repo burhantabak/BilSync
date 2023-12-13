@@ -91,6 +91,14 @@ public class TransactionService {
         Transaction existingTransaction = transactionRepository.findById(id).orElse(null);
         if (existingTransaction != null) {
             updatedTransaction.setStatus(newState);
+            if(newState == TransactionState.PENDING_TAKER_APPROVAL)
+            {
+                updatedTransaction.setGiverApproveDate(new Date());
+            }
+            else if(newState == TransactionState.DEPOSITED)
+            {
+                updatedTransaction.setTakerApproveDate(new Date());
+            }
             return transactionRepository.save(existingTransaction);
         }
         return null;

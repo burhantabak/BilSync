@@ -53,7 +53,7 @@ public class Transaction {
      * The date when the buyer approves the transaction.
      */
     @Temporal(TemporalType.TIMESTAMP)
-    private Date buyerApproveDate;
+    private Date takerApproveDate;
 
     /**
      * The current state of the transaction.
@@ -128,8 +128,8 @@ public class Transaction {
      *
      * @param buyerApproveDate The buyer approval date to set.
      */
-    public void setBuyerApproveDate(Date buyerApproveDate) {
-        this.buyerApproveDate = buyerApproveDate;
+    public void setTakerApproveDate(Date buyerApproveDate) {
+        this.takerApproveDate = buyerApproveDate;
     }
 
     /**
@@ -209,8 +209,8 @@ public class Transaction {
      *
      * @return The buyer approval date.
      */
-    public Date getBuyerApproveDate() {
-        return buyerApproveDate;
+    public Date getTakerApproveDate() {
+        return takerApproveDate;
     }
 
     /**
