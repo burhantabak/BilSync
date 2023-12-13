@@ -51,7 +51,7 @@ public class AuthService {
         //token creation
         String tokenCreated = tokenService.generateToken(claimedEmail);
         String baseUrl = "http://127.0.0.1:5173";
-        String endpoint = "/changePassword?ticket=";
+        String endpoint = "/resetPassword?ticket=";
         String mailLink =  baseUrl+endpoint+tokenCreated;//here the token is returned
         //mail title
         String mailTitle = "Reset Password Link at Bilsync";
