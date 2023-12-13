@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FeedPage from './FeedPage';
 import { useData } from '../Context/DataContext';
 import ChatScreen from './ChatScreen.jsx';
 
 export default function MainPage() {
-    const {postList,chatList} = useData();
-    console.log(postList);
+    const {postList,chatList,getThePosts,isPostsLoading} = useData();
+    console.log(isPostsLoading)
+    useEffect(()=> getThePosts()
+        ,[]
+    );
     const [filterTrading, setFilterTrading] = useState(true);
     const [filterForum, setFilterForum] = useState(true);
     const [filterLostnFound, setFilterLostnFound] = useState(true);
     const [selectedChat, setSelectedChat] = useState(null);
     const [searchInput, setSearchInput] = useState('');
 
-  
+    
     console.log("selected chat" + selectedChat)
   return (  
     <div className='flex w-full divide-x-2 mt-4'>
@@ -35,8 +38,9 @@ export default function MainPage() {
             <TradingPostItem vote={11} title="Basys3 Sale" isBuy={true} nameUser="Kenan Zeynalov" price={2700}/>
             <TradingPostItem vote={3} title="Basys3 Sale" nameUser="Anıl Hoca" price={150}/>
             <TradingPostItem vote={2} title="Basys3 Sale" isBuy={true} nameUser="12344" price={3000}/> */}
-            {!selectedChat ? <FeedPage postList={postList} filterForum={filterForum} filterLostnFound={filterLostnFound} filterTrading={filterTrading}/>
+            {(!selectedChat) && !isPostsLoading ? <FeedPage postList={postList} filterForum={filterForum} filterLostnFound={filterLostnFound} filterTrading={filterTrading}/>
             :<ChatScreen chat={selectedChat} setSelectedChat={setSelectedChat}/>}
+            {isPostsLoading && "Loading.."}
         </div>
         <div className='  px-2 pt-5 flex-1 divide-y'>
             <h2 className='mt-4 font-bold text-center text-xl'>Chat</h2>

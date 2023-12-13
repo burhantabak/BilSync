@@ -10,7 +10,7 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
     console.log('Selected Category:', category);
 
   };
-
+  console.log("PostLissssttttt::::" + postList)
   return (
     <div className='mx-auto w-3/4 overflow-y-auto px-2 divide-y'>
         <SearchBar setResult={setSearchBarString} onCategoryChange={handleCategoryChange}/>
