@@ -1,8 +1,5 @@
 package tr.edu.bilkent.bilsync.entity;
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -50,7 +47,7 @@ public class Transaction {
      * The date when the seller approves the transaction.
      */
     @Temporal(TemporalType.TIMESTAMP)
-    private Date sellerApproveDate;
+    private Date giverApproveDate;
 
     /**
      * The date when the buyer approves the transaction.
@@ -122,8 +119,8 @@ public class Transaction {
      *
      * @param sellerApproveDate The seller approval date to set.
      */
-    public void setSellerApproveDate(Date sellerApproveDate) {
-        this.sellerApproveDate = sellerApproveDate;
+    public void setGiverApproveDate(Date sellerApproveDate) {
+        this.giverApproveDate = sellerApproveDate;
     }
 
     /**
@@ -203,8 +200,8 @@ public class Transaction {
      *
      * @return The seller approval date.
      */
-    public Date getSellerApproveDate() {
-        return sellerApproveDate;
+    public Date getGiverApproveDate() {
+        return giverApproveDate;
     }
 
     /**
