@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.time.*;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -31,6 +33,12 @@ public class Post {
 
     @Column(nullable = false)
     private long votes = 0;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "voters", joinColumns = @JoinColumn(name = "post_id"))
+    @MapKeyColumn(name = "user_id")
+    @Column(name = "vote")
+    private Map<Long, Integer> voters = new HashMap<>();
 
     @Column(nullable = false)
     private long views = 0;
@@ -113,6 +121,22 @@ public class Post {
 
     public void setVotes(long votes) {
         this.votes = votes;
+    }
+
+    public Map<Long, Integer> getVoters() {
+        return voters;
+    }
+
+    public void setVoters(Map<Long, Integer> voters) {
+        this.voters = voters;
+    }
+
+    public void vote(long userId, int vote) {
+        this.voters.put(userId, vote);
+    }
+
+    public void removeVote(long userId) {
+        this.voters.remove(userId);
     }
 
     public long getViews() {
