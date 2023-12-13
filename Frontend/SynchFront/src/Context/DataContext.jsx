@@ -27,6 +27,7 @@ export const DataProvider = ({ children }) => {
     setIsPostsLoading(true);
     getAllPosts(user).then(data=>{setPostList(data);setIsPostsLoading(false);});
   }
+  
   const logout = ()=>{
     setUser(null);
   }
