@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
+import { forgotPasswordRequest } from '../calling/authCalling';
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState('');
@@ -44,7 +45,8 @@ const ForgetPassword = () => {
           </div>
 
           <div className="flex justify-center">
-            <button type="submit" className="bg-white text-blue-500 font-bold px-4 py-2 rounded">
+            <button onClick={()=> forgotPasswordRequest(email)}
+            type="submit" className="bg-white text-blue-500 font-bold px-4 py-2 rounded">
               Send Reset Link
             </button>
           </div>
