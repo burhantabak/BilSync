@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useData } from '../Context/DataContext';
 
@@ -6,20 +6,35 @@ import { useData } from '../Context/DataContext';
 export default function LoginForm({handleLogin}) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const { login , error} = useData(); // Access error from the data context
+  const { login , error,user} = useData(); // Access error from the data context
 
   const nav = useNavigate();
   const handleAuth = async (event)=> {
     event.preventDefault();
-      await login(userName, password);
+    login(userName, password)
+    .then(() => {
+      console.log(user)
       handleLogin();
-      console.log("called");
+      console.log('called');
       console.log(userName);
       console.log(password);
-      nav("/mainPage");
+
+      // Wait for login to complete, then navigate
+    })
+    .catch((error) => {
+      // Handle login error
+      console.error('Login failed:', error);
+    });
 }
 
+  useEffect(()=>{
+    if(user && !(user.isAdmin)){nav('/mainPage');}
 
+      // Assuming 'user' is updated after login
+      if (user && user.isAdmin) {
+        nav('/admin/adminPanel');
+      }
+  },[user])
 
 
   return (
