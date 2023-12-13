@@ -13,6 +13,7 @@ import tr.edu.bilkent.bilsync.service.PostService;
 import java.util.HashSet;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/post")
 public class PostController {
     private final PostService postService;
@@ -94,7 +95,7 @@ public class PostController {
         long userId = userEntity.getId();
         post.setAuthorID(userId);
     }
-
+    @CrossOrigin
     @GetMapping("/getAllPosts")
     public ResponseEntity<HashSet<Post>> getAllPosts() {
         try {
