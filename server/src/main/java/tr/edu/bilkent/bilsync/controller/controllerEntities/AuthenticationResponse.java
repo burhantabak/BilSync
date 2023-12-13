@@ -9,10 +9,13 @@ public class AuthenticationResponse {
     public String name;
     @JsonProperty("email")
     public String email;
+    @JsonProperty("isAdmin")
+    public boolean isAdmin;
 
-    public AuthenticationResponse(String token, String name, String email){
+    public AuthenticationResponse(String token, String name, String email, boolean isAdmin){
         this.token = token;
         this.name = name;
         this.email = email;
+        this.isAdmin = isAdmin;
     }
 }

@@ -1,11 +1,12 @@
 // Import necessary dependencies and components
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useData } from '../Context/DataContext';
 
 // Define the ReportsPage component
 const ReportsPage = () => {
   // Retrieve postList from the DataContext
-  const { postList } = useData();
+  const { postList, getThePosts } = useData();
+  useEffect(()=>getThePosts,[]);
 
   // Define the initial reports state
   const [reports, setReports] = useState([
@@ -48,7 +49,8 @@ const ReportsPage = () => {
   // Define the handleViewReportedItem function
   const handleViewReportedItem = (report) => {
     setSelectedReport(report);
-  
+    console.log("report");
+    console.log(report)
     if (report.type === 'Post Report') {
       // Find the corresponding post based on the report's information
       const correspondingPost = postList.find((post) => post.authorId === report.id);

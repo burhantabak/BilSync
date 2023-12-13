@@ -20,10 +20,16 @@ public class AuthService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequestBody request){
+        String adminEmail = "admin@bilkent.edu.tr";
+        String adminPassword = "admin";
         UserEntity userEntity = userRepository.findByEmail(request.email);
+        if(request.email.equals(adminEmail) && request.password.equals(adminPassword)){
+            return new AuthenticationResponse(tokenService.generateToken(adminEmail),
+                    "admin", adminEmail,true);
+        }
         if(userEntity != null && userEntity.getPassword().equals(request.password)){
             return new AuthenticationResponse(tokenService.generateToken(userEntity.getEmail()),
-                    userEntity.getName(), userEntity.getEmail());
+                    userEntity.getName(), userEntity.getEmail(),false);
         }
         return null;
     }

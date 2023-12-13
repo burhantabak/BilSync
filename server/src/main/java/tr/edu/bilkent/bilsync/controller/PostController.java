@@ -103,8 +103,38 @@ public class PostController {
             return ResponseEntity.ok(allPosts);
         } catch(Exception e) {
             System.out.println(e);
-            HashSet<Post> allPosts = new HashSet<>();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @PostMapping("/vote/{postID}")
+    public ResponseEntity<?> vote(@PathVariable long postID, @RequestParam String type) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+        long userId = userEntity.getId();
+
+        Post post = postService.getPostByID(postID);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("POST_DOESNT_EXIST");
+        }
+
+        Integer votes = post.getVoters().get(userId);
+        int voteValue = 0;
+
+        switch (type) {
+            case "upvote":
+                voteValue = votes == null ? 1 : (votes == 1 ? -1 : (votes == 0 ? 1 : 2));
+                break;
+            case "downvote":
+                voteValue = votes == null ? -1 : (votes == -1 ? 1 : (votes == 0 ? -1 : -2));
+                break;
+            default:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid vote type");
+        }
+
+        post.getVoters().put(userId, Integer.compare(voteValue, 0));
+        post.setVotes(post.getVotes() + voteValue);
+        postService.createOrSavePost(post);
+        return ResponseEntity.ok().build();
     }
 }
