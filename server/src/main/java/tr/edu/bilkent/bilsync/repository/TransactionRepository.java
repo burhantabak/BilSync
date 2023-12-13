@@ -5,6 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import tr.edu.bilkent.bilsync.entity.Transaction;
 
+import java.util.List;
+
 /**
  * Repository interface for managing {@link Transaction} entities in the database.
  */
@@ -18,4 +20,12 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
      * @return The {@link Transaction} associated with the taker's ID, or {@code null} if not found.
      */
     Transaction findByTakerId(Long id);
+
+    /**
+     * Retrieves a list of transactions associated with a specific post ID.
+     *
+     * @param postId The ID of the post to retrieve transactions for.
+     * @return A list of transactions associated with the specified post ID.
+     */
+    List<Transaction> findAllByPostId(Long postId);
 }

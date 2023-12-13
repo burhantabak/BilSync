@@ -1,6 +1,7 @@
 package tr.edu.bilkent.bilsync.controller.controllerEntities;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.dto.TransactionDto;
@@ -84,17 +85,12 @@ public class TransactionController {
         return transactionService.updateTransaction(id, transaction, TransactionState.DEPOSITED);
     }
 
-    /**
-     * Updates the state of a transaction to "Refunded".
-     *
-     * @param id          The ID of the transaction to be updated.
-     * @param transaction The updated transaction details.
-     * @return The updated {@link Transaction} with the state set to {@link TransactionState#REFUNDED}.
-     */
-    @PutMapping("update/refund/{id}")
-    public Transaction updateToRefund(@PathVariable Long id, @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, transaction, TransactionState.REFUNDED);
+    @GetMapping("/by-post/{postId}")
+    public ResponseEntity<List<Transaction>> getTransactionsByPostId(@PathVariable Long postId) {
+        List<Transaction> transactions=transactionService.getTransactionsByPostId(postId);
+        return ResponseEntity.ok(transactions);
     }
+
 
     //todo giving out dto or real obj?
     //todo refund durumuna end point yazmak mantıklı mı ama: çünkü zamana göre refund automated olmalı
