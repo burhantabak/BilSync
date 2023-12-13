@@ -15,7 +15,7 @@ public class NormalPostService {
         this.normalPostRepository = normalPostRepository;
     }
 
-    public boolean createPost(NormalPost normalPost) {
+    public boolean createOrSavePost(NormalPost normalPost) {
         try {
             normalPostRepository.save(normalPost);
             return true;
@@ -27,5 +27,9 @@ public class NormalPostService {
 
     public List<NormalPost> getPostsSortedByDate() {
         return normalPostRepository.findNormalPostsSortedByDate();
+    }
+
+    public NormalPost getPostByID(long id) {
+        return normalPostRepository.findById(id);
     }
 }

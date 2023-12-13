@@ -22,6 +22,9 @@ public class TradingPost extends Post {
     @Column(nullable = false)
     private boolean isHeld;
 
+    @Column(nullable = true)
+    private String IBAN;
+
     // Getters and Setters
 
     public long getGiverID() {
@@ -63,6 +66,12 @@ public class TradingPost extends Post {
     public void setIsHeld(boolean held) {
         isHeld = held;
     }
+
+    public String getIBAN() {
+        return IBAN;
+    }
+
+    public void setIBAN(String IBAN) { this.IBAN = IBAN; }
 
     @Override
     @PrePersist

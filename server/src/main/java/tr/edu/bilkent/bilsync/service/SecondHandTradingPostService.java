@@ -15,7 +15,7 @@ public class SecondHandTradingPostService {
         this.secondHandTradingPostRepository = secondHandTradingPostRepository;
     }
 
-    public boolean createPost(SecondHandTradingPost secondHandTradingPost) {
+    public boolean createOrSavePost(SecondHandTradingPost secondHandTradingPost) {
         try {
             secondHandTradingPost.setGiverID(secondHandTradingPost.getAuthorID());
             secondHandTradingPostRepository.save(secondHandTradingPost);
@@ -28,5 +28,9 @@ public class SecondHandTradingPostService {
 
     public List<SecondHandTradingPost> getPostsSortedByDate() {
         return secondHandTradingPostRepository.findSecondHandTradingPostsSortedByDate();
+    }
+
+    public SecondHandTradingPost getPostByID(long id) {
+        return secondHandTradingPostRepository.findById(id);
     }
 }

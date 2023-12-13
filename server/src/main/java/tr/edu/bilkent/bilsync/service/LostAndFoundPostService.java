@@ -14,7 +14,7 @@ public class LostAndFoundPostService {
         this.lostAndFoundPostRepository = lostAndFoundPostRepository;
     }
 
-    public boolean createPost(LostAndFoundPost lostAndFoundPost) {
+    public boolean createOrSavePost(LostAndFoundPost lostAndFoundPost) {
         try {
             lostAndFoundPost.setGiverID(lostAndFoundPost.getAuthorID());
             lostAndFoundPostRepository.save(lostAndFoundPost);
@@ -27,5 +27,9 @@ public class LostAndFoundPostService {
 
     public List<LostAndFoundPost> getPostsSortedByDate() {
         return lostAndFoundPostRepository.findLostAndFoundPostsSortedByDate();
+    }
+
+    public LostAndFoundPost getPostByID(long id) {
+        return lostAndFoundPostRepository.findById(id);
     }
 }

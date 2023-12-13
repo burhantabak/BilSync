@@ -2,37 +2,49 @@ package tr.edu.bilkent.bilsync.entity;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "comment")
+@Table
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "comment_sequence")
+    @TableGenerator(name = "comment_sequence", table = "comment_sequence_table", allocationSize = 1)
+    private long id;
 
     @Column(nullable = false)
     private long authorID;
 
-    @OneToMany(targetEntity = Comment.class)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Comment> commentReplyList = new HashSet<>();
 
     @Column(nullable = false)
     private boolean isReply;
 
     @Column(nullable = false)
-    private long likeCount = 0;
+    private long likeCount;
 
     @OneToMany(targetEntity = UserEntity.class)
-    private Set<UserEntity> taggedUserListEntity = new HashSet<>();
+    private Set<UserEntity> taggedUserList = new HashSet<>();
 
     @Column(length = 1000, nullable = false)
     private String text;
 
     @Column(nullable = false)
-    private String publishDate;
+    private Timestamp publishDate;
+
+    @Column
+    private long primaryCommentID;
+
+    @Column(nullable = false)
+    private long primaryPostID;
+
+    public Comment() {}
 
     public long getAuthorID() {
         return authorID;
@@ -50,11 +62,11 @@ public class Comment {
         this.commentReplyList = commentReplyList;
     }
 
-    public boolean isReply() {
+    public boolean getIsReply() {
         return isReply;
     }
 
-    public void setReply(boolean reply) {
+    public void setIsReply(boolean reply) {
         isReply = reply;
     }
 
@@ -67,12 +79,10 @@ public class Comment {
     }
 
     public Set<UserEntity> getTaggedUserList() {
-        return taggedUserListEntity;
+        return taggedUserList;
     }
 
-    public void setTaggedUserList(Set<UserEntity> taggedUserListEntity) {
-        this.taggedUserListEntity = taggedUserListEntity;
-    }
+    public void setTaggedUserList(Set<UserEntity> taggedUserList) { this.taggedUserList = taggedUserList; }
 
     public String getText() {
         return text;
@@ -82,20 +92,44 @@ public class Comment {
         this.text = text;
     }
 
-    public String getPublishDate() {
+    public Timestamp getPublishDate() {
         return publishDate;
     }
 
-    public void setPublishDate(String publishDate) {
+    public void setPublishDate(Timestamp publishDate) {
         this.publishDate = publishDate;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
+    public long getPrimaryCommentID() {
+        return primaryCommentID;
+    }
+
+    public void setPrimaryCommentID(long primaryCommentID) {
+        this.primaryCommentID = primaryCommentID;
+    }
+
+    public long getPrimaryPostID() { return primaryPostID; }
+
+    public void setPrimaryPostID(long primaryPostID) { this.primaryPostID = primaryPostID; }
+
+
+    @PrePersist
+    public void prePersist() {
+        this.likeCount = 0;
+        this.commentReplyList = new HashSet<Comment>();
+        // Get the current time in UTC+3
+        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.ofHours(3));
+        // Convert OffsetDateTime to Timestamp
+        this.publishDate = Timestamp.from(offsetDateTime.toInstant());
+    }
+
+    public void addComment(Comment comment) { this.commentReplyList.add(comment); }
 }

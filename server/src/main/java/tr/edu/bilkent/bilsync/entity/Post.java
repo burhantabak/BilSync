@@ -35,7 +35,7 @@ public class Post {
     @Column(nullable = false)
     private long views = 0;
 
-    @OneToMany(targetEntity = Comment.class)
+    @OneToMany(targetEntity = Comment.class, fetch = FetchType.EAGER)
     private Set<Comment> commentList = new HashSet<>();
 
     @Column(nullable = true)
@@ -171,5 +171,9 @@ public class Post {
         OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.ofHours(3));
         // Convert OffsetDateTime to Timestamp
         this.postDate = Timestamp.from(offsetDateTime.toInstant());
+    }
+
+    public void addComment(Comment comment) {
+        this.commentList.add(comment);
     }
 }
