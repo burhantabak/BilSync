@@ -48,7 +48,7 @@ export default function TradingPostItem({post}) {
             </div>
         </div>
         <div className='w-full'>
-            <CommentComponent commentList={post.comments}/>
+            <CommentComponent commentList={post.commentList}/>
         </div>
         <div className='w-full'>
         <CommentCreate isUpvote={isUpvote} isDownvote={isDownvote} vote={vote} 

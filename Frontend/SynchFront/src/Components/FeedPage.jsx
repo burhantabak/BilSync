@@ -43,10 +43,11 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
         
         .map((post,index)=>{
             console.log(post)
-            if(post.isTrading &&filterTrading){return <TradingPostItem key={index} post={post}/>}
-            else if(post.isLostnFound && filterForum){return <ForumPost key={index} post={post} isLostnFound={true}/>}
-            if(filterForum &&filterLostnFound){ return <ForumPost key={index} post={post} isLostnFound={false}/>}
+            // if(post.isTrading &&filterTrading){return <TradingPostItem key={index} post={post}/>}
+            // else if(post.isLostnFound && filterForum){return <ForumPost key={index} post={post} isLostnFound={true}/>}
+            // if(filterForum &&filterLostnFound){ return <ForumPost key={index} post={post} isLostnFound={false}/>}
             // <TradingPostItem vote={-1} title="Basys3 Sale" nameUser="Işıl Özgü" price={175}/>
+            if(post.postType ===6 || post.postType ===5 ) { return <TradingPostItem key={post.id} post={post}/>}
         })}
     </div>
   )
