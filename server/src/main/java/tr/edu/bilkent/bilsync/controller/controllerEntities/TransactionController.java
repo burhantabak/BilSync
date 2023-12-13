@@ -1,6 +1,7 @@
 package tr.edu.bilkent.bilsync.controller.controllerEntities;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -56,8 +57,13 @@ public class TransactionController {
      * @return The created {@link Transaction}.
      */
     @PostMapping("/create")
-    public Transaction createTransaction(@RequestBody TransactionDto transaction, @AuthenticationPrincipal UserEntity currentUser) {
-        return transactionService.createTransaction(transaction, currentUser);
+    public ResponseEntity<?> createTransaction(@RequestBody TransactionDto transaction, @AuthenticationPrincipal UserEntity currentUser) {
+        if (transaction.getTransactionAmount() < 0) {
+            // Return an error code as a String
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("TRANSACTION_AMOUNT_NEGATIVE");
+        }
+        Transaction tr=transactionService.createTransaction(transaction, currentUser);
+        return ResponseEntity.ok(tr);
     }
 
 
