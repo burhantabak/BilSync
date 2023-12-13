@@ -17,6 +17,7 @@ public class PostService {
     private final NormalPostService normalPostService;
     private final SectionExchangePostService sectionExchangePostService;
     private final SecondHandTradingPostService secondHandTradingPostService;
+    private final CommentService commentService;
 
     public PostService(
             AnnouncementPostService announcementPostService,
@@ -25,7 +26,8 @@ public class PostService {
             LostAndFoundPostService lostAndFoundPostService,
             NormalPostService normalPostService,
             SectionExchangePostService sectionExchangePostService,
-            SecondHandTradingPostService secondHandTradingPostService) {
+            SecondHandTradingPostService secondHandTradingPostService,
+            CommentService commentService) {
         this.announcementPostService = announcementPostService;
         this.borrowAndLendPostService = borrowAndLendPostService;
         this.donationPostService = donationPostService;
@@ -33,25 +35,26 @@ public class PostService {
         this.normalPostService = normalPostService;
         this.sectionExchangePostService = sectionExchangePostService;
         this.secondHandTradingPostService = secondHandTradingPostService;
+        this.commentService = commentService;
     }
 
-    public boolean createPost(Object post) {
+    public boolean createOrSavePost(Object post) {
         Post postObj = (Post) post;
         switch (postObj.getPostType()) {
             case 0:
-                return announcementPostService.createPost((AnnouncementPost) post);
+                return announcementPostService.createOrSavePost((AnnouncementPost) post);
             case 1:
-                return borrowAndLendPostService.createPost((BorrowAndLendPost) post);
+                return borrowAndLendPostService.createOrSavePost((BorrowAndLendPost) post);
             case 2:
-                return donationPostService.createPost((DonationPost) post);
+                return donationPostService.createOrSavePost((DonationPost) post);
             case 3:
-                return lostAndFoundPostService.createPost((LostAndFoundPost) post);
+                return lostAndFoundPostService.createOrSavePost((LostAndFoundPost) post);
             case 4:
-                return normalPostService.createPost((NormalPost) post);
+                return normalPostService.createOrSavePost((NormalPost) post);
             case 5:
-                return sectionExchangePostService.createPost((SectionExchangePost) post);
+                return sectionExchangePostService.createOrSavePost((SectionExchangePost) post);
             case 6:
-                return secondHandTradingPostService.createPost((SecondHandTradingPost) post);
+                return secondHandTradingPostService.createOrSavePost((SecondHandTradingPost) post);
             default:
                 return false;
         }
@@ -60,7 +63,6 @@ public class PostService {
     public HashSet<Post> getPostsSortedByDate() {
         HashSet<Post> allPosts = new HashSet<Post>();
 
-        // Add posts of each type to the set, sorted by date
         addSortedPosts(allPosts, announcementPostService.getPostsSortedByDate());
         addSortedPosts(allPosts, borrowAndLendPostService.getPostsSortedByDate());
         addSortedPosts(allPosts, donationPostService.getPostsSortedByDate());
@@ -72,8 +74,46 @@ public class PostService {
         return allPosts;
     }
 
+    //TODO: Will make it more efficient instead of repetitive code
+    public Post getPostByID(long id) {
+        Post foundPost = null;
+        for (byte postType = 0; postType <= 6 && foundPost == null; postType++) {
+            switch (postType) {
+                case 0:
+                    foundPost = announcementPostService.getPostByID(id);
+                    break;
+                case 1:
+                    foundPost = borrowAndLendPostService.getPostByID(id);
+                    break;
+                case 2:
+                    foundPost = donationPostService.getPostByID(id);
+                    break;
+                case 3:
+                    foundPost = lostAndFoundPostService.getPostByID(id);
+                    break;
+                case 4:
+                    foundPost = normalPostService.getPostByID(id);
+                    break;
+                case 5:
+                    foundPost = sectionExchangePostService.getPostByID(id);
+                    break;
+                case 6:
+                    foundPost = secondHandTradingPostService.getPostByID(id);
+                    break;
+            }
+        }
+        return foundPost;
+    }
+
     private <T extends Post> void addSortedPosts(HashSet<Post> allPosts, List<T> posts) {
         posts.sort(Comparator.comparing(Post::getPostDate).reversed());
         allPosts.addAll(posts);
+    }
+
+    public boolean createOrSaveComment(Comment comment) {
+        return commentService.createOrSaveComment(comment);
+    }
+    public Comment getCommentByID(long id) {
+        return commentService.getCommentByID(id);
     }
 }

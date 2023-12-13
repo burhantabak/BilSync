@@ -14,7 +14,7 @@ public class BorrowAndLendPostService {
         this.borrowAndLendPostRepository = borrowAndLendPostRepository;
     }
 
-    public boolean createPost(BorrowAndLendPost borrowAndLendPost) {
+    public boolean createOrSavePost(BorrowAndLendPost borrowAndLendPost) {
         try {
             borrowAndLendPost.setGiverID(borrowAndLendPost.getAuthorID());
             borrowAndLendPostRepository.save(borrowAndLendPost);
@@ -27,5 +27,9 @@ public class BorrowAndLendPostService {
 
     public List<BorrowAndLendPost> getPostsSortedByDate() {
         return borrowAndLendPostRepository.findBorrowAndLendPostsSortedByDate();
+    }
+
+    public BorrowAndLendPost getPostByID(long id) {
+        return borrowAndLendPostRepository.findById(id);
     }
 }

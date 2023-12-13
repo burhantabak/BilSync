@@ -15,7 +15,7 @@ public class SectionExchangePostService {
         this.sectionExchangePostRepository = sectionExchangePostRepository;
     }
 
-    public boolean createPost(SectionExchangePost sectionExchangePost) {
+    public boolean createOrSavePost(SectionExchangePost sectionExchangePost) {
         try {
             sectionExchangePost.setGiverID(sectionExchangePost.getAuthorID());
             sectionExchangePostRepository.save(sectionExchangePost);
@@ -28,5 +28,9 @@ public class SectionExchangePostService {
 
     public List<SectionExchangePost> getPostsSortedByDate() {
         return sectionExchangePostRepository.findSectionExchangePostsSortedByDate();
+    }
+
+    public SectionExchangePost getPostByID(long id) {
+        return sectionExchangePostRepository.findById(id);
     }
 }

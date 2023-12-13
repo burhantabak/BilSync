@@ -15,7 +15,7 @@ public class AnnouncementPostService {
         this.announcementPostRepository = announcementPostRepository;
     }
 
-    public boolean createPost(AnnouncementPost announcementPost) {
+    public boolean createOrSavePost(AnnouncementPost announcementPost) {
         try {
             announcementPostRepository.save(announcementPost);
             return true;
@@ -26,5 +26,9 @@ public class AnnouncementPostService {
     }
     public List<AnnouncementPost> getPostsSortedByDate() {
         return announcementPostRepository.findAnnouncementPostsSortedByDate();
+    }
+
+    public AnnouncementPost getPostByID(long id) {
+        return announcementPostRepository.findById(id);
     }
 }

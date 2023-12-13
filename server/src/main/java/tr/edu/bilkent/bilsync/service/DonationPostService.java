@@ -15,7 +15,7 @@ public class DonationPostService {
         this.donationPostRepository = donationPostRepository;
     }
 
-    public boolean createPost(DonationPost donationPost) {
+    public boolean createOrSavePost(DonationPost donationPost) {
         try {
             donationPost.setGiverID(donationPost.getAuthorID());
             donationPostRepository.save(donationPost);
@@ -28,5 +28,9 @@ public class DonationPostService {
 
     public List<DonationPost> getPostsSortedByDate() {
         return donationPostRepository.findDonationPostsSortedByDate();
+    }
+
+    public DonationPost getPostByID(long id) {
+        return donationPostRepository.findById(id);
     }
 }

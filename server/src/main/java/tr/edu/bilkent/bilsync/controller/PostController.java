@@ -58,11 +58,37 @@ public class PostController {
                 return ResponseEntity.badRequest().build();
         }
         setCommonPostFields(post);
-        if(postService.createPost(post)){
+        if(postService.createOrSavePost(post)){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @PostMapping("/createComment")
+    public ResponseEntity<?> createComment(@RequestBody Comment comment) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+            comment.setAuthorID(userEntity.getId());
+            Post primaryPost = postService.getPostByID(comment.getPrimaryPostID());
+            if(primaryPost == null) return ResponseEntity.badRequest().build();
+            //If post is a secondary post, we need to add it to original comment's list
+            if(comment.getIsReply()) {
+                Comment primaryComment = postService.getCommentByID(comment.getPrimaryCommentID());
+                if(primaryComment == null) return ResponseEntity.badRequest().build();
+                primaryComment.addComment(comment);
+                postService.createOrSaveComment(primaryComment);
+            }
+            postService.createOrSaveComment(comment);
+            primaryPost.addComment(comment);
+            postService.createOrSavePost(primaryPost);
+            return ResponseEntity.ok(comment);
+        } catch(Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     private void setCommonPostFields(Post post) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
@@ -75,15 +101,10 @@ public class PostController {
         try {
             HashSet<Post> allPosts = postService.getPostsSortedByDate();
             return ResponseEntity.ok(allPosts);
-            } catch(Exception e) {
-                System.out.println(e);
-            HashSet<Post> allPosts = new HashSet<Post>();
+        } catch(Exception e) {
+            System.out.println(e);
+            HashSet<Post> allPosts = new HashSet<>();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-    /*
-    @GetMapping("/create")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public boolean createPost{}
-    */ // todo
 }
