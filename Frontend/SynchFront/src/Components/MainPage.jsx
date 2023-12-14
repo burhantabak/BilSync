@@ -43,7 +43,6 @@ export default function MainPage() {
             <TradingPostItem vote={2} title="Basys3 Sale" isBuy={true} nameUser="12344" price={3000}/> */}
             {(!selectedChat) && !isPostsLoading ? <FeedPage postList={postList} filterForum={filterForum} filterLostnFound={filterLostnFound} filterTrading={filterTrading}/>
             :<ChatScreen chat={selectedChat} setSelectedChat={setSelectedChat}/>}
-            {isPostsLoading && "Loading.."}
         </div>
         <div className='  px-2 pt-5 flex-1 divide-y'>
             <h2 className='mt-4 font-bold text-center text-xl'>Chat</h2>

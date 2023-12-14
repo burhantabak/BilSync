@@ -4,10 +4,11 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import Dropdown from '../statics/DropDown';
 import CommentComponent from './CommentComponent';
 import CommentCreate from '../statics/CommentCreate';
+import formatDate, { formatTime } from './HelperFunctions/DateFormat';
 
 export default function TradingPostItem({post}) {
     const [isStarred,setStarred] = useState(false);
-    const [vote, setVotes] = useState(post.vote);
+    const [vote, setVotes] = useState(post.votes);
     const [isUpvote, setUpvote] = useState(false);
     const [isDownvote,setDownvote] = useState(false)
   return (
@@ -16,15 +17,15 @@ export default function TradingPostItem({post}) {
                 <div className='flex items-center'>
                     <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
                     <div>
-                    <p className='font-semibold'>{post.userName}</p>
+                    <p className='font-semibold'>{post.id}</p>
                     <small>Trading Post</small>
                     </div>
                 </div>
                 <h2 className='text-xl text-gray-900 font-bold'>{post.title}</h2>
                 <div className='flex justify-end pr-3 py-2'>
                     <div className='text-center'>
-                    <h2 className='text-sm font-semibold'>17th October 2023</h2>
-                    <p className='text-sm'>17:54</p>
+                    <h2 className='text-sm font-semibold'>{formatDate(post.postDate)}</h2>
+                    <p className='text-sm'>{formatTime(post.postDate)}</p>
                     </div>
                 </div>
             </div>
@@ -37,7 +38,7 @@ export default function TradingPostItem({post}) {
                 <h2>{post.price}TL</h2>
                 <div className='flex gap-5'>
                 <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    {post.isBuy ? "Buy":"Borrow"}
+                    {post.postType ? "Buy":"Borrow"}
                 </button>
                 <button onClick={()=>{setStarred(!isStarred)}}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill={isStarred?"rgb(246,190,0)":"none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="rgb(246,190,0)" className="w-6 h-6">
