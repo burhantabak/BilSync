@@ -34,6 +34,8 @@ public class AuthController {
         return "Hava karanlık";
     }
 
+
+    //DEPRECATED!!!
     @CrossOrigin
     @PostMapping("/registerUser")
     public ResponseEntity register(@RequestBody UserEntity userEntity) {
