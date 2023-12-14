@@ -75,27 +75,33 @@ public class PostController {
 
     @PostMapping("/createComment")
     public ResponseEntity<?> createComment(@RequestBody Comment comment) {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserEntity userEntity = (UserEntity) authentication.getPrincipal();
-            comment.setAuthorID(userEntity.getId());
-            Post primaryPost = postService.getPostByID(comment.getPrimaryPostID());
-            if(primaryPost == null) return ResponseEntity.badRequest().build();
-            //If post is a secondary post, we need to add it to original comment's list
-            if(comment.getIsReply()) {
-                Comment primaryComment = postService.getCommentByID(comment.getPrimaryCommentID());
-                if(primaryComment == null) return ResponseEntity.badRequest().build();
-                primaryComment.addComment(comment);
-                postService.createOrSaveComment(primaryComment);
-            }
-            postService.createOrSaveComment(comment);
-            primaryPost.addComment(comment);
-            postService.createOrSavePost(primaryPost);
-            return ResponseEntity.ok(comment);
-        } catch(Exception e) {
-            System.out.println(e);
-            return ResponseEntity.badRequest().build();
+        UserEntity user = getUser();
+        if(user == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("USER_DOES_NOT_EXIST");
+        if(user.getIsBanned())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("USER_IS_BANNED");
+        comment.setAuthorID(user.getId());
+        Post primaryPost = postService.getPostByID(comment.getPrimaryPostID());
+        if(primaryPost == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("POST_DOES_NOT_EXIST");
+        //If post is a secondary post, we need to add it to original comment's list
+        if(!postService.createOrSaveComment(comment)) //TODO: delete already saved primary comment's element
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("COMMENT_COULD_NOT_BE_SAVED");
+        if(comment.getIsReply()) {
+            Comment primaryComment = postService.getCommentByID(comment.getPrimaryCommentID());
+            if(primaryComment == null)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRIMARY_COMMENT_DOES_NOT_EXIST");
+            if(primaryComment.getPrimaryPostID() != comment.getPrimaryPostID())
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("COMMENTS_ARENT_FROM_SAME_POST");
+            primaryComment.addComment(comment.getId());
+            if(!postService.createOrSaveComment(primaryComment))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRIMARY_COMMENT_COULD_NOT_BE_SAVED");
         }
+        primaryPost.addComment(comment);
+        if(!postService.createOrSavePost(primaryPost))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRIMARY_POST_COULD_NOT_BE_SAVED");
+        return ResponseEntity.ok(comment);
+
     }
 
     @GetMapping("/getAllPosts")
