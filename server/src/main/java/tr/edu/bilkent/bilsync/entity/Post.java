@@ -53,7 +53,7 @@ public class Post {
     private String hashtagListID;
 
     @Column(nullable = false)
-    private boolean isAnonymous;
+    private boolean isAnonymous = false;
 
     @Column(nullable = false)
     private Timestamp postDate;

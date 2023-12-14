@@ -11,6 +11,7 @@ import tr.edu.bilkent.bilsync.entity.*;
 import tr.edu.bilkent.bilsync.service.PostService;
 
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
 @RestController
 @CrossOrigin
@@ -18,9 +19,7 @@ import java.util.HashSet;
 public class PostController {
     private final PostService postService;
 
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+    public PostController(PostService postService) { this.postService = postService; }
 
     @GetMapping()
     public String welcome() {
@@ -30,22 +29,48 @@ public class PostController {
     @PostMapping("/createPost")
     public ResponseEntity<?> createPost(@RequestBody JsonNode postNode) {
         Post post = JsonNodeToPost(postNode);
+        if(post == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("INVALID_POST_TYPE");
         Byte postType = post.getPostType();
+        UserEntity user = getUser();
+        if(user == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("USER_DOES_NOT_EXIST");
+        long userId = user.getId();
+        post.setAuthorID(userId);
+
+        if(user.getIsBanned())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("USER_IS_BANNED");
+
         if(post instanceof TradingPost ) {
             double price = ((TradingPost) post).getPrice();
             if(price < 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_LESS_THAN_0");
-            if(price == 0 && (postType != 1 && postType != 2))
+            if((postType != 1 && postType != 2) && price == 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_CANNOT_BE_0");
-            if(((TradingPost) post).getIBAN() == null && (postType != 1 && postType != 2))
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_MUST_BE_ENTERED");
+            if(postType != 1 && postType != 2) {
+                String trimmedIBAN = ((TradingPost) post).getIBAN().replaceAll("\\s", "");
+                if(!validateIBAN(trimmedIBAN))
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_WAS_MISTYPED");
+                ((TradingPost) post).setIBAN(trimmedIBAN);
+            }
         }
-        long userId = getUser().getId();
-        post.setAuthorID(userId);
+        if (post.getTitle() == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("TITLE_CANNOT_BE_EMPTY");
+        if(post.getTitle().length() < 10)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("TITLE_MUST_HAVE_AT_LEAST_10_CHARACTERS");
+        if(post.getTitle().length() > 100)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("TITLE_CAN_HAVE_AT_MOST_100_CHARACTERS");
+        if (post.getDescription() == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("DESCRIPTION_CANNOT_BE_EMPTY");
+        if(post.getDescription().length() < 10)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("DESCRIPTION_MUST_HAVE_AT_LEAST_10_CHARACTERS");
+        if(post.getDescription().length() > 3000)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("DESCRIPTION_CAN_HAVE_AT_MOST_3000_CHARACTERS");
+        //TODO: When file system is added, check if imagePath is valid or not. If it is not present, do not check.
         if(postService.createOrSavePost(post)){
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("POST_COULD_NOT_BE_SAVED_TO_DATABASE");
     }
 
     @PostMapping("/createComment")
@@ -119,34 +144,29 @@ public class PostController {
     }
 
     private Post JsonNodeToPost(JsonNode postNode) {
-        int postType = postNode.get("postType").asInt();
-        Post post;
+        JsonNode postTypeNode = postNode.get("postType");
 
-        switch (postType) {
-            case 0:
-                post = new ObjectMapper().convertValue(postNode, AnnouncementPost.class);
-                break;
-            case 1:
-                post = new ObjectMapper().convertValue(postNode, BorrowAndLendPost.class);
-                break;
-            case 2:
-                post = new ObjectMapper().convertValue(postNode, DonationPost.class);
-                break;
-            case 3:
-                post = new ObjectMapper().convertValue(postNode, LostAndFoundPost.class);
-                break;
-            case 4:
-                post = new ObjectMapper().convertValue(postNode, NormalPost.class);
-                break;
-            case 5:
-                post = new ObjectMapper().convertValue(postNode, SectionExchangePost.class);
-                break;
-            case 6:
-                post = new ObjectMapper().convertValue(postNode, SecondHandTradingPost.class);
-                break;
-            default:
-                post = null;
+        if (postTypeNode == null || !postTypeNode.isInt()) {
+            return null;
         }
+
+        int postType = postTypeNode.asInt();
+        Post post = switch (postType) {
+            case 0 -> new ObjectMapper().convertValue(postNode, AnnouncementPost.class);
+            case 1 -> new ObjectMapper().convertValue(postNode, BorrowAndLendPost.class);
+            case 2 -> new ObjectMapper().convertValue(postNode, DonationPost.class);
+            case 3 -> new ObjectMapper().convertValue(postNode, LostAndFoundPost.class);
+            case 4 -> new ObjectMapper().convertValue(postNode, NormalPost.class);
+            case 5 -> new ObjectMapper().convertValue(postNode, SectionExchangePost.class);
+            case 6 -> new ObjectMapper().convertValue(postNode, SecondHandTradingPost.class);
+            default -> null;
+        };
+
         return post;
+    }
+
+    private boolean validateIBAN(String IBAN) {
+        Pattern IBAN_PATTERN = Pattern.compile("^(?i)([A-Z]{2}[ '+\\\\'-]?[0-9]{2})(?=(?:[ '+\\\\'-]?[A-Z0-9]){9,30}$)((?:[ '+\\\\'-]?[A-Z0-9]{3,5}){2,7})([ '+\\\\'-]?[A-Z0-9]{1,3})?$");
+        return IBAN_PATTERN.matcher(IBAN).matches();
     }
 }

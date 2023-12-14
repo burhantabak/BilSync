@@ -40,28 +40,20 @@ public class PostService {
 
     public boolean createOrSavePost(Object post) {
         Post postObj = (Post) post;
-        switch (postObj.getPostType()) {
-            case 0:
-                return announcementPostService.createOrSavePost((AnnouncementPost) post);
-            case 1:
-                return borrowAndLendPostService.createOrSavePost((BorrowAndLendPost) post);
-            case 2:
-                return donationPostService.createOrSavePost((DonationPost) post);
-            case 3:
-                return lostAndFoundPostService.createOrSavePost((LostAndFoundPost) post);
-            case 4:
-                return normalPostService.createOrSavePost((NormalPost) post);
-            case 5:
-                return sectionExchangePostService.createOrSavePost((SectionExchangePost) post);
-            case 6:
-                return secondHandTradingPostService.createOrSavePost((SecondHandTradingPost) post);
-            default:
-                return false;
-        }
+        return switch (postObj.getPostType()) {
+            case 0 -> announcementPostService.createOrSavePost((AnnouncementPost) post);
+            case 1 -> borrowAndLendPostService.createOrSavePost((BorrowAndLendPost) post);
+            case 2 -> donationPostService.createOrSavePost((DonationPost) post);
+            case 3 -> lostAndFoundPostService.createOrSavePost((LostAndFoundPost) post);
+            case 4 -> normalPostService.createOrSavePost((NormalPost) post);
+            case 5 -> sectionExchangePostService.createOrSavePost((SectionExchangePost) post);
+            case 6 -> secondHandTradingPostService.createOrSavePost((SecondHandTradingPost) post);
+            default -> false;
+        };
     }
 
     public HashSet<Post> getPostsSortedByDate() {
-        HashSet<Post> allPosts = new HashSet<Post>();
+        HashSet<Post> allPosts = new HashSet<>();
 
         addSortedPosts(allPosts, announcementPostService.getPostsSortedByDate());
         addSortedPosts(allPosts, borrowAndLendPostService.getPostsSortedByDate());
@@ -79,27 +71,13 @@ public class PostService {
         Post foundPost = null;
         for (byte postType = 0; postType <= 6 && foundPost == null; postType++) {
             switch (postType) {
-                case 0:
-                    foundPost = announcementPostService.getPostByID(id);
-                    break;
-                case 1:
-                    foundPost = borrowAndLendPostService.getPostByID(id);
-                    break;
-                case 2:
-                    foundPost = donationPostService.getPostByID(id);
-                    break;
-                case 3:
-                    foundPost = lostAndFoundPostService.getPostByID(id);
-                    break;
-                case 4:
-                    foundPost = normalPostService.getPostByID(id);
-                    break;
-                case 5:
-                    foundPost = sectionExchangePostService.getPostByID(id);
-                    break;
-                case 6:
-                    foundPost = secondHandTradingPostService.getPostByID(id);
-                    break;
+                case 0 -> foundPost = announcementPostService.getPostByID(id);
+                case 1 -> foundPost = borrowAndLendPostService.getPostByID(id);
+                case 2 -> foundPost = donationPostService.getPostByID(id);
+                case 3 -> foundPost = lostAndFoundPostService.getPostByID(id);
+                case 4 -> foundPost = normalPostService.getPostByID(id);
+                case 5 -> foundPost = sectionExchangePostService.getPostByID(id);
+                case 6 -> foundPost = secondHandTradingPostService.getPostByID(id);
             }
         }
         return foundPost;
