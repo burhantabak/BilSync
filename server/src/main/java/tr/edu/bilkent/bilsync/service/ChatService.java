@@ -49,7 +49,11 @@ public class ChatService {
 
     private void addUsersToChat(Chat chat, List<Long> userIds) {
         for (long userId : userIds) {
-            UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
+            UserEntity user = userRepository.findById(userId);
+            if (user == null) {
+                throw new RuntimeException("User not found.");
+            }
+
             addUserToChat(chat, user, ChatUserStatus.PENDING_REQUEST);
         }
     }
@@ -90,8 +94,8 @@ public class ChatService {
                 .map(UserEntity::getId)
                 .collect(Collectors.toSet());
 
-        for (Long userId : inviteeIds){
-            if (memberIds.contains(userId)){
+        for (Long userId : inviteeIds) {
+            if (memberIds.contains(userId)) {
                 throw new RuntimeException("Member " + userId + " already in group");
             }
         }
@@ -99,7 +103,7 @@ public class ChatService {
                 .stream()
                 .distinct()
                 .map(userRepository::findById)
-                .map(e->e.orElseThrow(() -> new RuntimeException("User not found.")))
+                .map(e -> e.orElseThrow(() -> new RuntimeException("User not found.")))
                 .forEach(e -> addUserToChat(chat, e, ChatUserStatus.PENDING_REQUEST));
         chatRepository.save(chat);
     }
