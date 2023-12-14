@@ -25,6 +25,9 @@ public class TradingPost extends Post {
     @Column(nullable = true)
     private String IBAN;
 
+    @Column(nullable = false)
+    private double price;
+
     // Getters and Setters
 
     public long getGiverID() {
@@ -72,6 +75,10 @@ public class TradingPost extends Post {
     }
 
     public void setIBAN(String IBAN) { this.IBAN = IBAN; }
+
+    public double getPrice() { return price; }
+
+    public void setPrice(double price) { this.price = price; }
 
     @Override
     @PrePersist

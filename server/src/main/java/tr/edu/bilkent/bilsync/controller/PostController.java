@@ -29,35 +29,19 @@ public class PostController {
 
     @PostMapping("/createPost")
     public ResponseEntity<?> createPost(@RequestBody JsonNode postNode) {
-        int postType = postNode.get("postType").asInt();
-        Post post;
-
-        switch (postType) {
-            case 0:
-                post = new ObjectMapper().convertValue(postNode, AnnouncementPost.class);
-                break;
-            case 1:
-                post = new ObjectMapper().convertValue(postNode, BorrowAndLendPost.class);
-                break;
-            case 2:
-                post = new ObjectMapper().convertValue(postNode, DonationPost.class);
-                break;
-            case 3:
-                post = new ObjectMapper().convertValue(postNode, LostAndFoundPost.class);
-                break;
-            case 4:
-                post = new ObjectMapper().convertValue(postNode, NormalPost.class);
-                break;
-            case 5:
-                post = new ObjectMapper().convertValue(postNode, SectionExchangePost.class);
-                break;
-            case 6:
-                post = new ObjectMapper().convertValue(postNode, SecondHandTradingPost.class);
-                break;
-            default:
-                return ResponseEntity.badRequest().build();
+        Post post = JsonNodeToPost(postNode);
+        Byte postType = post.getPostType();
+        if(post instanceof TradingPost ) {
+            double price = ((TradingPost) post).getPrice();
+            if(price < 0)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_LESS_THAN_0");
+            if(price == 0 && (postType != 1 && postType != 2))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_CANNOT_BE_0");
+            if(((TradingPost) post).getIBAN() == null && (postType != 1 && postType != 2))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_MUST_BE_ENTERED");
         }
-        setCommonPostFields(post);
+        long userId = getUser().getId();
+        post.setAuthorID(userId);
         if(postService.createOrSavePost(post)){
             return ResponseEntity.ok().build();
         }
@@ -89,13 +73,6 @@ public class PostController {
         }
     }
 
-    private void setCommonPostFields(Post post) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
-        long userId = userEntity.getId();
-        post.setAuthorID(userId);
-    }
-    @CrossOrigin
     @GetMapping("/getAllPosts")
     public ResponseEntity<HashSet<Post>> getAllPosts() {
         try {
@@ -109,9 +86,7 @@ public class PostController {
 
     @PostMapping("/vote/{postID}")
     public ResponseEntity<?> vote(@PathVariable long postID, @RequestParam String type) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
-        long userId = userEntity.getId();
+        long userId = getUser().getId();
 
         Post post = postService.getPostByID(postID);
         if (post == null) {
@@ -136,5 +111,42 @@ public class PostController {
         post.setVotes(post.getVotes() + voteValue);
         postService.createOrSavePost(post);
         return ResponseEntity.ok().build();
+    }
+
+    private UserEntity getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (UserEntity) authentication.getPrincipal();
+    }
+
+    private Post JsonNodeToPost(JsonNode postNode) {
+        int postType = postNode.get("postType").asInt();
+        Post post;
+
+        switch (postType) {
+            case 0:
+                post = new ObjectMapper().convertValue(postNode, AnnouncementPost.class);
+                break;
+            case 1:
+                post = new ObjectMapper().convertValue(postNode, BorrowAndLendPost.class);
+                break;
+            case 2:
+                post = new ObjectMapper().convertValue(postNode, DonationPost.class);
+                break;
+            case 3:
+                post = new ObjectMapper().convertValue(postNode, LostAndFoundPost.class);
+                break;
+            case 4:
+                post = new ObjectMapper().convertValue(postNode, NormalPost.class);
+                break;
+            case 5:
+                post = new ObjectMapper().convertValue(postNode, SectionExchangePost.class);
+                break;
+            case 6:
+                post = new ObjectMapper().convertValue(postNode, SecondHandTradingPost.class);
+                break;
+            default:
+                post = null;
+        }
+        return post;
     }
 }
