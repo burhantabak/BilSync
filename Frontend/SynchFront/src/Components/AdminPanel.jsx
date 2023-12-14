@@ -24,6 +24,7 @@ export default function AdminPanel() {
 
   const handleReports = () => {
     console.log('Navigate to reports endpoint'); // i will change when i will impllement 
+    navigate("/admin/Reports")
   };
 
   const handleAddAccount = () => {

@@ -25,6 +25,7 @@ export const DataProvider = ({ children }) => {
   }
   const getThePosts = ()=>{
     setIsPostsLoading(true);
+    console.log("get the posts called");
     getAllPosts(user).then(data=>{setPostList(data);setIsPostsLoading(false);});
   }
   

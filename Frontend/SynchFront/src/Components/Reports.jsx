@@ -5,9 +5,11 @@ import { useData } from '../Context/DataContext';
 // Define the ReportsPage component
 const ReportsPage = () => {
   // Retrieve postList from the DataContext
-  const { postList, getThePosts } = useData();
-  useEffect(()=>getThePosts,[]);
-
+  const { postList, getThePosts, } = useData();
+  const [posts,setPosts] = useState([]);
+  useEffect(()=>getThePosts(),[]);
+  useEffect(()=>setPosts(postList),[postList]);
+  console.log(postList);
   // Define the initial reports state
   const [reports, setReports] = useState([
     {
@@ -128,7 +130,7 @@ const ReportsPage = () => {
           <div className="bg-black bg-opacity-50 absolute inset-0" onClick={handleCloseModal}></div>
           <div className="bg-white p-8 rounded-md z-50">
             {selectedReport.type === 'Post Report' && (
-              <TradingPostItem post={selectedReport} />
+              posts &&  <TradingPostItem post={posts[0]} />   
             )}
             {selectedReport.type === 'Comment Report' && (
               <>
