@@ -37,8 +37,8 @@ public class PostController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_LESS_THAN_0");
             if(price == 0 && (postType != 1 && postType != 2))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_CANNOT_BE_0");
-            if(((TradingPost) post).getIBAN() == null && (postType != 1 && postType != 2))
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_MUST_BE_ENTERED");
+            //if(((TradingPost) post).getIBAN() == null && (postType != 1 && postType != 2))
+            //    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_MUST_BE_ENTERED");
         }
         long userId = getUser().getId();
         post.setAuthorID(userId);

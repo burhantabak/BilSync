@@ -26,7 +26,13 @@ export const DataProvider = ({ children }) => {
   const getThePosts = ()=>{
     setIsPostsLoading(true);
     console.log("get the posts called");
-    getAllPosts(user).then(data=>{setPostList(data);setIsPostsLoading(false);});
+    getAllPosts(user).then(data=>{
+      if(data >= 400){
+        setUser(null);
+      }
+      setPostList(data);setIsPostsLoading(false);
+
+    });
   }
   
   const logout = ()=>{
