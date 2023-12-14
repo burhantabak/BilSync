@@ -29,7 +29,7 @@ public class Post {
     private String description;
 
     @Column(nullable = false)
-    private String imageID;
+    private String imagePath = "OUR_DEFAULT_IMAGE_PATH";
 
     @Column(nullable = false)
     private long votes = 0;
@@ -46,10 +46,10 @@ public class Post {
     @OneToMany(targetEntity = Comment.class, fetch = FetchType.EAGER)
     private Set<Comment> commentList = new HashSet<>();
 
-    @Column(nullable = true)
+    @Column
     private String taggedUserListID;
 
-    @Column(nullable = true)
+    @Column
     private String hashtagListID;
 
     @Column(nullable = false)
@@ -79,9 +79,7 @@ public class Post {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public void setId(long id) { this.id = id; }
 
     public String getTitle() {
         return title;
@@ -107,13 +105,11 @@ public class Post {
         this.description = description;
     }
 
-    public String getImageID() {
-        return imageID;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImageID(String imageID) {
-        this.imageID = imageID;
-    }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 
     public long getVotes() {
         return votes;
@@ -131,13 +127,9 @@ public class Post {
         this.voters = voters;
     }
 
-    public void vote(long userId, int vote) {
-        this.voters.put(userId, vote);
-    }
+    public void vote(long userId, int vote) { this.voters.put(userId, vote); }
 
-    public void removeVote(long userId) {
-        this.voters.remove(userId);
-    }
+    public void removeVote(long userId) { this.voters.remove(userId); }
 
     public long getViews() {
         return views;
