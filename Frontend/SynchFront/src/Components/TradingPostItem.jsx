@@ -6,7 +6,7 @@ import CommentComponent from './CommentComponent';
 import CommentCreate from '../statics/CommentCreate';
 import formatDate, { formatTime } from './HelperFunctions/DateFormat';
 
-export default function TradingPostItem({post}) {
+export default function TradingPostItem({post, isProfile}) {
     const [isStarred,setStarred] = useState(false);
     const [vote, setVotes] = useState(post.votes);
     const [isUpvote, setUpvote] = useState(false);
@@ -32,7 +32,7 @@ export default function TradingPostItem({post}) {
         <div className='w-full text-center'>
             {post.description}
         </div>
-        <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
+        {!isProfile && <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
             <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>
             <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
                 <h2>{post.price}TL</h2>
@@ -47,16 +47,29 @@ export default function TradingPostItem({post}) {
                 </button>
                 </div>
             </div>
-        </div>
+        </div>}
+        {isProfile  && <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
+            <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>
+            <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
+                <h2>{post.price}TL</h2>
+                <div className='flex gap-5'>
+                {!isProfile && <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                </button> }
+                <button onClick={()=>{setStarred(!isStarred)}}>
+                    
+                </button>
+                </div>
+            </div>
+        </div>}
         <div className='w-full'>
             <CommentComponent commentList={post.commentList}/>
         </div>
-        <div className='w-full'>
+        {!isProfile && <div className='w-full'>
         <CommentCreate isUpvote={isUpvote} isDownvote={isDownvote} vote={vote} 
         setDownvote={()=>{if(isDownvote){setDownvote(false);setVotes(vote+1);}else{setDownvote(true);isUpvote?setVotes(vote-2):setVotes(vote-1);setUpvote(false);}}} 
         setUpvote={()=>{if(isUpvote){setUpvote(false);setVotes(vote-1);}else{setUpvote(true);isDownvote?setVotes(vote+2):setVotes(vote+1);setDownvote(false);}}}/>
-    </div>
-    </div>
+    </div> }
+    </div> 
   )
 }
 // function CommentListDisclosure(){
