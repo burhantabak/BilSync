@@ -32,4 +32,8 @@ public class LostAndFoundPostService {
     public LostAndFoundPost getPostByID(long id) {
         return lostAndFoundPostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        lostAndFoundPostRepository.deleteById(id);
+    }
 }

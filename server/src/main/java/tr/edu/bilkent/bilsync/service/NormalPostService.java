@@ -32,4 +32,8 @@ public class NormalPostService {
     public NormalPost getPostByID(long id) {
         return normalPostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        normalPostRepository.deleteById(id);
+    }
 }

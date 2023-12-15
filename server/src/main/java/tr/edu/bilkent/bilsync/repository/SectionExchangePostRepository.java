@@ -12,4 +12,5 @@ public interface SectionExchangePostRepository extends CrudRepository<SectionExc
     SectionExchangePost findById(long id);
     @Query("SELECT p FROM SectionExchangePost p ORDER BY p.postDate DESC")
     List<SectionExchangePost> findSectionExchangePostsSortedByDate();
+    void deleteById(long id);
 }

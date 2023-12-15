@@ -31,4 +31,8 @@ public class AnnouncementPostService {
     public AnnouncementPost getPostByID(long id) {
         return announcementPostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        announcementPostRepository.deleteById(id);
+    }
 }

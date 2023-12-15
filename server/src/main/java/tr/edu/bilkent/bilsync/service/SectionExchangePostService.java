@@ -33,4 +33,8 @@ public class SectionExchangePostService {
     public SectionExchangePost getPostByID(long id) {
         return sectionExchangePostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        sectionExchangePostRepository.deleteById(id);
+    }
 }

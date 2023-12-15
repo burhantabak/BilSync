@@ -12,4 +12,5 @@ public interface NormalPostRepository extends CrudRepository<NormalPost, Long> {
     NormalPost findById(long id);
     @Query("SELECT p FROM NormalPost p ORDER BY p.postDate DESC")
     List<NormalPost> findNormalPostsSortedByDate();
+    void deleteById(long id);
 }

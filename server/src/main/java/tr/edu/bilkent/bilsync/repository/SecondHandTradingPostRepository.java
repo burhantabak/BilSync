@@ -12,4 +12,5 @@ public interface SecondHandTradingPostRepository extends CrudRepository<SecondHa
     SecondHandTradingPost findById(long id);
     @Query("SELECT p FROM SecondHandTradingPost p ORDER BY p.postDate DESC")
     List<SecondHandTradingPost> findSecondHandTradingPostsSortedByDate();
+    void deleteById(long id);
 }

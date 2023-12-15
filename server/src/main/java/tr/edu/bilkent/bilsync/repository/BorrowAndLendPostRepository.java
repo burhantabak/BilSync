@@ -13,4 +13,5 @@ public interface BorrowAndLendPostRepository extends CrudRepository<BorrowAndLen
     BorrowAndLendPost findById(long id);
     @Query("SELECT p FROM BorrowAndLendPost p ORDER BY p.postDate DESC")
     List<BorrowAndLendPost> findBorrowAndLendPostsSortedByDate();
+    void deleteById(long id);
 }

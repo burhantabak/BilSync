@@ -1,11 +1,6 @@
 package tr.edu.bilkent.bilsync.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +24,12 @@ public class UserEntity implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column
+    private String profileImagePath = "OUR_DEFAULT_IMAGE_PATH";
+
+    @Column
+    private boolean isBanned = false;
 
     // Constructors
     public UserEntity() {}
@@ -101,4 +102,12 @@ public class UserEntity implements UserDetails {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getProfileImagePath() { return profileImagePath; }
+
+    public void setProfileImagePath(String profileImagePath) { this.profileImagePath = profileImagePath; }
+
+    public boolean getIsBanned() { return isBanned; }
+
+    public void setIsBanned(boolean isBanned) { this.isBanned = isBanned; }
 }

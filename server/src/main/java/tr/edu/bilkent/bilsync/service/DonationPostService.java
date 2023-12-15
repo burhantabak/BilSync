@@ -33,4 +33,9 @@ public class DonationPostService {
     public DonationPost getPostByID(long id) {
         return donationPostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        donationPostRepository.deleteById(id);
+    }
 }
+
