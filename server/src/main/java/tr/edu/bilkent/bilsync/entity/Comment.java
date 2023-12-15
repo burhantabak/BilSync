@@ -3,6 +3,8 @@ package tr.edu.bilkent.bilsync.entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.HashSet;
@@ -125,11 +127,11 @@ public class Comment {
     @PrePersist
     public void prePersist() {
         this.likeCount = 0;
-        this.commentReplyList = new HashSet<Long>();
-        // Get the current time in UTC+3
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.ofHours(3));
-        // Convert OffsetDateTime to Timestamp
-        this.publishDate = Timestamp.from(offsetDateTime.toInstant());
+        this.commentReplyList = new HashSet<>();
+
+        Instant instant = Instant.now();
+        Instant trClock = instant.plus(Duration.ofHours(3));
+        this.publishDate = Timestamp.from(trClock);
     }
 
     public void addComment(long id) { this.commentReplyList.add(id); }

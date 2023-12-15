@@ -8,6 +8,7 @@ import tr.edu.bilkent.bilsync.service.CommentService;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 @Service
 public class PostService {
@@ -54,8 +55,8 @@ public class PostService {
         };
     }
 
-    public HashSet<Post> getPostsSortedByDate() {
-        HashSet<Post> allPosts = new HashSet<>();
+    public TreeSet<Post> getPostsSortedByDate() {
+        TreeSet<Post> allPosts = new TreeSet<>(Comparator.comparing(Post::getPostDate).reversed());
 
         addSortedPosts(allPosts, announcementPostService.getPostsSortedByDate());
         addSortedPosts(allPosts, borrowAndLendPostService.getPostsSortedByDate());
@@ -104,8 +105,7 @@ public class PostService {
         }
     }
 
-    private <T extends Post> void addSortedPosts(HashSet<Post> allPosts, List<T> posts) {
-        posts.sort(Comparator.comparing(Post::getPostDate).reversed());
+    private <T extends Post> void addSortedPosts(TreeSet<Post> allPosts, List<T> posts) {
         allPosts.addAll(posts);
     }
 

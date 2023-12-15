@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 import tr.edu.bilkent.bilsync.entity.Comment;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table
@@ -47,11 +45,9 @@ public class Post {
     @OneToMany(targetEntity = Comment.class, fetch = FetchType.EAGER)
     private Set<Comment> commentList = new HashSet<>();
 
-    @Column
-    private String taggedUserListID;
-
-    @Column
-    private String hashtagListID;
+    @ElementCollection
+    @Column(name = "hashtag")
+    private Set<String> hashtagList;
 
     @Column(nullable = false)
     private boolean isAnonymous = false;
@@ -148,20 +144,12 @@ public class Post {
         this.commentList = commentList;
     }
 
-    public String getTaggedUserListID() {
-        return taggedUserListID;
+    public Set<String> getHashtagList() {
+        return hashtagList;
     }
 
-    public void setTaggedUserListID(String taggedUserListID) {
-        this.taggedUserListID = taggedUserListID;
-    }
-
-    public String getHashtagListID() {
-        return hashtagListID;
-    }
-
-    public void setHashtagListID(String hashtagListID) {
-        this.hashtagListID = hashtagListID;
+    public void setHashtagList(Set<String> hashtagList) {
+        this.hashtagList = hashtagList;
     }
 
     public boolean getIsAnonymous() {
@@ -183,11 +171,11 @@ public class Post {
     public void prePersist() {
         this.votes = 0;
         this.views = 0;
-        this.commentList = new HashSet<Comment>();
-        // Get the current time in UTC+3
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.ofHours(3));
-        // Convert OffsetDateTime to Timestamp
-        this.postDate = Timestamp.from(offsetDateTime.toInstant());
+        this.commentList = new HashSet<>();
+
+        Instant instant = Instant.now();
+        Instant trClock = instant.plus(Duration.ofHours(3));
+        this.postDate = Timestamp.from(trClock);
     }
 
     public void addComment(Comment comment) {

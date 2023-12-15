@@ -12,6 +12,7 @@ import tr.edu.bilkent.bilsync.entity.PostEntities.*;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 
 import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 @RestController
@@ -43,12 +44,13 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("USER_IS_BANNED");
 
         if(post instanceof TradingPost ) {
+            boolean paidTradingPost = postType == 1 || postType == 6;
             double price = ((TradingPost) post).getPrice();
             if(price < 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_LESS_THAN_0");
-            if((postType != 1 && postType != 2) && price == 0)
+            if(paidTradingPost && price == 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_CANNOT_BE_0");
-            if(postType != 1 && postType != 2) {
+            if(paidTradingPost && ((TradingPost) post).getIBAN() == null) {
                 String trimmedIBAN = ((TradingPost) post).getIBAN().replaceAll("\\s", "");
                 if(!validateIBAN(trimmedIBAN))
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_WAS_MISTYPED");
@@ -106,9 +108,9 @@ public class PostController {
     }
 
     @GetMapping("/getAllPosts")
-    public ResponseEntity<HashSet<Post>> getAllPosts() {
+    public ResponseEntity<TreeSet<Post>> getAllPosts() {
         try {
-            HashSet<Post> allPosts = postService.getPostsSortedByDate();
+            TreeSet<Post> allPosts = postService.getPostsSortedByDate();
             return ResponseEntity.ok(allPosts);
         } catch(Exception e) {
             System.out.println(e);
