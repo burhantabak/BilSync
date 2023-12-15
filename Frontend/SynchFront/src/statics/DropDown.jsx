@@ -59,9 +59,9 @@ export default function Dropdown({onCategoryChange}) {
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm text-right'
                   )}
-                  onClick={()=>{setSelectedOne("By Label"); handleCategoryChange("By Label");}}
+                  onClick={()=>{setSelectedOne("By Hashtag"); handleCategoryChange("By Hashtag");}}
                 >
-                  Search By Label
+                  Search By Hashtag
                 </a>
               )}
             </Menu.Item>

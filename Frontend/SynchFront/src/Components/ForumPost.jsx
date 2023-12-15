@@ -24,9 +24,9 @@ export default function ForumPost({post,isLostnFound}) {
                 <div className='flex items-center'>
                     <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
                     <div>
-                    <p className='font-semibold'>{post.userName}</p>
+                    <p className='font-semibold'>{post.name}</p>
                     <small>
-                    {post.postType === 0 ? "Announcement Post" : post.postType === 4 ? "Normal Post" : "Forum Post"}
+                    {post.postType === 0 ? "Announcement" : post.postType === 4 ? "Normal" : "Forum"}
                     </small>
                     </div>
                 </div>

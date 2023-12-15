@@ -24,13 +24,14 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
           let categoryType;
           
           if(selectedCategory === "By Description"){
-            categoryType = post.title;
+            categoryType = post.description;
           }
           else if(selectedCategory === "By Username"){
-            categoryType = post.userName;
+            categoryType = post.name;
           }
-          else if(selectedCategory === "By Label"){
-            categoryType =  post.label;
+          else if(selectedCategory === "By Hashtag"){
+            categoryType =  post.hashtagList.map((hashtag)=>{return hashtag}).join(" ");;
+            console.log('Hashtag List:', categoryType);
           }
           else{
             categoryType = post.title;
