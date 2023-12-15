@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.dto.ChatDto;
 import tr.edu.bilkent.bilsync.dto.ChatMessageDto;
+import tr.edu.bilkent.bilsync.entity.Chat;
+import tr.edu.bilkent.bilsync.entity.ChatMessage;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.service.ChatService;
 
@@ -52,6 +54,9 @@ public class ChatController {
         return ResponseEntity.ok("Message sent successfully.");
     }
 
-//    @GetMapping("/{chatId}")
-//    public ResponseEntity<>
+    @GetMapping("/{chatId}")
+    public ResponseEntity<List<ChatMessageDto>> getMessages(@PathVariable Long chatId, @AuthenticationPrincipal UserEntity currentUser){
+        List<ChatMessageDto> messages = chatService.getMessagesByChatId(chatId);
+        return ResponseEntity.ok(messages);
+    }
 }

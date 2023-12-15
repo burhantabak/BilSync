@@ -1,5 +1,7 @@
 package tr.edu.bilkent.bilsync.dto;
 
+import tr.edu.bilkent.bilsync.entity.ChatMessage;
+
 import java.util.Date;
 
 public class ChatMessageDto {
@@ -24,6 +26,9 @@ public class ChatMessageDto {
         this.image = image;
     }
 
+    public ChatMessageDto(ChatMessage chatMessage){
+        this(chatMessage.getId(), chatMessage.getSender().getId(), chatMessage.getChat().getId(), chatMessage.getDate(), chatMessage.getBody(), chatMessage.getImagePath());
+    }
     public Long getMessageId() {
         return messageId;
     }

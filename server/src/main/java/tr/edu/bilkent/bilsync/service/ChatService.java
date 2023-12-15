@@ -1,5 +1,6 @@
 package tr.edu.bilkent.bilsync.service;
 
+import org.apache.logging.log4j.message.Message;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.dto.ChatDto;
 import tr.edu.bilkent.bilsync.dto.ChatMessageDto;
@@ -26,10 +27,16 @@ public class ChatService {
         this.chatMessageRepository = chatMessageRepository;
     }
 
+    public List<ChatMessageDto> getMessagesByChatId(Long chatId){
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        List<ChatMessage> chatMessages = chat.getChatMessages();
+        return chatMessages.stream().map(ChatMessageDto::new).toList();
+    }
+
     public void createChat(ChatDto chatDto, UserEntity currentUser) {
         List<Long> userIds = chatDto.getUserIds();
         if (!chatDto.isGroupChat() && userIds.size() != 1) {
-            throw new IllegalArgumentException("Cannot create private chat with >1 members");
+            throw new IllegalArgumentException("Cannot create private chat with >2 members");
         }
 
         String chatName = chatDto.getChatName();
