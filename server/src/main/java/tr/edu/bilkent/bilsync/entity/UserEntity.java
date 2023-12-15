@@ -1,9 +1,15 @@
 package tr.edu.bilkent.bilsync.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import tr.edu.bilkent.bilsync.dto.UserDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,16 +27,37 @@ public class UserEntity implements UserDetails {
 
     @Column(nullable = false)
     private String name;
+    private String bio;
 
     @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
+    private boolean isBanned;
 
-    @Column
-    private String profileImagePath = "OUR_DEFAULT_IMAGE_PATH";
+    public UserType getAccountType() {
+        return accountType;
+    }
 
-    @Column
-    private boolean isBanned = false;
+    public void setAccountType(UserType accountType) {
+        this.accountType = accountType;
+    }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    private UserType accountType;
+    public boolean isBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(boolean banned) {
+        isBanned = banned;
+    }
     // Constructors
     public UserEntity() {}
 
@@ -38,6 +65,15 @@ public class UserEntity implements UserDetails {
         this.password = password;
         this.name = name;
         this.email = email;
+        this.isBanned=false;
+    }
+
+    public UserEntity(UserDto dto)
+    {
+        this.isBanned=false;
+        this.name= dto.getName();
+        this.email=dto.getEmail();
+        this.accountType=dto.getAccountType();
     }
 
     public long getId() {
@@ -102,12 +138,4 @@ public class UserEntity implements UserDetails {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getProfileImagePath() { return profileImagePath; }
-
-    public void setProfileImagePath(String profileImagePath) { this.profileImagePath = profileImagePath; }
-
-    public boolean getIsBanned() { return isBanned; }
-
-    public void setIsBanned(boolean isBanned) { this.isBanned = isBanned; }
 }
