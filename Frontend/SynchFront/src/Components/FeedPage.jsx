@@ -48,6 +48,7 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
             // if(filterForum &&filterLostnFound){ return <ForumPost key={index} post={post} isLostnFound={false}/>}
             // <TradingPostItem vote={-1} title="Basys3 Sale" nameUser="Işıl Özgü" price={175}/>
             if(post.postType ===6 || post.postType ===5 ) { return <TradingPostItem key={post.id} post={post}/>}
+            
         })}
     </div>
   )
