@@ -12,7 +12,9 @@ import tr.edu.bilkent.bilsync.repository.UserRepository;
 @RequestMapping("/user")
 public class UserController {
     UserRepository repo;
-
+    UserController(UserRepository repo){
+        this.repo = repo;
+    }
     @CrossOrigin
     @GetMapping("/users")
     public Iterable<UserEntity> listUsers(){

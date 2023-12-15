@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ImageInput from './ForumComponents/ImageInput'
 import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
+import DateInput from './ForumComponents/DateInput';
 export default function BorrowForm() {
     const [hashtags,setHashtags] = useState([]);
     const addTag= (event)=>{
@@ -25,8 +26,7 @@ export default function BorrowForm() {
             <InputField type={"number"} name={"Add Title"} handleEvent={null}/>
             <InputField type={"text"} name={"Add Description"} handleEvent={null}/>
             <div className='flex justify-between'>
-            <InputField type={"number"} name={"Price"} handleEvent={null}/>
-            <InputField type={"text"} name={"IBAN"} handleEvent={null}/>
+            <DateInput/>
             </div>
             <button type="submit" 
             className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 

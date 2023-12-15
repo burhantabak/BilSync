@@ -11,6 +11,7 @@ export default function TradingPostItem({post, isProfile}) {
     const [vote, setVotes] = useState(post.votes);
     const [isUpvote, setUpvote] = useState(false);
     const [isDownvote,setDownvote] = useState(false)
+    const [commentList, setCommentList] = useState(post.commentList);
   return (
     <div className='mx-5 my-4 flex flex-col items-center bg-gray-100 rounded-lg divide-y'>
         <div className='flex justify-between w-full items-center px-2'>
@@ -62,12 +63,16 @@ export default function TradingPostItem({post, isProfile}) {
             </div>
         </div>}
         <div className='w-full'>
-            <CommentComponent commentList={post.commentList}/>
+            <CommentComponent commentList={commentList}/>
         </div>
         {!isProfile && <div className='w-full'>
         <CommentCreate isUpvote={isUpvote} isDownvote={isDownvote} vote={vote} 
         setDownvote={()=>{if(isDownvote){setDownvote(false);setVotes(vote+1);}else{setDownvote(true);isUpvote?setVotes(vote-2):setVotes(vote-1);setUpvote(false);}}} 
-        setUpvote={()=>{if(isUpvote){setUpvote(false);setVotes(vote-1);}else{setUpvote(true);isDownvote?setVotes(vote+2):setVotes(vote+1);setDownvote(false);}}}/>
+        setUpvote={()=>{if(isUpvote){setUpvote(false);setVotes(vote-1);}else{setUpvote(true);isDownvote?setVotes(vote+2):setVotes(vote+1);setDownvote(false);}}}
+        postId={post.id}
+        handlePostCreation={setCommentList}
+        commentList ={commentList}
+        />
     </div> }
     </div> 
   )
