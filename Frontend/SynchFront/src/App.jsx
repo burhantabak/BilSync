@@ -37,16 +37,16 @@ function App() {
                 </ProtectedRoute>}/>
 
               <Route path="/commentScreen" element={<CommentScreen/>}/>
-              <Route path="/admin/adminPanel" element={<AdminPanel/>}/>
-              <Route path="/editAccount" element={<ProtectedRoute><EditAccount/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
-              <Route path="/editProfile" element={<ProtectedRoute><EditProfilePage/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
-              <Route path="/profilePage" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
-              <Route path="/aboutUs" element = {<AboutUs/>}/>
+              <Route path="/editAccount" element={<ProtectedRoute><EditAccount/></ProtectedRoute>}/>
+              <Route path="/editProfile" element={<ProtectedRoute><EditProfilePage/></ProtectedRoute>}/>
+              <Route path="/profilePage" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
               <Route path="/resetPassword" element = {<ResetPassword/>}/>
               <Route path="/changePassword" element = {<ForgetPassword/>}/>
-              <Route path="/admin/addAccount" element = {<AddAccount/>}/>
-              <Route path="/admin/Reports" element = {<ReportsPage/>}/>
+              <Route path="/admin/addAccount" element={<ProtectedRoute adminOnly><AddAccount/></ProtectedRoute>}/>
+              <Route path="/admin/Reports" element = {<ProtectedRoute adminOnly><ReportsPage/></ProtectedRoute>}/>
+              <Route path="/admin/adminPanel" element={<ProtectedRoute adminOnly><AdminPanel/></ProtectedRoute>}/>
+              <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
           </BrowserRouter>
