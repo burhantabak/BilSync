@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationRequestBody;
 import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationResponse;
+import tr.edu.bilkent.bilsync.controller.controllerEntities.ForgotPasswordRequestBody;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.service.AuthService;
 
@@ -33,10 +34,35 @@ public class AuthController {
         return "Hava karanlık";
     }
 
+
+    //DEPRECATED!!!
     @CrossOrigin
     @PostMapping("/registerUser")
-    public ResponseEntity register(@RequestBody UserEntity user) {
-        if(authService.register(user)){
+    public ResponseEntity register(@RequestBody UserEntity userEntity) {
+        if(authService.register(userEntity)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+    @CrossOrigin
+    @PostMapping("/forgotPassword")
+    public ResponseEntity forgotPassword(@RequestBody String claimedEmail){
+        boolean result = authService.forgotPasswordUrl(claimedEmail);
+        if(result){
+            return ResponseEntity.ok("Message successfully sent");
+        }
+        return ResponseEntity.badRequest().build();
+    }
+    @CrossOrigin
+    @PostMapping("/resetPassword")
+    public ResponseEntity resetPassword(@RequestBody ForgotPasswordRequestBody forgotPasswordRequestBody){
+        //authService will validify and save the newPassword if password is okay
+        if(forgotPasswordRequestBody.newPassword.isBlank()){
+            return ResponseEntity.noContent().build();
+        }
+        boolean result = authService.changePassword(forgotPasswordRequestBody.token,
+                forgotPasswordRequestBody.newPassword);
+        if(result){
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();

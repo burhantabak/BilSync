@@ -11,9 +11,14 @@ import { SearchResultList } from "./statics/SearchResultList.jsx"
 import AboutUs from "./Components/AboutUs.jsx"
 import EditAccount from "./Components/EditAccount.jsx"
 import CreatePost from "./Components/CreatePostPage.jsx"
-
-
-
+import ResetPassword from "./Components/ResetPassword.jsx"
+import ForgetPassword from "./Components/ForgetPassword.jsx"
+import ChangePassword from "./Components/ChangePassword.jsx"
+import EditProfile from "./Components/EditProfile.jsx"
+import AdminPanel from "./Components/AdminPanel.jsx"
+import AddAccount from "./statics/AddAccount.jsx"
+import ReportsPage from "./Components/Reports.jsx"
+import EditProfilePage from "./statics/EditProfilePage.jsx"
 
 function App() {
   const [results, setResults] = useState([]);
@@ -26,14 +31,22 @@ function App() {
             <Navbar isLoggedIn={isLoggedIn}/>
             <Routes>
               <Route path="/login" element={<LoginForm handleLogin={()=>{setLoggedIn(true)}}/>}/>
+              <Route path="/forgetPassword" element = {<ForgetPassword/>}/>
               <Route path="/mainPage" element={<ProtectedRoute>
                 <MainPage/>
                 </ProtectedRoute>}/>
+
               <Route path="/commentScreen" element={<CommentScreen/>}/>
-              <Route path="/editAccount" element={<EditAccount/>}/>{/**Kardeşim elinden öper */}
-              <Route path="/editProfile" element={<CommentScreen/>}/>{/**Kardeşim elinden öper */}
+              <Route path="/admin/adminPanel" element={<AdminPanel/>}/>
+              <Route path="/editAccount" element={<ProtectedRoute><EditAccount/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
+              <Route path="/editProfile" element={<ProtectedRoute><EditProfilePage/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
+              <Route path="/profilePage" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
               <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
+              <Route path="/resetPassword" element = {<ResetPassword/>}/>
+              <Route path="/changePassword" element = {<ForgetPassword/>}/>
+              <Route path="/admin/addAccount" element = {<AddAccount/>}/>
+              <Route path="/admin/Reports" element = {<ReportsPage/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
           </BrowserRouter>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useData } from '../Context/DataContext';
 
@@ -6,20 +6,36 @@ import { useData } from '../Context/DataContext';
 export default function LoginForm({handleLogin}) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const { login , error} = useData(); // Access error from the data context
+  const { login , error,user, getTheUsers} = useData(); // Access error from the data context
 
   const nav = useNavigate();
   const handleAuth = async (event)=> {
     event.preventDefault();
-      await login(userName, password);
+    login(userName, password)
+    .then(() => {
+      console.log(user)
       handleLogin();
-      console.log("called");
+      getTheUsers();
+      console.log('called');
       console.log(userName);
       console.log(password);
-      nav("/mainPage");
+
+      // Wait for login to complete, then navigate
+    })
+    .catch((error) => {
+      // Handle login error
+      console.error('Login failed:', error);
+    });
 }
 
+  useEffect(()=>{
+    if(user && !(user.isAdmin)){nav('/mainPage');}
 
+      // Assuming 'user' is updated after login
+      if (user && user.isAdmin) {
+        nav('/admin/adminPanel');
+      }
+  },[user])
 
 
   return (
@@ -50,7 +66,7 @@ export default function LoginForm({handleLogin}) {
                             <label htmlFor="remember" className="text-gray-500 dark:text-gray-500">Remember me</label>
                           </div>
                       </div>
-                      <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
+                      <a href="/changePassword" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
                   </div>
                   <button onClick={handleAuth} type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
 

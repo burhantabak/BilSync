@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Navbar() {
-  const itemList = ["Edit Profile","Edit Account","Sign Out"]
+  const itemList = ["Profile Page","Edit Account","Sign Out"]
   const {user} = useData();
   const { logout } = useData();
   
@@ -21,8 +21,8 @@ export default function Navbar() {
       logout();
       navigate("/login");
     }
-    else if(item == "Edit Profile"){
-      navigate("/editProfile");
+    else if(item == "Profile Page"){
+      navigate("/profilePage");
     }
     else if(item == "Edit Account"){
       navigate("/editAccount");
@@ -31,7 +31,8 @@ export default function Navbar() {
 
   return (
     <div className='flex bg-sky-600 justify-between px-4'>
-        <h1 className='text-3xl text-white font-bold font-mono py-3'>BilSync</h1>
+        <h1 onClick={()=>navigate("/mainPage")}
+        className='text-3xl text-white font-bold font-mono py-3'>BilSync</h1>
         <div>
             <ul className='flex gap-5'>
                 <li className='text-white text-xl mr-4 hover:bg-gray-400 py-4 px-1'><a href="/aboutUs">About Us</a></li>
@@ -60,7 +61,7 @@ function DropdownProfile({itemList, handleItemClick}){
     const navigate = useNavigate();
 
     return(
-      <Menu as={"div"}>
+      <Menu as={"div"} zIndex={100}>
         <Menu.Button>
           <Profile/>
         </Menu.Button>
@@ -73,7 +74,7 @@ function DropdownProfile({itemList, handleItemClick}){
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
         >
-           <Menu.Items className="absolute right-8 z-10 mt-2 w-[12%] origin-top-right bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+           <Menu.Items className="absolute right-8 z-10 mt-2 w-[12%] origin-top-right bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
           {itemList.map((item, index) => {
             return (
               <div key={index} className="py-1">

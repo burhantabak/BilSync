@@ -2,13 +2,17 @@ import { createContext, useContext, useMemo } from "react";
 import { authUser } from "../calling/authCalling";
 import { useLocalStorage } from "./useLocalStorage";
 import { useState } from "react";
-
+import { getAllPosts } from "../calling/postCalling";
+import getAllUsers from "../calling/userCalling";
+import matchUserID from "../calling/matchUserId";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", {});
   const [error, setError] = useState(""); // New state to store authentication error
-
+  const [postList, setPostList] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [isPostsLoading, setIsPostsLoading] = useState(true);
   const login = async (userName, password) =>{
 
     try{
@@ -18,103 +22,35 @@ export const DataProvider = ({ children }) => {
     }
     catch(error){
       setError("Invalid username or password"); // Set error state on unsuccessful login
-      console.log("are we in datacontext")
+      console.log("are we in data context")
       error = "Invalid username or password"; 
     }
   }
+  const getTheUsers =async ()=>{
+    console.log("get the users");
+    await getAllUsers(user).then(users=>{setAllUsers(users);console.log(allUsers);});
+  }
+  const getThePosts = ()=>{
+    setIsPostsLoading(true);
+    console.log("get the posts called");
+    getAllPosts(user).then(data=>{
+      if(data >= 400){
+        setUser(null);
+      }
+      getAllUsers(user).then((users)=>{
+        console.log("usersssssssssssssss:")
+        console.log(users)
+        setPostList(matchUserID(users,data))
+      })
+      console.log("mathcing user ID::::")
+      setIsPostsLoading(false);
+    });
+  }
+  
   const logout = ()=>{
     setUser(null);
   }
-  const postList = [
-    {
-      userName: "Tuna Saygın",
-      title: "CS 319 Hoca Değerlendirmesi",
-      description: "Hangi hocadan almak daha mantıklı",
-      vote: 16,
-      isTrading: false,
-      isLostnFound: false,
-      label: "Forum",
-      price: null,
-      IBAN: null,
-      comments: [
-        {
-          userName: "Burhan",
-          text: "Eray Hoca'dan al mükemmel anlatıyor",
-          likeNo: 10,
-          isReply: false
-        },
-        {
-          userName: "Işıl",
-          text: "Katılıyorum",
-          likeNo: 3,
-          isReply: true
-        },
-        {
-          userName: "Tuna",
-          text: "tşk",
-          likeNo: 0,
-          isReply: true
-        }
-      ]
-    },
-    {
-      userName: "Kenan Zeynalov",
-      title: "81 Sigara Alanı Kayıp Çakmak",
-      description: "18 Ekimde 81 sigara alanında 20 gibi çakmağımı unutmuşum. Bulan varsa çok sevinirim",
-      vote: 3,
-      isTrading: false,
-      isLostnFound: true,
-      label: "Lost",
-      price: null,
-      IBAN: null,
-      comments: [
-        {
-          userName: "Ahmet Tarık",
-          text: "Rengi neydi",
-          likeNo: 2,
-          isReply: false
-        },
-        {
-          userName: "Kenan Zeynalov",
-          text: "Metalik",
-          likeNo: 1,
-          isReply: true
-        },
-        {
-          userName: "Tuna",
-          text: "Geçmiş olsun kardeşim",
-          likeNo: 3,
-          isReply: false
-        }
-      ]
-    },
-    {
-      userName: "Burhan Tabak",
-      title: "Basys Satıyom",
-      description: "2 dönem kullanılmış 2. el basys. CS223 ve Cs 224'cüler için.",
-      vote: 10000,
-      isTrading: true,
-      isLostnFound: false,
-      label: "Trading",
-      price: 30000,
-      isBuy: true,
-      IBAN: "TR 203094090030",
-      comments: [
-        {
-          userName: "Elhan",
-          text: "Bütün switchler çalışıyor mu",
-          likeNo: 2,
-          isReply: false
-        },
-        {
-          userName: "Burhan Tabak",
-          text: "yes",
-          likeNo: 1,
-          isReply: true
-        }
-      ]
-    }
-  ];
+  
   const chatList = [
     {
       userName: "Tuna Saygın",
@@ -173,7 +109,7 @@ export const DataProvider = ({ children }) => {
     },
     // Add more entries as needed
   ];
-  const value = useMemo(() => ({ postList, chatList, user, login, logout, error}), [postList,chatList,user,login,logout, error]);
+  const value = useMemo(() => ({ postList, chatList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
