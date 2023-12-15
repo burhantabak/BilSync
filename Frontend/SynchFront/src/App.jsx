@@ -19,6 +19,7 @@ import AdminPanel from "./Components/AdminPanel.jsx"
 import AddAccount from "./statics/AddAccount.jsx"
 import ReportsPage from "./Components/Reports.jsx"
 import EditProfilePage from "./statics/EditProfilePage.jsx"
+import TransactionPage from "./Components/Transaction.jsx"
 
 function App() {
   const [results, setResults] = useState([]);
@@ -41,6 +42,8 @@ function App() {
               <Route path="/editProfile" element={<ProtectedRoute><EditProfilePage/></ProtectedRoute>}/>
               <Route path="/profilePage" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
+              <Route path="/transaction" element = {<ProtectedRoute><TransactionPage/></ProtectedRoute>}/>
+
               <Route path="/resetPassword" element = {<ResetPassword/>}/>
               <Route path="/changePassword" element = {<ForgetPassword/>}/>
               <Route path="/admin/addAccount" element={<ProtectedRoute adminOnly><AddAccount/></ProtectedRoute>}/>
