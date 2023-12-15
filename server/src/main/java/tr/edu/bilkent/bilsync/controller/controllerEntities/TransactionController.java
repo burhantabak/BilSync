@@ -60,12 +60,11 @@ public class TransactionController {
     public ResponseEntity<?> createTransaction(@RequestBody TransactionDto transaction, @AuthenticationPrincipal UserEntity currentUser) {
         if (transaction.getTransactionAmount() < 0) {
             // Return an error code as a String
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("TRANSACTION_AMOUNT_NEGATIVE");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction amount cannot be negative");
         }
         Transaction tr=transactionService.createTransaction(transaction, currentUser);
         return ResponseEntity.ok(tr);
     }
-
 
     /**
      * Updates the state of a transaction to "Giver Approved".
@@ -76,19 +75,18 @@ public class TransactionController {
      */
     @PutMapping("update/giverApproved/{id}")
     public Transaction updateToGiverApproved(@PathVariable Long id, @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, transaction, TransactionState.PENDING_TAKER_APPROVAL);
+        return transactionService.updateTransaction(id, TransactionState.PENDING_TAKER_APPROVAL);
     }
 
     /**
      * Updates the state of a transaction to "Taker Approved".
      *
      * @param id          The ID of the transaction to be updated.
-     * @param transaction The updated transaction details.
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#DEPOSITED}.
      */
     @PutMapping("update/takerApproved/{id}")
-    public Transaction updateToTakerApproved(@PathVariable Long id, @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, transaction, TransactionState.DEPOSITED);
+    public Transaction updateToTakerApproved(@PathVariable Long id) {
+        return transactionService.updateTransaction(id, TransactionState.DEPOSITED);
     }
 
     @GetMapping("/by-post/{postId}")
@@ -96,10 +94,6 @@ public class TransactionController {
         List<Transaction> transactions=transactionService.getTransactionsByPostId(postId);
         return ResponseEntity.ok(transactions);
     }
-
-
-    //todo giving out dto or real obj?
-    //todo refund durumuna end point yazmak mantıklı mı ama: çünkü zamana göre refund automated olmalı
 
     /**
      * Deletes a transaction by its ID.

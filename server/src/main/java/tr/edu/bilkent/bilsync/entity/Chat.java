@@ -39,14 +39,6 @@ public class Chat {
         this.id = id;
     }
 
-    public List<ChatMessage> getMessages() {
-        return chatMessages;
-    }
-
-    public void setMessages(List<ChatMessage> chatMessages) {
-        this.chatMessages = chatMessages;
-    }
-
     public List<ChatUser> getUsers() {
         return users;
     }

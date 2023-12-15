@@ -7,6 +7,7 @@ import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.PostRepositories.NormalPostRepository;
 import tr.edu.bilkent.bilsync.repository.TransactionRepository;
+import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 
 import java.util.Date;
 import java.util.List;
@@ -19,18 +20,18 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
 
-    //todo this needs to be changed to trading post
-    private final NormalPostRepository postRepository;
+
+    private final PostService postService;
 
     /**
      * Constructs a new instance of the {@code TransactionService}.
      *
      * @param transactionRepository The repository for handling transactions.
-     * @param postRepository        The repository for handling posts (assuming it exists).
+     * @param postService        The repository for handling posts (assuming it exists).
      */
-    public TransactionService(TransactionRepository transactionRepository, NormalPostRepository postRepository) {
+    public TransactionService(TransactionRepository transactionRepository, PostService postService) {
         this.transactionRepository = transactionRepository;
-        this.postRepository = postRepository;
+        this.postService = postService;
     }
 
     /**
@@ -76,6 +77,7 @@ public class TransactionService {
         transaction.setPostId(trDto.getPostId());
         transaction.setMoneyFetchDate(new Date());
         transaction.setStatus(TransactionState.PENDING_GIVER_APPROVAL);
+        postService.setHeld(trDto.getPostId(), true);
         return transactionRepository.save(transaction);
     }
 
@@ -83,20 +85,21 @@ public class TransactionService {
      * Updates an existing transaction.
      *
      * @param id                 The ID of the transaction to update.
-     * @param updatedTransaction The updated transaction data.
      * @return The updated {@link Transaction}, or {@code null} if the transaction with the given ID is not found.
      */
-    public Transaction updateTransaction(Long id, Transaction updatedTransaction, TransactionState newState) {
+    public Transaction updateTransaction(Long id, TransactionState newState) {
         Transaction existingTransaction = transactionRepository.findById(id).orElse(null);
         if (existingTransaction != null) {
-            updatedTransaction.setStatus(newState);
+            existingTransaction.setStatus(newState);
             if(newState == TransactionState.PENDING_TAKER_APPROVAL)
             {
-                updatedTransaction.setGiverApproveDate(new Date());
+                existingTransaction.setGiverApproveDate(new Date());
             }
             else if(newState == TransactionState.DEPOSITED)
             {
-                updatedTransaction.setTakerApproveDate(new Date());
+                postService.setHeld(existingTransaction.getPostId(),false);
+                postService.setAsResolved(existingTransaction.getPostId(),true);
+                existingTransaction.setTakerApproveDate(new Date());
             }
             return transactionRepository.save(existingTransaction);
         }
@@ -146,6 +149,8 @@ public class TransactionService {
                         if (daysDifference >= 3) {
                             // Update the transaction state here
                             transaction.setStatus(TransactionState.REFUNDED);
+                            postService.setAsResolved(transaction.getPostId(),false);
+                            postService.setHeld(transaction.getPostId(),false);
                             // Save the updated transaction to the repository
                             this.transactionRepository.save(transaction);
                         }

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
-export default function ImageInput() {
-  const [imageFile, setImageFile] = useState(null);
+export default function ImageInput({imageFile, setImageFile}) {
   const handleImageFileChange = (e) => {
     const file = e.target.files[0];
     console.log(e.target.files);
