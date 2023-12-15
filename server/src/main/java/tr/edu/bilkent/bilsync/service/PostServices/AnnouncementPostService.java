@@ -1,8 +1,8 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.entity.AnnouncementPost;
-import tr.edu.bilkent.bilsync.repository.AnnouncementPostRepository;
+import tr.edu.bilkent.bilsync.entity.PostEntities.AnnouncementPost;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.AnnouncementPostRepository;
 
 import java.util.List;
 

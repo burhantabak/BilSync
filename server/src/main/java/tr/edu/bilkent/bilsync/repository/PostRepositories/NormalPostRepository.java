@@ -1,9 +1,9 @@
-package tr.edu.bilkent.bilsync.repository;
+package tr.edu.bilkent.bilsync.repository.PostRepositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import tr.edu.bilkent.bilsync.entity.NormalPost;
+import tr.edu.bilkent.bilsync.entity.PostEntities.NormalPost;
 
 import java.util.List;
 

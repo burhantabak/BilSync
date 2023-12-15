@@ -1,8 +1,8 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.entity.SectionExchangePost;
-import tr.edu.bilkent.bilsync.repository.SectionExchangePostRepository;
+import tr.edu.bilkent.bilsync.entity.PostEntities.SectionExchangePost;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.SectionExchangePostRepository;
 
 import java.util.List;
 

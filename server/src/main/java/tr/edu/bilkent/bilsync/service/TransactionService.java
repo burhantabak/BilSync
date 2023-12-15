@@ -5,11 +5,10 @@ import tr.edu.bilkent.bilsync.dto.TransactionDto;
 import tr.edu.bilkent.bilsync.entity.Transaction;
 import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
-import tr.edu.bilkent.bilsync.repository.NormalPostRepository;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.NormalPostRepository;
 import tr.edu.bilkent.bilsync.repository.TransactionRepository;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**

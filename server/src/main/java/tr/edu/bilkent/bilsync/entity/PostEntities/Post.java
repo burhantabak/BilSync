@@ -1,6 +1,7 @@
-package tr.edu.bilkent.bilsync.entity;
+package tr.edu.bilkent.bilsync.entity.PostEntities;
 
 import jakarta.persistence.*;
+import tr.edu.bilkent.bilsync.entity.Comment;
 
 import java.sql.Timestamp;
 import java.time.*;

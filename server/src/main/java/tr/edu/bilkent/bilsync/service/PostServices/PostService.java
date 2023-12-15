@@ -1,7 +1,9 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.*;
+import tr.edu.bilkent.bilsync.entity.PostEntities.*;
+import tr.edu.bilkent.bilsync.service.CommentService;
 
 import java.util.Comparator;
 import java.util.HashSet;

@@ -3,7 +3,6 @@ package tr.edu.bilkent.bilsync.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tr.edu.bilkent.bilsync.entity.FileData;
-import tr.edu.bilkent.bilsync.repository.DonationPostRepository;
 import tr.edu.bilkent.bilsync.repository.FileRepository;
 
 import java.io.IOException;

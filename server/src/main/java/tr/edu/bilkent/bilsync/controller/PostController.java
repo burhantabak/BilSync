@@ -8,7 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.entity.*;
-import tr.edu.bilkent.bilsync.service.PostService;
+import tr.edu.bilkent.bilsync.entity.PostEntities.*;
+import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 
 import java.util.HashSet;
 import java.util.regex.Pattern;
