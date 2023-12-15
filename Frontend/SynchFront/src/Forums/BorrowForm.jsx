@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ImageInput from './ForumComponents/ImageInput'
 import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
-export default function SectionExchangeForm() {
+export default function BorrowForm() {
     const [hashtags,setHashtags] = useState([]);
     const addTag= (event)=>{
         if (event.target.value !== "") {
@@ -19,8 +19,8 @@ export default function SectionExchangeForm() {
         <div className='flex justify-center mb-5'>
             <h1 className='font-bold text-2xl'>Borrow Creation</h1>
         </div>
+        <HashtagInput tags={hashtags} setTags={setHashtags}/>
         <form>
-            <HashtagInput tags={hashtags} setTags={setHashtags}/>
             <ImageInput/>
             <InputField type={"number"} name={"Add Title"} handleEvent={null}/>
             <InputField type={"text"} name={"Add Description"} handleEvent={null}/>

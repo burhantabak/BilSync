@@ -17,7 +17,7 @@ export default function TradingPostItem({post, isProfile}) {
                 <div className='flex items-center'>
                     <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
                     <div>
-                    <p className='font-semibold'>{post.id}</p>
+                    <p className='font-semibold'>{post.name}</p>
                     <small>Trading Post</small>
                     </div>
                 </div>

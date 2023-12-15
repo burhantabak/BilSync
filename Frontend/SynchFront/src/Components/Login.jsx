@@ -6,7 +6,7 @@ import { useData } from '../Context/DataContext';
 export default function LoginForm({handleLogin}) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const { login , error,user} = useData(); // Access error from the data context
+  const { login , error,user, getTheUsers} = useData(); // Access error from the data context
 
   const nav = useNavigate();
   const handleAuth = async (event)=> {
@@ -15,6 +15,7 @@ export default function LoginForm({handleLogin}) {
     .then(() => {
       console.log(user)
       handleLogin();
+      getTheUsers();
       console.log('called');
       console.log(userName);
       console.log(password);

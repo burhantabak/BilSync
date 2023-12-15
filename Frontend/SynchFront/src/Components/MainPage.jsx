@@ -6,7 +6,7 @@ import ChatScreen from './ChatScreen.jsx';
 export default function MainPage() {
     const {postList,chatList,getThePosts,isPostsLoading} = useData();
     console.log(isPostsLoading)
-    useEffect(()=> getThePosts()
+    useEffect(()=> {getThePosts()}
         ,[]
     );
     const [filterTrading, setFilterTrading] = useState(true);
@@ -87,7 +87,6 @@ function ChatItem({chat,handleChat}){
     const {isGroupChat,userName} = chat;
     console.log(`isGroupChat=${isGroupChat}`)
     if(chat=null){
-        return <div>Loading..</div>
     }
     return(
         <div onClick={()=>{handleChat();console.log("Clicked chat")}} 

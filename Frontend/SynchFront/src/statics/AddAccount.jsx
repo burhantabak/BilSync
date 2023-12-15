@@ -67,6 +67,7 @@ export default function AddAccount() {
               <option value="student">Student</option>
               <option value="alumni">Alumni</option>
               <option value="instructor">Instructor</option>
+              <option value="staff">Staff</option>
             </select>
           </div>
 
