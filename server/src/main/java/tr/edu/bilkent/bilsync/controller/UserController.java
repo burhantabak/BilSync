@@ -35,7 +35,6 @@ public class UserController {
 
         List<UserEntityDto> userDtoList = StreamSupport.stream(users.spliterator(), false)
                 .map(userEntity -> new UserEntityDto(
-                        userEntity.getId(),
                         userEntity.getEmail(),
                         userEntity.getName(),
                         userEntity.getProfileImagePath(),

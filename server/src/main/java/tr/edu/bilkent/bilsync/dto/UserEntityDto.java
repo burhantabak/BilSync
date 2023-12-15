@@ -2,7 +2,6 @@ package tr.edu.bilkent.bilsync.dto;
 
 public class UserEntityDto {
 
-    private long id;
     private String email;
     private String name;
     private String profileImagePath;
@@ -11,8 +10,7 @@ public class UserEntityDto {
     // Constructors
     public UserEntityDto() {}
 
-    public UserEntityDto(long id, String email, String name, String profileImagePath, boolean isBanned) {
-        this.id = id;
+    public UserEntityDto(String email, String name, String profileImagePath, boolean isBanned) {
         this.email = email;
         this.name = name;
         this.profileImagePath = profileImagePath;
@@ -31,10 +29,6 @@ public class UserEntityDto {
     public String getProfileImagePath() { return profileImagePath; }
 
     public void setProfileImagePath(String profileImagePath) { this.profileImagePath = profileImagePath; }
-
-    public long getId() { return id; }
-
-    public void setId(long id) { this.id = id; }
 
     public boolean getIsBanned() { return isBanned; }
 
