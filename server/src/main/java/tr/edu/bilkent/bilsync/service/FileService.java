@@ -16,7 +16,7 @@ public class FileService {
 
     public FileService(FileRepository fileRepository) { this.fileRepository = fileRepository; }
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file) {
         try {
             int counter = 1;
             String fileName = file.getOriginalFilename();
