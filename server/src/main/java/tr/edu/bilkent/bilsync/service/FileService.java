@@ -13,7 +13,6 @@ import java.nio.file.Files;
 public class FileService {
     private FileRepository fileRepository;
     //TODO: FolderPath should be placed in the application for now
-    private final String FOLDER_PATH="C://Users//Lenovo//Desktop//Files/";
 
     public FileService(FileRepository fileRepository) { this.fileRepository = fileRepository; }
 
@@ -28,7 +27,8 @@ public class FileService {
                 fileName = baseName + "(" + counter + ")" + extension;
                 counter++;
             }
-            String filePath = FOLDER_PATH + fileName;
+            String abs = new java.io.File(".").getAbsolutePath();
+            String filePath = abs.substring(0,abs.length()-1) + fileName;
             FileData fileData = new FileData(fileName, file.getContentType(), filePath);
             fileRepository.save(fileData);
             file.transferTo(new java.io.File(filePath));
