@@ -34,6 +34,9 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private boolean isBanned;
 
+    @Column
+    private String profileImagePath = "OUR_DEFAULT_IMAGE_PATH";
+
     public UserType getAccountType() {
         return accountType;
     }
@@ -138,4 +141,8 @@ public class UserEntity implements UserDetails {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getProfileImagePath() { return profileImagePath; }
+
+    public void setProfileImagePath(String profileImagePath) { this.profileImagePath = profileImagePath; }
 }

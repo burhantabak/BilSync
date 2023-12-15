@@ -40,7 +40,7 @@ public class PostController {
         long userId = user.getId();
         post.setAuthorID(userId);
 
-        if(user.getIsBanned())
+        if(user.isBanned())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("USER_IS_BANNED");
 
         if(post instanceof TradingPost ) {
@@ -82,7 +82,7 @@ public class PostController {
         UserEntity user = getUser();
         if(user == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("USER_DOES_NOT_EXIST");
-        if(user.getIsBanned())
+        if(user.isBanned())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("USER_IS_BANNED");
         comment.setAuthorID(user.getId());
         Post primaryPost = postService.getPostByID(comment.getPrimaryPostID());

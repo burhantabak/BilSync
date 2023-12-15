@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.entity.Comment;
-import tr.edu.bilkent.bilsync.entity.Post;
+import tr.edu.bilkent.bilsync.entity.PostEntities.Post;
 import tr.edu.bilkent.bilsync.entity.Report;
 import tr.edu.bilkent.bilsync.exception.NoRecordFoundException;
 import tr.edu.bilkent.bilsync.exception.UserIsBannedException;
 import tr.edu.bilkent.bilsync.service.CommentService;
-import tr.edu.bilkent.bilsync.service.PostService;
+import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 import tr.edu.bilkent.bilsync.service.ReportService;
 
 /**
