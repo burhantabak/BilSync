@@ -3,12 +3,15 @@ import { authUser } from "../calling/authCalling";
 import { useLocalStorage } from "./useLocalStorage";
 import { useState } from "react";
 import { getAllPosts } from "../calling/postCalling";
+import getAllUsers from "../calling/userCalling";
+import matchUserID from "../calling/matchUserId";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", {});
   const [error, setError] = useState(""); // New state to store authentication error
   const [postList, setPostList] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const [isPostsLoading, setIsPostsLoading] = useState(true);
   const login = async (userName, password) =>{
 
@@ -19,14 +22,29 @@ export const DataProvider = ({ children }) => {
     }
     catch(error){
       setError("Invalid username or password"); // Set error state on unsuccessful login
-      console.log("are we in datacontext")
+      console.log("are we in data context")
       error = "Invalid username or password"; 
     }
+  }
+  const getTheUsers =async ()=>{
+    console.log("get the users");
+    await getAllUsers(user).then(users=>{setAllUsers(users);console.log(allUsers);});
   }
   const getThePosts = ()=>{
     setIsPostsLoading(true);
     console.log("get the posts called");
-    getAllPosts(user).then(data=>{setPostList(data);setIsPostsLoading(false);});
+    getAllPosts(user).then(data=>{
+      if(data >= 400){
+        setUser(null);
+      }
+      getAllUsers(user).then((users)=>{
+        console.log("usersssssssssssssss:")
+        console.log(users)
+        setPostList(matchUserID(users,data))
+      })
+      console.log("mathcing user ID::::")
+      setIsPostsLoading(false);
+    });
   }
   
   const logout = ()=>{
@@ -91,7 +109,7 @@ export const DataProvider = ({ children }) => {
     },
     // Add more entries as needed
   ];
-  const value = useMemo(() => ({ postList, chatList, user, login, logout, error, getThePosts,isPostsLoading}), [isPostsLoading,postList,chatList,user,login,logout, error]);
+  const value = useMemo(() => ({ postList, chatList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

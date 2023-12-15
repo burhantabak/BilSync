@@ -1,6 +1,25 @@
 import React from 'react'
 import { useState } from 'react';
-export default function CommentCreate({isUpvote, setUpvote,isDownvote , setDownvote, vote}) {
+import CreateComment from '../calling/commentCalling';
+export default function CommentCreate({isUpvote, setUpvote,isDownvote , setDownvote, vote, postId, handlePostCreation,commentList}) {
+  const [commentInput, setCommentInput] = useState("");
+  const handleInput = (event)=>{
+    setCommentInput(event.target.value);
+  }
+  const handleEnter = (event)=>{
+    if (event.key === 'Enter') {
+      if(commentInput !== ""){
+        CreateComment(commentInput, postId);
+        setCommentInput("");
+      }
+    }
+  }
+  const handleButtonSubmit = ()=>{
+    if(commentInput !== ""){
+      CreateComment(commentInput, postId);
+      setCommentInput("");
+    }
+  }
   return (
         <div className="flex justify-around w-full items-center pr-1 pl-1">
 	        <div className='font-bold grow-1 text-2xl flex justify-center items-center gap-2'>
@@ -18,7 +37,8 @@ export default function CommentCreate({isUpvote, setUpvote,isDownvote , setDownv
             </div>
 	        <div className='w-3/4'>
                 <div className="relative my-2 px-4 pr-8">
-                    <input type="search" id="search-dropdown" className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "  placeholder="Write a comment" required/>
+                    <input onChange={handleInput} value={commentInput}
+                    type="search" id="search-dropdown" className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "  placeholder="Write a comment" required/>
                     <button type="submit" className="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />

@@ -14,8 +14,9 @@ export function getAllPosts(user) {
 
     if (response.status === 200) {
       return response.json();
-    } else {
-      throw new Error(`Failed to authenticate. Status: ${response.status}`);
+    }
+     else {
+      return response.status;
     }
   })
   .catch(err => {

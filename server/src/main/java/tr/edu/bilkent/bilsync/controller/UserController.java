@@ -21,7 +21,6 @@ public class UserController {
     public UserController(UserRepository userRepository) {
         this.repo = userRepository;
     }
-
     @CrossOrigin
     @GetMapping("/users")
     public Iterable<UserEntity> listUsers(){

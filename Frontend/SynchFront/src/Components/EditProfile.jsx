@@ -66,30 +66,29 @@ const ProfilePage = () => {
 
   return (
     <div className="flex flex-row h-screen bg-gray-100">
-      <div className="w-1/3 flex flex-col p-4">
-        {/* Profile Section */}
-        <div className="flex items-center">
-          <img
-            className="rounded-full h-40 w-40 border-2 border-gray-300"
-            src={profilePicture}
-            alt="Profile Picture"
-          />
-          <div className="ml-4">
-            <p className="text-dark font-bold text-xl">{userType}</p>
-            <button
-              onClick={handleEditProfile}
-              className="bg-blue-500 text-white font-bold px-4 py-1 rounded w-full md:w-auto"
-            >
-              Edit Profile
-            </button>
-          </div>
-        </div>
-        {/* Bio Section */}
+    <div className="w-1/3 flex flex-col p-4">
+      <div className="flex flex-col items-center">
+        <p className="text-dark font-bold text-2xl mb-2">{user.name}</p>
+        <img
+          className="rounded-full h-40 w-40 border-2 border-gray-300"
+          src={profilePicture}
+          alt="Profile Picture"
+        />
         <div className="mt-4">
-          <p className="text-dark text-lg font-bold mb-2">Bio:</p>
-          <p className="text-gray-600 leading-relaxed">{bio}</p>
+          <p className="text-dark font-bold text-xl">{userType}</p>
+          <button
+            onClick={handleEditProfile}
+            className="bg-blue-500 text-white font-bold px-4 py-2 rounded-full mt-2 md:w-auto hover:bg-blue-600 transition duration-300"
+          >
+            Edit Profile
+          </button>
         </div>
       </div>
+      <div className="mt-4 bg-gradient-to-r from-blue-200 to-blue-300 p-4 rounded-md">
+        <p className="text-dark text-lg font-bold mb-2">Bio:</p>
+        <p className="text-gray-700 leading-relaxed">{bio}</p>
+      </div>
+    </div>
       <div className="w-2/3 flex flex-col p-4">
         {/* Post History Section */}
         <div className="mb-4">
@@ -105,6 +104,7 @@ const ProfilePage = () => {
               <TradingPostItem
               key={post.id}
               post={post}
+              isProfile={true}
               className="flex flex-col bg-white border-gray-300 rounded-md p-4 shadow-md transition duration-300 ease-in-out transform hover:scale-105"
             >
             <h3 className="text-dark font-bold text-xl mb-2">{post.title}</h3>

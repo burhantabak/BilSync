@@ -20,8 +20,8 @@ export default function ForumForm() {
         <div className='flex justify-center mb-5'>
             <h1 className='font-bold text-2xl'>Forum Post Creation</h1>
         </div>
+        <HashtagInput tags={hashtags} setTags={setHashtags}/>
         <form>
-            <HashtagInput tags={hashtags} setTags={setHashtags}/>
             <ImageInput/>
             <InputField type={"number"} name={"Add Title"} handleEvent={null}/>
             <InputField type={"text"} name={"Add Description"} handleEvent={null}/>
