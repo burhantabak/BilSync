@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import CommentComponent from './CommentComponent';
 import CommentCreate from '../statics/CommentCreate';
+import formatDate, { formatTime } from './HelperFunctions/DateFormat';
+
+
 export default function ForumPost({post,isLostnFound}) {
     console.log("entered Forum Post");
     if(post==null){
@@ -10,6 +13,8 @@ export default function ForumPost({post,isLostnFound}) {
     const [vote, setVotes] = useState(post.vote);
     const [isUpvote, setUpvote] = useState(false);
     const [isDownvote,setDownvote] = useState(false);
+    const [commentList, setCommentList] = useState(post.commentList);
+
     if(post== null){
         return <h1>Not Loaded</h1>
     }
@@ -20,14 +25,16 @@ export default function ForumPost({post,isLostnFound}) {
                     <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
                     <div>
                     <p className='font-semibold'>{post.userName}</p>
-                    <small>{isLostnFound?"Lost&Found":"Forum Post"}</small>
+                    <small>
+                    {post.postType === 0 ? "Announcement Post" : post.postType === 4 ? "Normal Post" : "Forum Post"}
+                    </small>
                     </div>
                 </div>
                 <h2 className='text-xl text-gray-900 font-bold'>{post.title}</h2>
                 <div className='flex justify-end pr-3 py-2'>
                     <div className='text-center'>
-                    <h2 className='text-sm font-semibold'>17th October 2023</h2>
-                    <p className='text-sm'>17:54</p>
+                    <h2 className='text-sm font-semibold'>{formatDate(post.postDate)}</h2>
+                    <p className='text-sm'>{formatTime(post.postDate)}</p>
                     </div>
                 </div>
             </div>
@@ -47,12 +54,16 @@ export default function ForumPost({post,isLostnFound}) {
                 </div>
             </div>
             <div className='w-full'>
-                <CommentComponent commentList={post.comments}/>
+                <CommentComponent commentList={post.commentList}/>
             </div>
             <div className='w-full'>
             <CommentCreate isUpvote={isUpvote} isDownvote={isDownvote} vote={vote} 
         setDownvote={()=>{if(isDownvote){setDownvote(false);setVotes(vote+1);}else{setDownvote(true);isUpvote?setVotes(vote-2):setVotes(vote-1);setUpvote(false);}}} 
-        setUpvote={()=>{if(isUpvote){setUpvote(false);setVotes(vote-1);}else{setUpvote(true);isDownvote?setVotes(vote+2):setVotes(vote+1);setDownvote(false);}}}/>
+        setUpvote={()=>{if(isUpvote){setUpvote(false);setVotes(vote-1);}else{setUpvote(true);isDownvote?setVotes(vote+2):setVotes(vote+1);setDownvote(false);}}}
+        postId={post.id}
+        handlePostCreation={setCommentList}
+        commentList ={commentList}
+        />
             </div>
         </div>
   )

@@ -19,7 +19,11 @@ export default function TradingPostItem({post, isProfile}) {
                     <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
                     <div>
                     <p className='font-semibold'>{post.name}</p>
-                    <small>Trading Post</small>
+                    {post.postType === 1 ? "Borrow&Lend Post":
+                     post.postType === 2 ? "Donation Post":
+                      post.postType === 3? "Lost&Found Post ":
+                       post.postType === 5? "Section Exchange ":
+                        post.postType === 6? "SecondHandTrading Post"  : "Forum Post"}
                     </div>
                 </div>
                 <h2 className='text-xl text-gray-900 font-bold'>{post.title}</h2>
