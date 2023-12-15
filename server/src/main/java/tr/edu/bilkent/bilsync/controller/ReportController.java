@@ -6,9 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import tr.edu.bilkent.bilsync.entity.Comment;
+import tr.edu.bilkent.bilsync.entity.Post;
 import tr.edu.bilkent.bilsync.entity.Report;
 import tr.edu.bilkent.bilsync.exception.NoRecordFoundException;
 import tr.edu.bilkent.bilsync.exception.UserIsBannedException;
+import tr.edu.bilkent.bilsync.service.CommentService;
+import tr.edu.bilkent.bilsync.service.PostService;
 import tr.edu.bilkent.bilsync.service.ReportService;
 
 /**
@@ -20,17 +24,17 @@ public class ReportController {
 
     private final ReportService reportService;
 
+    private final PostService postService;
 
-    /**
-     * Constructs a new ReportController with the specified service dependency.
-     *
-     * @param reportService The service responsible for report-related operations.
-     */
+    private final CommentService commentService;
+
     @Autowired
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportService reportService, PostService postService, CommentService commentService) {
         this.reportService = reportService;
-
+        this.postService = postService;
+        this.commentService = commentService;
     }
+
 
     /**
      * Retrieves all reports.
@@ -71,9 +75,14 @@ public class ReportController {
      * @return A ResponseEntity with a status code and a message.
      */
     @GetMapping("/{reportId}/viewPost")
-    public ResponseEntity<String> viewReportedPost(@PathVariable Long reportId) {
-        // Implement logic to view details of a report
-        return new ResponseEntity<>("Report details", HttpStatus.OK);
+    public ResponseEntity<?> viewReportedPost(@PathVariable Long reportId) {
+        Post post = postService.getPostByID(reportId);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post does not exist");
+        } else {
+            return ResponseEntity.ok(post);
+        }
+
     }
 
     /**
@@ -83,9 +92,13 @@ public class ReportController {
      * @return A ResponseEntity with a status code and a message.
      */
     @GetMapping("/{reportId}/viewComment")
-    public ResponseEntity<String> viewReportedComment(@PathVariable Long reportId) {
-        // Implement logic to view details of a report
-        return new ResponseEntity<>("Report details", HttpStatus.OK);
+    public ResponseEntity<?> viewReportedComment(@PathVariable Long reportId) {
+        Comment comment = commentService.getCommentByID(reportId);
+        if (comment == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post does not exist");
+        } else {
+            return ResponseEntity.ok(comment);
+        }
     }
 
     /**
