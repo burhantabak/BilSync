@@ -12,7 +12,7 @@ import java.nio.file.Files;
 @Service
 public class FileService {
     private FileRepository fileRepository;
-    //TODO: FolderPath should be placed in the application for now
+    //TODO: Refine this :(
 
     public FileService(FileRepository fileRepository) { this.fileRepository = fileRepository; }
 
