@@ -83,6 +83,25 @@ public class PostService {
         return foundPost;
     }
 
+    public boolean deletePostById(long id) {
+        try {
+            for (byte postType = 0; postType <= 6; postType++) {
+                switch (postType) {
+                    case 0 -> announcementPostService.deleteById(id);
+                    case 1 -> borrowAndLendPostService.deleteById(id);
+                    case 2 -> donationPostService.deleteById(id);
+                    case 3 -> lostAndFoundPostService.deleteById(id);
+                    case 4 -> normalPostService.deleteById(id);
+                    case 5 -> sectionExchangePostService.deleteById(id);
+                    case 6 -> secondHandTradingPostService.deleteById(id);
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private <T extends Post> void addSortedPosts(HashSet<Post> allPosts, List<T> posts) {
         posts.sort(Comparator.comparing(Post::getPostDate).reversed());
         allPosts.addAll(posts);

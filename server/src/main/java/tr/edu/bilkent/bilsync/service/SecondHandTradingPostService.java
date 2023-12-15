@@ -33,4 +33,9 @@ public class SecondHandTradingPostService {
     public SecondHandTradingPost getPostByID(long id) {
         return secondHandTradingPostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        secondHandTradingPostRepository.deleteById(id);
+    }
+
 }

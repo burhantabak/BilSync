@@ -32,4 +32,8 @@ public class BorrowAndLendPostService {
     public BorrowAndLendPost getPostByID(long id) {
         return borrowAndLendPostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        borrowAndLendPostRepository.deleteById(id);
+    }
 }

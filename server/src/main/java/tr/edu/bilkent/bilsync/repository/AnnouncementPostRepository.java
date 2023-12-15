@@ -12,4 +12,5 @@ public interface AnnouncementPostRepository extends CrudRepository<AnnouncementP
     AnnouncementPost findById(long id);
     @Query("SELECT p FROM AnnouncementPost p ORDER BY p.postDate DESC")
     List<AnnouncementPost> findAnnouncementPostsSortedByDate();
+    void deleteById(long id);
 }

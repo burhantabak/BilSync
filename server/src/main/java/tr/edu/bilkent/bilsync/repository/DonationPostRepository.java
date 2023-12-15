@@ -12,4 +12,5 @@ public interface DonationPostRepository extends CrudRepository<DonationPost, Lon
     DonationPost findById(long id);
     @Query("SELECT p FROM DonationPost p ORDER BY p.postDate DESC")
     List<DonationPost> findDonationPostsSortedByDate();
+    void deleteById(long id);
 }

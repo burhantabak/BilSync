@@ -13,4 +13,5 @@ public interface LostAndFoundPostRepository extends CrudRepository<LostAndFoundP
     LostAndFoundPost findById(long id);
     @Query("SELECT p FROM LostAndFoundPost p ORDER BY p.postDate DESC")
     List<LostAndFoundPost> findLostAndFoundPostsSortedByDate();
+    void deleteById(long id);
 }
