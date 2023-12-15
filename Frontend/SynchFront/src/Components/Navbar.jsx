@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Navbar() {
-  const itemList = ["Edit Profile","Edit Account","Sign Out"]
+  const itemList = ["Profile Page","Edit Account","Sign Out"]
   const {user} = useData();
   const { logout } = useData();
   
@@ -21,8 +21,8 @@ export default function Navbar() {
       logout();
       navigate("/login");
     }
-    else if(item == "Edit Profile"){
-      navigate("/editProfile");
+    else if(item == "Profile Page"){
+      navigate("/profilePage");
     }
     else if(item == "Edit Account"){
       navigate("/editAccount");

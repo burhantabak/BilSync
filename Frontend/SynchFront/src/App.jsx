@@ -18,6 +18,7 @@ import EditProfile from "./Components/EditProfile.jsx"
 import AdminPanel from "./Components/AdminPanel.jsx"
 import AddAccount from "./statics/AddAccount.jsx"
 import ReportsPage from "./Components/Reports.jsx"
+import EditProfilePage from "./statics/EditProfilePage.jsx"
 
 function App() {
   const [results, setResults] = useState([]);
@@ -38,7 +39,8 @@ function App() {
               <Route path="/commentScreen" element={<CommentScreen/>}/>
               <Route path="/admin/adminPanel" element={<AdminPanel/>}/>
               <Route path="/editAccount" element={<ProtectedRoute><EditAccount/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
-              <Route path="/editProfile" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
+              <Route path="/editProfile" element={<ProtectedRoute><EditProfilePage/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
+              <Route path="/profilePage" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
               <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
               <Route path="/resetPassword" element = {<ResetPassword/>}/>
