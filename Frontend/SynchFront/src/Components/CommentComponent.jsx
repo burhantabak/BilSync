@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 export default function CommentComponent({commentList}){
+  console.log('commentList:', commentList);
+
     return (
       <Disclosure>
         {({ open }) => (
