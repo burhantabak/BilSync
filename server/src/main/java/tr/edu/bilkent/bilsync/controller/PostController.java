@@ -40,7 +40,7 @@ public class PostController {
         long userId = user.getId();
         post.setAuthorID(userId);
 
-        if(user.getIsBanned())
+        if(user.isBanned())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("USER_IS_BANNED");
 
         if(post instanceof TradingPost ) {
@@ -50,12 +50,13 @@ public class PostController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_LESS_THAN_0");
             if(paidTradingPost && price == 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_CANNOT_BE_0");
-            if(paidTradingPost && ((TradingPost) post).getIBAN() == null) {
+            if(paidTradingPost && ((TradingPost) post).getIBAN() != null) {
                 String trimmedIBAN = ((TradingPost) post).getIBAN().replaceAll("\\s", "");
                 if(!validateIBAN(trimmedIBAN))
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_WAS_MISTYPED");
                 ((TradingPost) post).setIBAN(trimmedIBAN);
-            }
+            } else if(paidTradingPost)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_MUST_BE_TYPED");
         }
         if (post.getTitle() == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("TITLE_CANNOT_BE_EMPTY");
@@ -81,7 +82,7 @@ public class PostController {
         UserEntity user = getUser();
         if(user == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("USER_DOES_NOT_EXIST");
-        if(user.getIsBanned())
+        if(user.isBanned())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("USER_IS_BANNED");
         comment.setAuthorID(user.getId());
         Post primaryPost = postService.getPostByID(comment.getPrimaryPostID());

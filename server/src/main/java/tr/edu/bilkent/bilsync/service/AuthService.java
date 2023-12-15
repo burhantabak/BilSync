@@ -60,7 +60,7 @@ public class AuthService {
         String endpoint = "/resetPassword?ticket=";
         String mailLink =  baseUrl+endpoint+tokenCreated;//here the token is returned
         //mail title
-        String mailTitle = "Reset Password Link at Bilsync";
+        String mailTitle = "Reset Password Link at BilSync";
         String mailBody = "Hello,\n Here is your password reset link:\n" + mailLink +"\n Bilsync Team :)";
         return mailService.sendMail(mailTitle,mailBody, claimedEmail);
     }

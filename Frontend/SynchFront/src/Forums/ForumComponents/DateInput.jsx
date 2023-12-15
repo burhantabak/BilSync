@@ -15,7 +15,7 @@ export default function DateInput({title, handleInput}) {
     <span className='font-semibold mx-5'>to</span>
     <DatePicker
       showIcon
-      selected={startDate}
+      selected={endDate}
       onChange={(date) => setEndDate(date)}
     />
     </div>
