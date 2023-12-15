@@ -105,6 +105,32 @@ public class PostService {
         }
     }
 
+    public boolean setAsResolved(long postId, boolean resolved) {
+        try {
+            Post post = getPostByID(postId);
+            if(!(post instanceof TradingPost))
+                return false;
+            ((TradingPost) post).setIsResolved(resolved);
+            createOrSavePost(post);
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
+    public boolean setHeld(long postId, boolean held) {
+        try {
+            Post post = getPostByID(postId);
+            if(!(post instanceof TradingPost))
+                return false;
+            ((TradingPost) post).setIsHeld(held);
+            createOrSavePost(post);
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
     private <T extends Post> void addSortedPosts(TreeSet<Post> allPosts, List<T> posts) {
         allPosts.addAll(posts);
     }
