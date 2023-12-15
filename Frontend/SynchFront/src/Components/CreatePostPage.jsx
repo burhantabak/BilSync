@@ -5,6 +5,7 @@ import ForumForm from '../Forums/ForumForm';
 import SectionExchangeForm from '../Forums/SectionExchangeForm';
 import DonationForm from '../Forums/DonationForm';
 import LostnFoundForm from '../Forums/LostnFoundForm';
+import BorrowForm from '../Forums/BorrowForm';
 
 export default function CreatePost() {
   const [selectedForm, setSelectedForm] = useState("Second Hand");
@@ -32,6 +33,7 @@ export default function CreatePost() {
             {selectedForm === "Section Exchange" && <SectionExchangeForm/>}
             {selectedForm === "Donation" && <DonationForm/>}
             {selectedForm === "Lost&Found" && <LostnFoundForm/>}
+            {selectedForm === "Borrowing" && <BorrowForm/>}
         </div>
     </div>
   )

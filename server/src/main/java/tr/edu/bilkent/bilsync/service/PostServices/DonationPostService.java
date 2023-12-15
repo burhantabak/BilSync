@@ -1,8 +1,8 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.entity.DonationPost;
-import tr.edu.bilkent.bilsync.repository.DonationPostRepository;
+import tr.edu.bilkent.bilsync.entity.PostEntities.DonationPost;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.DonationPostRepository;
 
 import java.util.List;
 
@@ -33,4 +33,9 @@ public class DonationPostService {
     public DonationPost getPostByID(long id) {
         return donationPostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        donationPostRepository.deleteById(id);
+    }
 }
+

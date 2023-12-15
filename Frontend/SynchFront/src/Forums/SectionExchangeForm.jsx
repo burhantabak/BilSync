@@ -4,23 +4,14 @@ import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
 export default function SectionExchangeForm() {
     const [hashtags,setHashtags] = useState([]);
-    const addTag= (event)=>{
-        if (event.target.value !== "") {
-            setHashtags([...hashtags, event.target.value]);
-            event.target.value = "";
-            console.log(hashtags)
-          }
-    };
-    const removeTags = indexToRemove => {
-        setHashtags([...hashtags.filter((_, index) => index !== indexToRemove)]);
-      };
+
   return (
     <div>
         <div className='flex justify-center mb-5'>
-            <h1 className='font-bold text-2xl'>Second Exchange Post Creation</h1>
+            <h1 className='font-bold text-2xl'>Section Exchange Post Creation</h1>
         </div>
+        <HashtagInput tags={hashtags} setTags={setHashtags}/>
         <form>
-            <HashtagInput tags={hashtags} setTags={setHashtags}/>
             <ImageInput/>
             <InputField type={"number"} name={"Add Title"} handleEvent={null}/>
             <InputField type={"text"} name={"Add Description"} handleEvent={null}/>

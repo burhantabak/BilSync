@@ -1,9 +1,9 @@
-package tr.edu.bilkent.bilsync.repository;
+package tr.edu.bilkent.bilsync.repository.PostRepositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import tr.edu.bilkent.bilsync.entity.DonationPost;
+import tr.edu.bilkent.bilsync.entity.PostEntities.DonationPost;
 
 import java.util.List;
 
@@ -12,4 +12,5 @@ public interface DonationPostRepository extends CrudRepository<DonationPost, Lon
     DonationPost findById(long id);
     @Query("SELECT p FROM DonationPost p ORDER BY p.postDate DESC")
     List<DonationPost> findDonationPostsSortedByDate();
+    void deleteById(long id);
 }

@@ -19,8 +19,8 @@ export default function LostnFoundForm() {
         <div className='flex justify-center mb-5'>
             <h1 className='font-bold text-2xl'>Lost & Found Post Creation</h1>
         </div>
-        <form>
-            <HashtagInput tags={hashtags} setTags={setHashtags}/>
+        <HashtagInput tags={hashtags} setTags={setHashtags}/>
+        <form >
             <ImageInput/>
             <InputField type={"number"} name={"Add Title"} handleEvent={null}/>
             <InputField type={"text"} name={"Add Description"} handleEvent={null}/>

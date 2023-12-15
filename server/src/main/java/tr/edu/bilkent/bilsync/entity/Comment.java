@@ -3,6 +3,8 @@ package tr.edu.bilkent.bilsync.entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.HashSet;
@@ -20,8 +22,10 @@ public class Comment {
     @Column(nullable = false)
     private long authorID;
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Comment> commentReplyList = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "comment_reply", joinColumns = @JoinColumn(name = "comment_id"))
+    @Column(name = "reply_id")
+    private Set<Long> commentReplyList = new HashSet<>();
 
     @Column(nullable = false)
     private boolean isReply;
@@ -54,11 +58,11 @@ public class Comment {
         this.authorID = authorID;
     }
 
-    public Set<Comment> getCommentReplyList() {
+    public Set<Long> getCommentReplyList() {
         return commentReplyList;
     }
 
-    public void setCommentReplyList(Set<Comment> commentReplyList) {
+    public void setCommentReplyList(Set<Long> commentReplyList) {
         this.commentReplyList = commentReplyList;
     }
 
@@ -120,16 +124,15 @@ public class Comment {
 
     public void setPrimaryPostID(long primaryPostID) { this.primaryPostID = primaryPostID; }
 
-
     @PrePersist
     public void prePersist() {
         this.likeCount = 0;
-        this.commentReplyList = new HashSet<Comment>();
-        // Get the current time in UTC+3
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.ofHours(3));
-        // Convert OffsetDateTime to Timestamp
-        this.publishDate = Timestamp.from(offsetDateTime.toInstant());
+        this.commentReplyList = new HashSet<>();
+
+        Instant instant = Instant.now();
+        Instant trClock = instant.plus(Duration.ofHours(3));
+        this.publishDate = Timestamp.from(trClock);
     }
 
-    public void addComment(Comment comment) { this.commentReplyList.add(comment); }
+    public void addComment(long id) { this.commentReplyList.add(id); }
 }

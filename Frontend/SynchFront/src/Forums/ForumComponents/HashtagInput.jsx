@@ -8,8 +8,11 @@ export const HashtagInput = (props) => {
   
     const addTags = (event) => {
       if (event.target.value !== "") {
-        props.setTags([...props.tags, event.target.value]);
-        event.target.value = "";
+        if(!(props.tags.find((value)=>event.target.value === value)))
+        {
+          props.setTags([...props.tags, event.target.value]);
+          event.target.value = "";
+        }
       }
     };
   

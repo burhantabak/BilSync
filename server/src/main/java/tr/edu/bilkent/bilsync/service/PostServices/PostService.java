@@ -1,11 +1,14 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.*;
+import tr.edu.bilkent.bilsync.entity.PostEntities.*;
+import tr.edu.bilkent.bilsync.service.CommentService;
 
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 @Service
 public class PostService {
@@ -40,28 +43,20 @@ public class PostService {
 
     public boolean createOrSavePost(Object post) {
         Post postObj = (Post) post;
-        switch (postObj.getPostType()) {
-            case 0:
-                return announcementPostService.createOrSavePost((AnnouncementPost) post);
-            case 1:
-                return borrowAndLendPostService.createOrSavePost((BorrowAndLendPost) post);
-            case 2:
-                return donationPostService.createOrSavePost((DonationPost) post);
-            case 3:
-                return lostAndFoundPostService.createOrSavePost((LostAndFoundPost) post);
-            case 4:
-                return normalPostService.createOrSavePost((NormalPost) post);
-            case 5:
-                return sectionExchangePostService.createOrSavePost((SectionExchangePost) post);
-            case 6:
-                return secondHandTradingPostService.createOrSavePost((SecondHandTradingPost) post);
-            default:
-                return false;
-        }
+        return switch (postObj.getPostType()) {
+            case 0 -> announcementPostService.createOrSavePost((AnnouncementPost) post);
+            case 1 -> borrowAndLendPostService.createOrSavePost((BorrowAndLendPost) post);
+            case 2 -> donationPostService.createOrSavePost((DonationPost) post);
+            case 3 -> lostAndFoundPostService.createOrSavePost((LostAndFoundPost) post);
+            case 4 -> normalPostService.createOrSavePost((NormalPost) post);
+            case 5 -> sectionExchangePostService.createOrSavePost((SectionExchangePost) post);
+            case 6 -> secondHandTradingPostService.createOrSavePost((SecondHandTradingPost) post);
+            default -> false;
+        };
     }
 
-    public HashSet<Post> getPostsSortedByDate() {
-        HashSet<Post> allPosts = new HashSet<Post>();
+    public TreeSet<Post> getPostsSortedByDate() {
+        TreeSet<Post> allPosts = new TreeSet<>(Comparator.comparing(Post::getPostDate).reversed());
 
         addSortedPosts(allPosts, announcementPostService.getPostsSortedByDate());
         addSortedPosts(allPosts, borrowAndLendPostService.getPostsSortedByDate());
@@ -79,34 +74,38 @@ public class PostService {
         Post foundPost = null;
         for (byte postType = 0; postType <= 6 && foundPost == null; postType++) {
             switch (postType) {
-                case 0:
-                    foundPost = announcementPostService.getPostByID(id);
-                    break;
-                case 1:
-                    foundPost = borrowAndLendPostService.getPostByID(id);
-                    break;
-                case 2:
-                    foundPost = donationPostService.getPostByID(id);
-                    break;
-                case 3:
-                    foundPost = lostAndFoundPostService.getPostByID(id);
-                    break;
-                case 4:
-                    foundPost = normalPostService.getPostByID(id);
-                    break;
-                case 5:
-                    foundPost = sectionExchangePostService.getPostByID(id);
-                    break;
-                case 6:
-                    foundPost = secondHandTradingPostService.getPostByID(id);
-                    break;
+                case 0 -> foundPost = announcementPostService.getPostByID(id);
+                case 1 -> foundPost = borrowAndLendPostService.getPostByID(id);
+                case 2 -> foundPost = donationPostService.getPostByID(id);
+                case 3 -> foundPost = lostAndFoundPostService.getPostByID(id);
+                case 4 -> foundPost = normalPostService.getPostByID(id);
+                case 5 -> foundPost = sectionExchangePostService.getPostByID(id);
+                case 6 -> foundPost = secondHandTradingPostService.getPostByID(id);
             }
         }
         return foundPost;
     }
 
-    private <T extends Post> void addSortedPosts(HashSet<Post> allPosts, List<T> posts) {
-        posts.sort(Comparator.comparing(Post::getPostDate).reversed());
+    public boolean deletePostById(long id) {
+        try {
+            for (byte postType = 0; postType <= 6; postType++) {
+                switch (postType) {
+                    case 0 -> announcementPostService.deleteById(id);
+                    case 1 -> borrowAndLendPostService.deleteById(id);
+                    case 2 -> donationPostService.deleteById(id);
+                    case 3 -> lostAndFoundPostService.deleteById(id);
+                    case 4 -> normalPostService.deleteById(id);
+                    case 5 -> sectionExchangePostService.deleteById(id);
+                    case 6 -> secondHandTradingPostService.deleteById(id);
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private <T extends Post> void addSortedPosts(TreeSet<Post> allPosts, List<T> posts) {
         allPosts.addAll(posts);
     }
 

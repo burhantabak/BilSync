@@ -1,8 +1,8 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.entity.SecondHandTradingPost;
-import tr.edu.bilkent.bilsync.repository.SecondHandTradingPostRepository;
+import tr.edu.bilkent.bilsync.entity.PostEntities.SecondHandTradingPost;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.SecondHandTradingPostRepository;
 
 import java.util.List;
 
@@ -33,4 +33,9 @@ public class SecondHandTradingPostService {
     public SecondHandTradingPost getPostByID(long id) {
         return secondHandTradingPostRepository.findById(id);
     }
+
+    public void deleteById(long id) {
+        secondHandTradingPostRepository.deleteById(id);
+    }
+
 }

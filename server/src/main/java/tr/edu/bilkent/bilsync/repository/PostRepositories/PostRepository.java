@@ -1,4 +1,4 @@
-package tr.edu.bilkent.bilsync.repository;
+package tr.edu.bilkent.bilsync.repository.PostRepositories;
 
 import org.springframework.stereotype.Repository;
 

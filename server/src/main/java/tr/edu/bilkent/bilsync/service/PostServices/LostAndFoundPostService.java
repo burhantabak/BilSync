@@ -1,8 +1,8 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.entity.LostAndFoundPost;
-import tr.edu.bilkent.bilsync.repository.LostAndFoundPostRepository;
+import tr.edu.bilkent.bilsync.entity.PostEntities.LostAndFoundPost;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.LostAndFoundPostRepository;
 
 import java.util.List;
 
@@ -31,5 +31,9 @@ public class LostAndFoundPostService {
 
     public LostAndFoundPost getPostByID(long id) {
         return lostAndFoundPostRepository.findById(id);
+    }
+
+    public void deleteById(long id) {
+        lostAndFoundPostRepository.deleteById(id);
     }
 }

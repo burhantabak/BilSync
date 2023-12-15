@@ -1,8 +1,8 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.entity.BorrowAndLendPost;
-import tr.edu.bilkent.bilsync.repository.BorrowAndLendPostRepository;
+import tr.edu.bilkent.bilsync.entity.PostEntities.BorrowAndLendPost;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.BorrowAndLendPostRepository;
 
 import java.util.List;
 
@@ -31,5 +31,9 @@ public class BorrowAndLendPostService {
 
     public BorrowAndLendPost getPostByID(long id) {
         return borrowAndLendPostRepository.findById(id);
+    }
+
+    public void deleteById(long id) {
+        borrowAndLendPostRepository.deleteById(id);
     }
 }

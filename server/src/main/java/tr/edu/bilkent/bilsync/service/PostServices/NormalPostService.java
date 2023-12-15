@@ -1,8 +1,8 @@
-package tr.edu.bilkent.bilsync.service;
+package tr.edu.bilkent.bilsync.service.PostServices;
 
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.entity.NormalPost;
-import tr.edu.bilkent.bilsync.repository.NormalPostRepository;
+import tr.edu.bilkent.bilsync.entity.PostEntities.NormalPost;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.NormalPostRepository;
 
 import java.util.List;
 
@@ -31,5 +31,9 @@ public class NormalPostService {
 
     public NormalPost getPostByID(long id) {
         return normalPostRepository.findById(id);
+    }
+
+    public void deleteById(long id) {
+        normalPostRepository.deleteById(id);
     }
 }

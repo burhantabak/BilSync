@@ -1,10 +1,9 @@
-package tr.edu.bilkent.bilsync.repository;
+package tr.edu.bilkent.bilsync.repository.PostRepositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import tr.edu.bilkent.bilsync.entity.AnnouncementPost;
-import tr.edu.bilkent.bilsync.entity.BorrowAndLendPost;
+import tr.edu.bilkent.bilsync.entity.PostEntities.BorrowAndLendPost;
 
 import java.util.List;
 
@@ -13,4 +12,5 @@ public interface BorrowAndLendPostRepository extends CrudRepository<BorrowAndLen
     BorrowAndLendPost findById(long id);
     @Query("SELECT p FROM BorrowAndLendPost p ORDER BY p.postDate DESC")
     List<BorrowAndLendPost> findBorrowAndLendPostsSortedByDate();
+    void deleteById(long id);
 }

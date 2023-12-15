@@ -1,13 +1,12 @@
-package tr.edu.bilkent.bilsync.entity;
+package tr.edu.bilkent.bilsync.entity.PostEntities;
 
 import jakarta.persistence.*;
+import tr.edu.bilkent.bilsync.entity.Comment;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table
@@ -29,7 +28,7 @@ public class Post {
     private String description;
 
     @Column(nullable = false)
-    private String imageID;
+    private String imagePath = "OUR_DEFAULT_IMAGE_PATH";
 
     @Column(nullable = false)
     private long votes = 0;
@@ -46,14 +45,12 @@ public class Post {
     @OneToMany(targetEntity = Comment.class, fetch = FetchType.EAGER)
     private Set<Comment> commentList = new HashSet<>();
 
-    @Column(nullable = true)
-    private String taggedUserListID;
-
-    @Column(nullable = true)
-    private String hashtagListID;
+    @ElementCollection
+    @Column(name = "hashtag")
+    private Set<String> hashtagList;
 
     @Column(nullable = false)
-    private boolean isAnonymous;
+    private boolean isAnonymous = false;
 
     @Column(nullable = false)
     private Timestamp postDate;
@@ -79,9 +76,7 @@ public class Post {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public void setId(long id) { this.id = id; }
 
     public String getTitle() {
         return title;
@@ -107,13 +102,11 @@ public class Post {
         this.description = description;
     }
 
-    public String getImageID() {
-        return imageID;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImageID(String imageID) {
-        this.imageID = imageID;
-    }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 
     public long getVotes() {
         return votes;
@@ -131,13 +124,9 @@ public class Post {
         this.voters = voters;
     }
 
-    public void vote(long userId, int vote) {
-        this.voters.put(userId, vote);
-    }
+    public void vote(long userId, int vote) { this.voters.put(userId, vote); }
 
-    public void removeVote(long userId) {
-        this.voters.remove(userId);
-    }
+    public void removeVote(long userId) { this.voters.remove(userId); }
 
     public long getViews() {
         return views;
@@ -155,20 +144,12 @@ public class Post {
         this.commentList = commentList;
     }
 
-    public String getTaggedUserListID() {
-        return taggedUserListID;
+    public Set<String> getHashtagList() {
+        return hashtagList;
     }
 
-    public void setTaggedUserListID(String taggedUserListID) {
-        this.taggedUserListID = taggedUserListID;
-    }
-
-    public String getHashtagListID() {
-        return hashtagListID;
-    }
-
-    public void setHashtagListID(String hashtagListID) {
-        this.hashtagListID = hashtagListID;
+    public void setHashtagList(Set<String> hashtagList) {
+        this.hashtagList = hashtagList;
     }
 
     public boolean getIsAnonymous() {
@@ -190,11 +171,11 @@ public class Post {
     public void prePersist() {
         this.votes = 0;
         this.views = 0;
-        this.commentList = new HashSet<Comment>();
-        // Get the current time in UTC+3
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.ofHours(3));
-        // Convert OffsetDateTime to Timestamp
-        this.postDate = Timestamp.from(offsetDateTime.toInstant());
+        this.commentList = new HashSet<>();
+
+        Instant instant = Instant.now();
+        Instant trClock = instant.plus(Duration.ofHours(3));
+        this.postDate = Timestamp.from(trClock);
     }
 
     public void addComment(Comment comment) {

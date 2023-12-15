@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tr.edu.bilkent.bilsync.entity.FileData;
 import tr.edu.bilkent.bilsync.service.FileService;
 
 import java.io.IOException;
@@ -19,17 +20,23 @@ public class FileController {
     public FileController(FileService fileService) { this.fileService = fileService; }
 
 
-    @PostMapping("/fileSystem")
-    public ResponseEntity<?> uploadFileAsImage(@RequestParam("image") MultipartFile file) throws IOException {
-        if(fileService.uploadFile(file)) {
-            return ResponseEntity.ok().build();
+    @PostMapping("/uploadFile")
+    public ResponseEntity<?> uploadFileAsImage(@RequestParam("image") MultipartFile file) {
+        if(file == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FILE_IS_EMPTY");
+        String fileName = fileService.uploadFile(file);
+        if(fileName != null) {
+            FileData fileData = fileService.findByName(fileName);
+            return ResponseEntity.ok().body(fileData.getFilePath());
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FILE_COULD_NOT_BE_SAVED");
     }
 
     @GetMapping("/fileSystem/{fileName}")
     public ResponseEntity<?> downloadFileAsImage(@PathVariable String fileName) throws IOException {
         byte[] fileData = fileService.downloadFile(fileName);
+        if(fileData == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FILE_DATA_IS_NULL");
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(fileData);

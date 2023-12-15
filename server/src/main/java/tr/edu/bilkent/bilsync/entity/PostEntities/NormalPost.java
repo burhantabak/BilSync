@@ -1,4 +1,4 @@
-package tr.edu.bilkent.bilsync.entity;
+package tr.edu.bilkent.bilsync.entity.PostEntities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
