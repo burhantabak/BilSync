@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tr.edu.bilkent.bilsync.entity.FileData;
 import tr.edu.bilkent.bilsync.service.FileService;
 
 import java.io.IOException;
@@ -19,10 +20,12 @@ public class FileController {
     public FileController(FileService fileService) { this.fileService = fileService; }
 
 
-    @PostMapping("/fileSystem")
+    @PostMapping("/uploadFile")
     public ResponseEntity<?> uploadFileAsImage(@RequestParam("image") MultipartFile file) throws IOException {
-        if(fileService.uploadFile(file)) {
-            return ResponseEntity.ok().build();
+        String fileName = fileService.uploadFile(file);
+        if(fileName != null) {
+            FileData fileData = fileService.findByName(fileName);
+            return ResponseEntity.ok().body(fileData.getFilePath());
         }
         return ResponseEntity.badRequest().build();
     }
