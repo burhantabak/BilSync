@@ -32,7 +32,8 @@ public class ChatMessageDto {
         this.image = image;
     }
 
-    public ChatMessageDto(){}
+    public ChatMessageDto() {
+    }
 
     public ChatMessageDto(Long messageId, Long senderId, Long chatId, Date date, String body) {
         this.messageId = messageId;
@@ -42,19 +43,20 @@ public class ChatMessageDto {
         this.body = body;
     }
 
-    public ChatMessageDto(ChatMessage chatMessage){
+    public ChatMessageDto(ChatMessage chatMessage) {
         this(chatMessage.getId(), chatMessage.getSender().getId(), chatMessage.getChat().getId(), chatMessage.getDate(), chatMessage.getBody());
         Image i = chatMessage.getImage();
-        try {
-            if(i == null){
-                this.image = null;
-            }else {
+        if (i == null) {
+            this.image = null;
+        } else {
+            try {
                 this.image = Files.readAllBytes(Paths.get(i.getPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
+
     public Long getMessageId() {
         return messageId;
     }
