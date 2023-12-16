@@ -39,9 +39,9 @@ export default function BorrowForm() {
             title: title,
             description: description,
             imageName: imageName ? imageName : "",
-            startDate:startDate,
+            startDate:startDate.toISOString(),
             tags: hashtags,
-            endDate:endDate,
+            endDate:endDate.toISOString(),
         };
     
         // Debugging: Log the post object
