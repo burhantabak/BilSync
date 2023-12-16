@@ -2,6 +2,10 @@ package tr.edu.bilkent.bilsync.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -58,5 +62,28 @@ public class ChatController {
     public ResponseEntity<List<ChatMessageDto>> getMessages(@PathVariable Long chatId, @AuthenticationPrincipal UserEntity currentUser){
         List<ChatMessageDto> messages = chatService.getMessagesByChatId(chatId);
         return ResponseEntity.ok(messages);
+    }
+
+    @MessageMapping("/chat/{chatId}/sendMessage")
+    @SendTo("/topic/chat/{chatId}")
+    public ChatMessageDto sendMessageToChatWebSocket(@DestinationVariable Long chatId, @RequestBody ChatMessageDto chatMessageDto, @AuthenticationPrincipal UserEntity currentUser) {
+
+        boolean userHasAccess = chatService.userHasAccessToChat(currentUser, chatId);
+
+        if (userHasAccess) {
+            return chatService.sendMessageToChat(chatId, chatMessageDto, currentUser);
+        } else {
+            throw new AccessDeniedException("You do not have access to this chat.");
+        }
+    }
+
+    @MessageMapping("/subscribe/chat/{chatId}")
+    public void subscribeToChat(@DestinationVariable Long chatId, @AuthenticationPrincipal UserEntity currentUser) {
+
+        boolean userHasAccess = chatService.userHasAccessToChat(currentUser, chatId);
+
+        if (!userHasAccess) {
+            throw new AccessDeniedException("You do not have access to this chat.");
+        }
     }
 }

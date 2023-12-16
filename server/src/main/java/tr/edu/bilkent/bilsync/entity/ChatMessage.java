@@ -17,7 +17,10 @@ public class ChatMessage {
     private UserEntity sender;
 
     private String body;
-    private String imagePath; // todo may be multiple images?
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,12 +59,12 @@ public class ChatMessage {
         this.sender = sender;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public Image getImage() {
+        return image;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public Date getDate() {
