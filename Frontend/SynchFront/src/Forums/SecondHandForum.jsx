@@ -38,7 +38,7 @@ export default function SecondHandForum() {
             })
         });
     }
-    if(imageName !== "not uploaded")
+    else if(imageName !== "not uploaded")
         {const post = {
             title: title,
             description: description,

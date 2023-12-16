@@ -25,11 +25,11 @@ public class AuthService {
         UserEntity userEntity = userRepository.findByEmail(request.email);
         if(request.email.equals(adminEmail) && request.password.equals(adminPassword)){
             return new AuthenticationResponse(tokenService.generateToken(adminEmail),
-                    "admin", adminEmail,true);
+                    "admin", adminEmail,true,0);
         }
         if(userEntity != null && userEntity.getPassword().equals(request.password)){
             return new AuthenticationResponse(tokenService.generateToken(userEntity.getEmail()),
-                    userEntity.getName(), userEntity.getEmail(),false);
+                    userEntity.getName(), userEntity.getEmail(),false,userEntity.getId());
         }
         return null;
     }
