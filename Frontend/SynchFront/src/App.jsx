@@ -22,6 +22,10 @@ import EditProfilePage from "./statics/EditProfilePage.jsx"
 import TransactionPage from "./Components/Transaction.jsx"
 
 function App() {
+  const handleBuyNow = () => {
+    // Implement your buy now logic here
+    console.log("Buy now logic");
+  };
   const [results, setResults] = useState([]);
   const [isLoggedIn,setLoggedIn] = useState(false);
   return (
@@ -43,7 +47,7 @@ function App() {
               <Route path="/profilePage" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>
               <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
               <Route path="/transaction" element = {<ProtectedRoute><TransactionPage/></ProtectedRoute>}/>
-
+              <Route path="/transaction/:postId" element={<ProtectedRoute><TransactionPage handleBuyNow={handleBuyNow} /></ProtectedRoute>} />
               <Route path="/resetPassword" element = {<ResetPassword/>}/>
               <Route path="/changePassword" element = {<ForgetPassword/>}/>
               <Route path="/admin/addAccount" element={<ProtectedRoute adminOnly><AddAccount/></ProtectedRoute>}/>

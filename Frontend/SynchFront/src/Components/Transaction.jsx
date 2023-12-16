@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom'; // Import useParams from react-router-dom
+import { useNavigate } from 'react-router-dom';
 
-export default function TransactionPage() {
+
+export default function TransactionPage(handleBuyNow) {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryMonth, setExpiryMonth] = useState('');
   const [expiryYear, setExpiryYear] = useState('');
@@ -9,8 +12,12 @@ export default function TransactionPage() {
   const [isTransactionComplete, setTransactionComplete] = useState(false);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const { postId } = useParams(); // Get postId from the URL params
+  const navigate = useNavigate();
+  
 
-  const handleBuyNow = () => {
+
+  const handleBuyNowLocal = () => {
     // Validate fields before processing
     if (!cardNumber || !expiryMonth || !expiryYear || !nameSurname || !ccv) {
       setError('Please fill in all fields.');
@@ -33,7 +40,9 @@ export default function TransactionPage() {
 
     // Handle the buy now action, e.g., setTransactionComplete(true)
     setTransactionComplete(true);
+    handleBuyNow(postId);
     setError(''); // Reset error if the transaction is successful
+    return null;
   };
 
   const handleCardNumberChange = (e) => {
@@ -177,7 +186,7 @@ export default function TransactionPage() {
         </div>
       ) : (
         <button
-          onClick={handleBuyNow}
+          onClick={handleBuyNowLocal}
           className="bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300"
         >
           Buy Now
