@@ -58,8 +58,7 @@ public class PostController {
 
         if(post instanceof TradingPost ) {
             boolean paidTradingPost = postType == 6;
-            double price = ((SecondHandTradingPost) post).getPrice();
-            if(price <= 0 && paidTradingPost)
+            if(paidTradingPost && ((SecondHandTradingPost) post).getPrice() <= 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Price must be positive");
             if(paidTradingPost && ((SecondHandTradingPost) post).getIBAN() != null) {
                 String trimmedIBAN = ((SecondHandTradingPost) post).getIBAN().replaceAll("\\s", "");
