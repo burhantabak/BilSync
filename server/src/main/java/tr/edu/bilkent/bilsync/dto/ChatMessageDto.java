@@ -1,6 +1,7 @@
 package tr.edu.bilkent.bilsync.dto;
 
 import tr.edu.bilkent.bilsync.entity.ChatMessage;
+import tr.edu.bilkent.bilsync.entity.Image;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,8 +44,13 @@ public class ChatMessageDto {
 
     public ChatMessageDto(ChatMessage chatMessage){
         this(chatMessage.getId(), chatMessage.getSender().getId(), chatMessage.getChat().getId(), chatMessage.getDate(), chatMessage.getBody());
+        Image i = chatMessage.getImage();
         try {
-            this.image = Files.readAllBytes(Paths.get(chatMessage.getImage().getPath()));
+            if(i == null){
+                this.image = null;
+            }else {
+                this.image = Files.readAllBytes(Paths.get(i.getPath()));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
