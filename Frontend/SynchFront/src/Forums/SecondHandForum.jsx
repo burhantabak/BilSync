@@ -30,7 +30,7 @@ export default function SecondHandForum() {
         let imageName = "";
         if(imageFile)
         {
-            imageName = uploadFileCall(imageFile,user);
+            uploadFileCall(imageFile,user).then((name)=>{imageName = name});
         }
         if(imageName !== "not uploaded")
             {const post = {

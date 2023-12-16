@@ -32,7 +32,7 @@ export default function BorrowForm() {
     let imageName = "";
     if(imageFile)
     {
-        imageName = uploadFileCall(imageFile,user);
+        uploadFileCall(imageFile,user).then((name)=>{imageName = name});
     }
     if(imageName !== "not uploaded")
         {const borrowPost = {
@@ -68,7 +68,9 @@ export default function BorrowForm() {
             <DateInput setEndDate={setEndDate} setStartDate={setStartDate}
              startDate={startDate} endDate={endDate}/>
             </div>
+            <div className='flex justify-center mb-1'>
             <p className='text-red-600'>{errorMessage}</p>
+            </div>
             <button type="submit" onClick={(event)=>handlePostCreation(event)}
             className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 
             focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 
