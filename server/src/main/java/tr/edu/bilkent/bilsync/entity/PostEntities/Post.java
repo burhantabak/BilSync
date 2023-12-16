@@ -167,6 +167,10 @@ public class Post {
 
     public void setPostDate(Timestamp postDate) { this.postDate = postDate; }
 
+    /**
+     * Executes pre-persistence operations before saving the entity to the database.
+     * Initializes votes, views, and commentList. Sets the postDate to the current time in the Turkish time zone.
+     */
     public void prePersist() {
         this.votes = 0;
         this.views = 0;
@@ -177,6 +181,11 @@ public class Post {
         this.postDate = Timestamp.from(trClock);
     }
 
+    /**
+     * Adds a comment to the commentList associated with this post.
+     *
+     * @param comment The comment to be added.
+     */
     public void addComment(Comment comment) {
         this.commentList.add(comment);
     }

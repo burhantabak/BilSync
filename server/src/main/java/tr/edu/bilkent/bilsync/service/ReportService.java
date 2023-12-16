@@ -70,7 +70,12 @@ public class ReportService {
         return reports;
     }
 
-
+    /**
+     * Creates a report and saves it in the repository.
+     *
+     * @param report The Report object to be created and saved.
+     * @return true if the report is successfully created and saved, false otherwise.
+     */
     public boolean createReport(Report report) {
         try{
             reportRepository.save(report);

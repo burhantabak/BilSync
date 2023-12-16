@@ -36,6 +36,14 @@ public class ReportController {
 
     private final UserInfoService userInfoService;
 
+    /**
+     * Constructor for ReportController, autowiring required services.
+     *
+     * @param reportService    The ReportService for handling report-related operations.
+     * @param postService      The PostService for handling post-related operations.
+     * @param commentService   The CommentService for handling comment-related operations.
+     * @param userInfoService  The UserInfoService for handling user information.
+     */
     @Autowired
     public ReportController(ReportService reportService, PostService postService, CommentService commentService, UserInfoService userInfoService) {
         this.reportService = reportService;
@@ -44,6 +52,12 @@ public class ReportController {
         this.userInfoService = userInfoService;
     }
 
+    /**
+     * Creates a report for a post.
+     *
+     * @param report The Report object containing details of the report.
+     * @return A ResponseEntity with a status code and a message.
+     */
     @PostMapping("/createPostReport")
     public ResponseEntity<?> createPostReport(@RequestBody Report report) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -56,6 +70,12 @@ public class ReportController {
         return uploadValidReport(report);
     }
 
+    /**
+     * Creates a report for a comment.
+     *
+     * @param report The Report object containing details of the report.
+     * @return A ResponseEntity with a status code and a message.
+     */
     @PostMapping("/createCommentReport")
     public ResponseEntity<?> createCommentReport(@RequestBody Report report) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,6 +88,12 @@ public class ReportController {
         return uploadValidReport(report);
     }
 
+    /**
+     * Validates and uploads a report to the database.
+     *
+     * @param report The Report object to be validated and uploaded.
+     * @return A ResponseEntity with a status code and a message.
+     */
     private ResponseEntity<?> uploadValidReport(Report report) {
         if(report.getDescription().length() < 10)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report description must be longer than 10 characters");

@@ -80,6 +80,11 @@ public class TradingPost extends Post {
 
     public void setPrice(double price) { this.price = price; }
 
+    /**
+     * Executes pre-persistence operations specific to SecondHandTradingPost before saving the entity to the database.
+     * Initializes takerID, isResolved, isMissedOut, and isHeld.
+     * Invokes the prePersist method from the superclass (Post) for common pre-persistence operations.
+     */
     @Override
     @PrePersist
     public void prePersist() {
