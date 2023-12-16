@@ -31,6 +31,8 @@ public class ChatMessageDto {
         this.image = image;
     }
 
+    public ChatMessageDto(){}
+
     public ChatMessageDto(Long messageId, Long senderId, Long chatId, Date date, String body) {
         this.messageId = messageId;
         this.senderId = senderId;
