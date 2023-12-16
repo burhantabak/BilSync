@@ -21,9 +21,9 @@ export const DataProvider = ({ children }) => {
       setError(""); // Reset error state on successful login
     }
     catch(error){
-      setError("Invalid username or password"); // Set error state on unsuccessful login
+      setError("Invalid emial or password"); // Set error state on unsuccessful login
       console.log("are we in data context")
-      error = "Invalid username or password"; 
+      error = "Invalid email or password"; 
     }
   }
   const getTheUsers =async ()=>{
