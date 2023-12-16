@@ -18,9 +18,22 @@ export default function LostnFoundForm() {
         let imageName = "";
         if(imageFile)
         {
-            uploadFileCall(imageFile,user).then((name)=>{imageName = name});
+            uploadFileCall(imageFile,user).then((name)=>{
+                const lostnFoundPost = {
+                    title: title,
+                    description: description,
+                    imageName: name,
+                    tags: hashtags,              
+                };
+            
+                // Debugging: Log the post object
+                console.log("Post object:", lostnFoundPost);
+                createLostnFoundPost(lostnFoundPost,user).then((result) => {
+                    console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+                });
+            });
         }
-        if(imageName !== "not uploaded")
+        else if(imageName !== "not uploaded")
             {const lostnFoundPost = {
                 title: title,
                 description: description,
