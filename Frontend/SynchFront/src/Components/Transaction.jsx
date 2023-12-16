@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom'; // Import useParams from react-router-dom
 import { useNavigate } from 'react-router-dom';
-
+import createTransaction from '../calling/transactioncall';
+import { useData } from '../Context/DataContext';
 
 export default function TransactionPage(handleBuyNow) {
   const [cardNumber, setCardNumber] = useState('');
@@ -14,15 +15,26 @@ export default function TransactionPage(handleBuyNow) {
   const [currentPage, setCurrentPage] = useState(1);
   const { postId } = useParams(); // Get postId from the URL params
   const navigate = useNavigate();
-  
-
-
-  const handleBuyNowLocal = () => {
+  const {user} = useData();
+  const handleBuyNowLocal  = () => {
     // Validate fields before processing
     if (!cardNumber || !expiryMonth || !expiryYear || !nameSurname || !ccv) {
       setError('Please fill in all fields.');
       return;
     }
+
+
+    createTransaction(
+      postId,
+      user
+    
+    ).then((response) => {
+      setTransactionComplete(true);
+      setError(''); // Reset error if the transaction is successful
+    }).catch((error) => {
+      setError(error.message);
+    });
+
 
     // Validate card number length
     const cardNum = cardNumber.replace(/\D/g, '');
@@ -42,7 +54,7 @@ export default function TransactionPage(handleBuyNow) {
     setTransactionComplete(true);
     handleBuyNow(postId);
     setError(''); // Reset error if the transaction is successful
-    return null;
+    
   };
 
   const handleCardNumberChange = (e) => {
@@ -129,7 +141,7 @@ export default function TransactionPage(handleBuyNow) {
             </select>
             <select
               id="expiryYear"
-              name="expiryYear"
+              name="expiryYear" 
               value={expiryYear}
               onChange={(e) => setExpiryYear(e.target.value)}
               className="mt-1 p-2 border rounded-md"

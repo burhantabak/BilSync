@@ -6,8 +6,8 @@ import CommentComponent from './CommentComponent';
 import CommentCreate from '../statics/CommentCreate';
 import formatDate, { formatTime } from './HelperFunctions/DateFormat';
 import { useNavigate } from 'react-router-dom';
-
-
+import createTransaction from '../calling/transactioncall';
+import { useData } from '../Context/DataContext';
 export default function TradingPostItem({post, isProfile}) {
     const [isStarred,setStarred] = useState(false);
     const [vote, setVotes] = useState(post.votes);
@@ -16,7 +16,7 @@ export default function TradingPostItem({post, isProfile}) {
     const [commentList, setCommentList] = useState(post.commentList);
     const [transactionComplete, setTransactionComplete] = useState(false);
     const [isSold, setIsSold] = useState(post.isSold || false);
-
+    const {user} = useData();
     
     const navigate = useNavigate();
 
@@ -31,7 +31,17 @@ export default function TradingPostItem({post, isProfile}) {
 
     const handleBuyClick = () => {
         // Navigate to the TransactionPage with the post id
-        handleBuyNow(post.id, () => setIsSold(true));
+        createTransaction(
+            post.id, user
+            // Add other necessary data
+          ).then((response) => {
+            setTransactionComplete(true);
+            handleBuyNow(post.id);
+      
+            setIsSold(true); // Set isSold to true when the item is sold
+          }).catch((error) => {
+            // Handle the case where the transaction failed
+          });
         navigate(`/transaction/${post.id}`, );;
       };
   return (
