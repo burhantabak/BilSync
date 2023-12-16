@@ -12,10 +12,6 @@ import jakarta.persistence.*;
 public class FileData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "file_sequence")
-    @TableGenerator(name = "file_sequence", table = "file_sequence_table", allocationSize = 1)
-    private long id;
-
     @Column(nullable = false)
     private String name;
 
