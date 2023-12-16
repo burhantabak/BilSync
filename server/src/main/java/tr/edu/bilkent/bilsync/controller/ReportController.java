@@ -39,10 +39,10 @@ public class ReportController {
     /**
      * Constructor for ReportController, autowiring required services.
      *
-     * @param reportService    The ReportService for handling report-related operations.
-     * @param postService      The PostService for handling post-related operations.
-     * @param commentService   The CommentService for handling comment-related operations.
-     * @param userInfoService  The UserInfoService for handling user information.
+     * @param reportService   The ReportService for handling report-related operations.
+     * @param postService     The PostService for handling post-related operations.
+     * @param commentService  The CommentService for handling comment-related operations.
+     * @param userInfoService The UserInfoService for handling user information.
      */
     @Autowired
     public ReportController(ReportService reportService, PostService postService, CommentService commentService, UserInfoService userInfoService) {
@@ -62,11 +62,11 @@ public class ReportController {
     public ResponseEntity<?> createPostReport(@RequestBody Report report) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = (UserEntity) authentication.getPrincipal();
-        if(user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User cannot be found");
+        if (user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User cannot be found");
         report.setReportType(ReportType.POST_REPORT);
         report.setReporterId(user.getId());
         Post post = postService.getPostByID(report.getReportedEntityId());
-        if(post == null)
+        if (post == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post could not be found");
         report.setReportedUserId(post.getAuthorID());
         return uploadValidReport(report, user);
@@ -82,11 +82,11 @@ public class ReportController {
     public ResponseEntity<?> createCommentReport(@RequestBody Report report) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = (UserEntity) authentication.getPrincipal();
-        if(user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User cannot be found");
+        if (user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User cannot be found");
         report.setReportType(ReportType.COMMENT_REPORT);
         report.setReporterId(user.getId());
         Comment comment = commentService.getCommentByID(report.getReportedEntityId());
-        if(comment == null)
+        if (comment == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Comment could not be found");
         report.setReportedUserId(comment.getAuthorID());
         return uploadValidReport(report, user);
@@ -99,16 +99,22 @@ public class ReportController {
      * @return A ResponseEntity with a status code and a message.
      */
     private ResponseEntity<?> uploadValidReport(Report report, UserEntity user) {
-        if(user.getId() == report.getReportedUserId())
+        if (user.getId() == report.getReportedUserId())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot report yourself");
-        if(report.getDescription().length() < 10)
+        if (report.getDescription().length() < 10)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report description must be longer than 10 characters");
-        if(report.getDescription().length() > 1000)
+        if (report.getDescription().length() > 1000)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report description must be shorter than 1000 characters");
-        if(userInfoService.loadUserById(report.getReportedUserId()) == null)
+        if (userInfoService.loadUserById(report.getReportedUserId()) == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reported user cannot be found");
-        if(!reportService.createReport(report))
+        if (!reportService.createReport(report))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report could not be saved");
+
+        Report rep = reportService.getPreviousReport(user.getId(),report.getReportedEntityId(),report.getReportType());
+        if (rep != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You already reported this content");
+        }
+
         return ResponseEntity.ok().build();
     }
 

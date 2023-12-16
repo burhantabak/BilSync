@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.Report;
+import tr.edu.bilkent.bilsync.entity.ReportType;
 import tr.edu.bilkent.bilsync.exception.NoRecordFoundException;
 import tr.edu.bilkent.bilsync.repository.ReportRepository;
 
@@ -83,5 +84,10 @@ public class ReportService {
         } catch(Exception e) {
             return false;
         }
+    }
+
+    public Report getPreviousReport(long reporterId, long reportedEntityId, ReportType reportType)
+    {
+        return  reportRepository.findByReporterIdAndReportedEntityIdAndReportType( reporterId,  reportedEntityId,  reportType);
     }
 }
