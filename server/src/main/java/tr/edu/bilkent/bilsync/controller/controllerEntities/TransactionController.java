@@ -63,25 +63,38 @@ public class TransactionController {
         }
     }
 
+
+    /**
+     * Retrieves a list of transactions for the authenticated user, either as the taker or giver.
+     *
+     * @param currentUser The authenticated user for whom transactions are to be retrieved.
+     * @return A ResponseEntity containing the list of transactions if found, or a BAD_REQUEST response
+     * with an error message if no transactions are associated with the user.
+     */
+    @GetMapping("/by-user")
+    public ResponseEntity<?> getTransactionsByUser(@AuthenticationPrincipal UserEntity currentUser) {
+        List<Transaction> userTransactions = transactionService.getTransactionsByUser(currentUser);
+        if(userTransactions.isEmpty())
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no transaction");
+        }
+        return ResponseEntity.ok(userTransactions);
+    }
+
     /**
      * Creates a new transaction.
      *
-     * @param transaction The transaction to create. Notice the giverId should be in the DTO!
+     * @param postId post that the transaction is based from
      * @param currentUser The current user is always accepted as TAKER!
      * @return The created {@link Transaction}.
      */
-    @PostMapping("/create")
-    public ResponseEntity<?> createTransaction(@RequestBody TransactionDto transaction, @AuthenticationPrincipal UserEntity currentUser) {
+    @PostMapping("/create/{postId}")
+    public ResponseEntity<?> createTransaction(@PathVariable Long postId, @AuthenticationPrincipal UserEntity currentUser) {
         try {
-            if (transaction.getTransactionAmount() < 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction amount cannot be negative");
-            } else if (Objects.equals(currentUser.getId(), transaction.getGiverId())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("It is not possible to buy the item that you are the seller of");
-            }
-            Transaction tr = transactionService.createTransaction(transaction, currentUser);
+            Transaction tr = transactionService.createTransaction(postId, currentUser);
             return ResponseEntity.ok(tr);
         } catch (EntityNotFoundException | IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
