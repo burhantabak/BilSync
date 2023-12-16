@@ -71,7 +71,7 @@ export const DataProvider = ({ children }) => {
   }
   const getTheChats = ()=>{
     getChats(user).then(result=>{console.log("chatt");console.log(result);setChatList(result)});
-  }
+  } 
   const logout = ()=>{
     setUser(null);
   }

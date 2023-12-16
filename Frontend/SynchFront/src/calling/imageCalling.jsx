@@ -48,11 +48,6 @@ export function getImage(imageName, user) {
             });
         })
         .then(dataUrl => {
-            // Display the image
-            const image = new Image();
-            image.src = dataUrl;
-            document.body.appendChild(image); // Append the image to the body or any other container
-
             return dataUrl;
         })
         .catch(error => {
