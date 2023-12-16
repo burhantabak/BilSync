@@ -105,7 +105,7 @@ public class TransactionController {
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#PENDING_TAKER_APPROVAL}.
      */
     @PutMapping("update/giverApproved/{id}")
-    public ResponseEntity<?> updateToGiverApproved(@PathVariable Long id) {
+    public ResponseEntity<?> updateTransactionToGiverApproved(@PathVariable Long id) {
         return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, TransactionState.PENDING_TAKER_APPROVAL));
     }
 
@@ -116,7 +116,7 @@ public class TransactionController {
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#DEPOSITED}.
      */
     @PutMapping("update/takerApproved/{id}")
-    public ResponseEntity<?> updateToTakerApproved(@PathVariable Long id) {
+    public ResponseEntity<?> updateTransactionToTakerApproved(@PathVariable Long id) {
         return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, TransactionState.DEPOSITED));
     }
 
@@ -144,7 +144,7 @@ public class TransactionController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no such transaction");
             } else {
                 // Handle success case if needed
-                return ResponseEntity.ok("Transaction updated successfully");
+                return ResponseEntity.ok(tr);
             }
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

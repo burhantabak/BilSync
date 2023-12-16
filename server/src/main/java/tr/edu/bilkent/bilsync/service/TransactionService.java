@@ -4,9 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.dto.TransactionDto;
-import tr.edu.bilkent.bilsync.entity.PostEntities.Post;
-import tr.edu.bilkent.bilsync.entity.PostEntities.SecondHandTradingPost;
-import tr.edu.bilkent.bilsync.entity.PostEntities.TradingPost;
+import tr.edu.bilkent.bilsync.entity.PostEntities.*;
 import tr.edu.bilkent.bilsync.entity.Transaction;
 import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
@@ -78,32 +76,38 @@ public class TransactionService {
      */
     public Transaction createTransaction(Long postId, UserEntity currentUser) {
         Post post = postService.getPostByID(postId);
-        SecondHandTradingPost secondHandTradingPost;
+        TradingPost tradingPost = null;
+        double price = 0;
         UserEntity giver;
         if (post == null) {
             throw new EntityNotFoundException("Post does not exist");
         } else if (post instanceof SecondHandTradingPost) {
-            secondHandTradingPost = (SecondHandTradingPost) post;
-        } else {
-            throw new IllegalStateException("This item cannot be bought");
-        }
-        if (secondHandTradingPost.getIsHeld()) {
-            throw new IllegalStateException("The trading post is already in someone else's cart");
-        } else if (secondHandTradingPost.isResolved()) {
-            throw new IllegalStateException("The trading post is already bought by someone else");
-        } else {
-            giver = userService.findById(secondHandTradingPost.getAuthorID());
-            if (giver == null) {
-                throw new EntityNotFoundException("Giver does not exist");
-            } else if (secondHandTradingPost.getAuthorID() == currentUser.getId()) {
-                throw new IllegalStateException("It is not possible to buy the item that you are the seller of");
-            }
-            else if(secondHandTradingPost.getPrice()<0)
-            {
+            SecondHandTradingPost secondHandTradingPost = (SecondHandTradingPost) post;
+            price = secondHandTradingPost.getPrice();
+            if (price < 0) {
                 throw new IllegalStateException("The transaction amount cannot be negative");
             }
+        } else if (post instanceof AnnouncementPost || post instanceof NormalPost) {
+            throw new IllegalStateException("This item cannot be bought");
+        }
+
+
+        tradingPost = (TradingPost) post;
+
+
+        if (tradingPost.getIsHeld()) {
+            throw new IllegalStateException("The trading post is already in someone else's cart");
+        } else if (tradingPost.isResolved()) {
+            throw new IllegalStateException("The trading post is already bought by someone else");
+        } else {
+            giver = userService.findById(tradingPost.getAuthorID());
+            if (giver == null) {
+                throw new EntityNotFoundException("Giver does not exist");
+            } else if (tradingPost.getAuthorID() == currentUser.getId()) {
+                throw new IllegalStateException("It is not possible to buy the item that you are the seller of");
+            }
             Transaction transaction = new Transaction();
-            transaction.setTransactionAmount(secondHandTradingPost.getPrice());
+            transaction.setTransactionAmount(price);
             transaction.setTakerId(currentUser.getId());
             transaction.setGiverId(post.getAuthorID());
             transaction.setPostId(postId);
