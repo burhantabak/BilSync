@@ -11,6 +11,9 @@ import tr.edu.bilkent.bilsync.entity.*;
 import tr.edu.bilkent.bilsync.entity.PostEntities.*;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -44,7 +47,7 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("USER_IS_BANNED");
 
         if(post instanceof TradingPost ) {
-            boolean paidTradingPost = postType == 1 || postType == 6;
+            boolean paidTradingPost = postType == 6;
             double price = ((TradingPost) post).getPrice();
             if(price < 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PRICE_LESS_THAN_0");
@@ -57,6 +60,17 @@ public class PostController {
                 ((TradingPost) post).setIBAN(trimmedIBAN);
             } else if(paidTradingPost)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN_MUST_BE_TYPED");
+            if(postType == 1) { //BorrowAndLendPost
+                Instant instant = Instant.now();
+                Instant trClock = instant.plus(Duration.ofHours(3));
+                Timestamp now = Timestamp.from(trClock);
+                Timestamp beginDate = ((BorrowAndLendPost)post).getBeginDate();
+                Timestamp endDate = ((BorrowAndLendPost)post).getEndDate();
+                if (!beginDate.after(now) || !endDate.after(now))
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Start and end dates cannot be from past");
+                if (!endDate.after(beginDate))
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("End date must be after start date");
+            }
         }
         if (post.getTitle() == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("TITLE_CANNOT_BE_EMPTY");
