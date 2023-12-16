@@ -16,7 +16,7 @@ export async function uploadFileCall(file, user) {
         return "not uploaded";
       }
     })
-    .then(result=>{console.log(result);return result;})
+    .then(result=>{return result;})
     .catch((error) => {
       throw new Error(`Error during file upload: ${error.message}`);
     });

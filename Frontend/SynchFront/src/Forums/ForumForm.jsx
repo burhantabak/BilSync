@@ -22,7 +22,7 @@ export default function ForumForm() {
             const normalForumPost = {
                 title: title,
                 description: description,
-                imageName: imageName ? imageName : "",
+                imageName: name,
                 tags: hashtags,  
                 isAnonymous: isAnonymity            
             };

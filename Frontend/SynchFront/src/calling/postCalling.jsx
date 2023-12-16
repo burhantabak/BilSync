@@ -9,8 +9,6 @@ export function getAllPosts(user) {
     },
   })
   .then(response => {
-    console.log("finished fetch");
-    console.log(response.status);
 
     if (response.status === 200) {
       return response.json();
