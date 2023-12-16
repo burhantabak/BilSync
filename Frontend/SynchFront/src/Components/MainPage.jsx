@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import FeedPage from './FeedPage';
 import { useData } from '../Context/DataContext';
 import ChatScreen from './ChatScreen.jsx';
+import { getChats } from '../calling/chatsCalling.jsx';
 
 export default function MainPage() {
-    const {postList,chatList,getThePosts,isPostsLoading} = useData();
+    const {postList,chatList,getThePosts,isPostsLoading,getTheChats} = useData();
     console.log(isPostsLoading)
-    useEffect(()=> {getThePosts()}
+    useEffect(()=> {getThePosts();getTheChats();}
         ,[]
     );
     const [filterTrading, setFilterTrading] = useState(true);
@@ -75,8 +76,8 @@ export default function MainPage() {
             </svg>
           </button>
         </div>
-            {chatList && chatList.filter((chat) => chat.chatName.toLowerCase().includes(searchInput.toLowerCase())
-            ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)}
+            {/* {chatList && chatList.filter((chat) => chat.chatName.toLowerCase().includes(searchInput.toLowerCase())
+            ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)} */}
         </div>
     </div>
   )

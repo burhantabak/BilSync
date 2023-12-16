@@ -20,7 +20,23 @@ export default function SecondHandForum() {
     let imageName = "";
     if(imageFile)
     {
-        uploadFileCall(imageFile,user).then((name)=>{imageName = name});
+        uploadFileCall(imageFile,user).then((name)=>{
+            const post = {
+                title: title,
+                description: description,
+                imageName: imageName ? imageName : "",
+                iban: iban,
+                tags: hashtags,
+                price: price,
+            };
+        
+            // Debugging: Log the post object
+            console.log("Post object:", post);
+    
+            createTradingPost(post,user).then((result) => {
+                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+            })
+        });
     }
     if(imageName !== "not uploaded")
         {const post = {

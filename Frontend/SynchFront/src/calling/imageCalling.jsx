@@ -21,3 +21,29 @@ export async function uploadFileCall(file, user) {
       throw new Error(`Error during file upload: ${error.message}`);
     });
   };
+  export function getImage(imageName, user){
+    const sentUrl = `http://localhost:8080/file/fileSystem/${imageName}`;
+
+  return fetch(sentUrl, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${user.token}`
+    },
+  })
+  .then(response => {
+    console.log("finished fetch");
+    console.log(response);
+
+    if (response.status === 200) {
+      return response.arrayBuffer();
+    }
+     else {
+      return response.status;
+    }
+  })
+  .catch(err => {
+    console.log("Error:", err);
+    throw err;
+  });
+  }

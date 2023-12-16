@@ -18,9 +18,24 @@ export default function ForumForm() {
       let imageName = "";
       if(imageFile)
       {
-          uploadFileCall(imageFile,user).then((name)=>{imageName = name});
+          uploadFileCall(imageFile,user).then((name)=>{
+            const normalForumPost = {
+                title: title,
+                description: description,
+                imageName: imageName ? imageName : "",
+                tags: hashtags,  
+                isAnonymous: isAnonymity            
+            };
+        
+            // Debugging: Log the post object
+            console.log("Post object:", normalForumPost);
+    
+            createNormalPost(normalForumPost,user).then((result) => {
+                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+            });
+          });
       }
-      if(imageName !== "not uploaded")
+      else if(imageName !== "not uploaded")
           {const normalForumPost = {
               title: title,
               description: description,

@@ -25,12 +25,12 @@ export const  SearchBar = ({setResult, onCategoryChange}) => {
           return post.title.toLowerCase().includes(input.toLowerCase());
         });
 
-        const filteredChat = chatList.filter((chat) => {
-          return chat.userName.toLowerCase().includes(input.toLowerCase());
-        });
+        // const filteredChat = chatList.filter((chat) => {
+        //   return chat.userName.toLowerCase().includes(input.toLowerCase());
+        // });
 
-        const combinedResults = [...filtered, ...filteredChat];
-
+        // const combinedResults = [...filtered, ...filteredChat];
+        const combinedResults = [filtered];
         
         updateResults(combinedResults);
         

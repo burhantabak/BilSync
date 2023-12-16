@@ -6,6 +6,7 @@ import { getAllPosts } from "../calling/postCalling";
 import getAllUsers from "../calling/userCalling";
 import matchUserID from "../calling/matchUserId";
 import { getChats } from "../calling/chatsCalling";
+import { getImage } from "../calling/imageCalling";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
@@ -40,16 +41,36 @@ export const DataProvider = ({ children }) => {
         setUser(null);
       }
       getAllUsers(user).then((users)=>{
-        console.log("usersssssssssssssss:")
-        console.log(users)
-        setPostList(matchUserID(users,data))
+        console.log("usersssssssssssssss:");
+  console.log(users);
+
+  const updatedPostList = matchUserID(users, data).map(async (post) => {
+    // Fetch image for each post
+    const imageData = await getImage(post.imageName, user);
+    
+    // Update the post object with the image data
+    return { ...post, imageData };
+  });
+
+  // Wait for all image fetch operations to complete
+  Promise.all(updatedPostList)
+    .then((postsWithImages) => {
+      // Set the updated post list with image data
+      setPostList(postsWithImages);
+      console.log("images with posts")
+      console.log(postsWithImages);
+    })
+    .catch((error) => {
+      console.error('Error fetching images:', error);
+    });
+
       })
       console.log("mathcing user ID::::")
       setIsPostsLoading(false);
     });
   }
   const getTheChats = ()=>{
-    getChats(user).then(result=>setChatList(result));
+    getChats(user).then(result=>{console.log("chatt");console.log(result);setChatList(result)});
   }
   const logout = ()=>{
     setUser(null);
