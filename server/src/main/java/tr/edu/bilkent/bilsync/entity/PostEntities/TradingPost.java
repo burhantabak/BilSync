@@ -17,16 +17,7 @@ public class TradingPost extends Post {
     private boolean isResolved;
 
     @Column(nullable = false)
-    private boolean isMissedOut;
-
-    @Column(nullable = false)
     private boolean isHeld;
-
-    @Column(nullable = true)
-    private String IBAN;
-
-    @Column(nullable = false)
-    private double price;
 
     // Getters and Setters
 
@@ -54,14 +45,6 @@ public class TradingPost extends Post {
         isResolved = resolved;
     }
 
-    public boolean getIsMissedOut() {
-        return isMissedOut;
-    }
-
-    public void setIsMissedOut(boolean missedOut) {
-        isMissedOut = missedOut;
-    }
-
     public boolean getIsHeld() {
         return isHeld;
     }
@@ -70,19 +53,9 @@ public class TradingPost extends Post {
         isHeld = held;
     }
 
-    public String getIBAN() {
-        return IBAN;
-    }
-
-    public void setIBAN(String IBAN) { this.IBAN = IBAN; }
-
-    public double getPrice() { return price; }
-
-    public void setPrice(double price) { this.price = price; }
-
     /**
      * Executes pre-persistence operations specific to SecondHandTradingPost before saving the entity to the database.
-     * Initializes takerID, isResolved, isMissedOut, and isHeld.
+     * Initializes takerID, isResolved, and isHeld.
      * Invokes the prePersist method from the superclass (Post) for common pre-persistence operations.
      */
     @Override
@@ -91,7 +64,6 @@ public class TradingPost extends Post {
         super.prePersist();
         this.takerID = -1;
         this.isResolved = false;
-        this.isMissedOut = false;
         this.isHeld = false;
     }
 }

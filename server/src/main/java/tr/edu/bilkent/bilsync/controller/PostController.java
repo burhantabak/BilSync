@@ -58,14 +58,14 @@ public class PostController {
 
         if(post instanceof TradingPost ) {
             boolean paidTradingPost = postType == 6;
-            double price = ((TradingPost) post).getPrice();
-            if(price < 0 || (paidTradingPost && price == 0))
+            double price = ((SecondHandTradingPost) post).getPrice();
+            if(price <= 0 && paidTradingPost)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Price must be positive");
-            if(paidTradingPost && ((TradingPost) post).getIBAN() != null) {
-                String trimmedIBAN = ((TradingPost) post).getIBAN().replaceAll("\\s", "");
+            if(paidTradingPost && ((SecondHandTradingPost) post).getIBAN() != null) {
+                String trimmedIBAN = ((SecondHandTradingPost) post).getIBAN().replaceAll("\\s", "");
                 if(!validateIBAN(trimmedIBAN))
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN format is mistyped");
-                ((TradingPost) post).setIBAN(trimmedIBAN);
+                ((SecondHandTradingPost) post).setIBAN(trimmedIBAN);
             } else if(paidTradingPost)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IBAN cannot be empty");
             if(postType == 1) { //BorrowAndLendPost
