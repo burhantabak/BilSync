@@ -104,5 +104,10 @@ public class UserInfoService implements UserDetailsService {
         repository.save(user);
 
     }
+
+    public UserEntity findById(long userId)
+    {
+        return  repository.findById(userId);
+    }
 }
 

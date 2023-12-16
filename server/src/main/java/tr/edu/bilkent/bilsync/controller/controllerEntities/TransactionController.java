@@ -1,5 +1,6 @@
 package tr.edu.bilkent.bilsync.controller.controllerEntities;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.service.TransactionService;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Controller class for handling HTTP requests related to transactions.
@@ -25,8 +28,13 @@ import java.util.List;
 @RequestMapping("/transactions")
 public class TransactionController {
 
+    private final TransactionService transactionService;
+
     @Autowired
-    private TransactionService transactionService;
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
 
     /**
      * Retrieves a list of all transactions.
@@ -39,14 +47,20 @@ public class TransactionController {
     }
 
     /**
-     * Retrieves a transaction by its ID.
+     * Retrieves a transaction by its unique identifier.
      *
-     * @param id The ID of the transaction.
-     * @return The {@link Transaction} with the specified ID, or {@code null} if not found.
+     * @param id The identifier of the transaction to retrieve.
+     * @return A ResponseEntity containing the transaction if found, or a BAD_REQUEST response
+     * with an error message if the transaction does not exist.
      */
     @GetMapping("/{id}")
-    public Transaction getTransactionById(@PathVariable Long id) {
-        return transactionService.getTransactionById(id);
+    public ResponseEntity<?> getTransactionById(@PathVariable Long id) {
+        Transaction tr = transactionService.getTransactionById(id);
+        if (tr == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no such transaction");
+        } else {
+            return ResponseEntity.ok(tr);
+        }
     }
 
     /**
@@ -58,40 +72,44 @@ public class TransactionController {
      */
     @PostMapping("/create")
     public ResponseEntity<?> createTransaction(@RequestBody TransactionDto transaction, @AuthenticationPrincipal UserEntity currentUser) {
-        if (transaction.getTransactionAmount() < 0) {
-            // Return an error code as a String
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction amount cannot be negative");
+        try {
+            if (transaction.getTransactionAmount() < 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction amount cannot be negative");
+            } else if (Objects.equals(currentUser.getId(), transaction.getGiverId())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("It is not possible to buy the item that you are the seller of");
+            }
+            Transaction tr = transactionService.createTransaction(transaction, currentUser);
+            return ResponseEntity.ok(tr);
+        } catch (EntityNotFoundException | IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-        Transaction tr=transactionService.createTransaction(transaction, currentUser);
-        return ResponseEntity.ok(tr);
     }
 
     /**
      * Updates the state of a transaction to "Giver Approved".
      *
-     * @param id          The ID of the transaction to be updated.
-     * @param transaction The updated transaction details.
+     * @param id The ID of the transaction to be updated.
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#PENDING_TAKER_APPROVAL}.
      */
     @PutMapping("update/giverApproved/{id}")
-    public Transaction updateToGiverApproved(@PathVariable Long id, @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, TransactionState.PENDING_TAKER_APPROVAL);
+    public ResponseEntity<?> updateToGiverApproved(@PathVariable Long id) {
+        return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, TransactionState.PENDING_TAKER_APPROVAL));
     }
 
     /**
      * Updates the state of a transaction to "Taker Approved".
      *
-     * @param id          The ID of the transaction to be updated.
+     * @param id The ID of the transaction to be updated.
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#DEPOSITED}.
      */
     @PutMapping("update/takerApproved/{id}")
-    public Transaction updateToTakerApproved(@PathVariable Long id) {
-        return transactionService.updateTransaction(id, TransactionState.DEPOSITED);
+    public ResponseEntity<?> updateToTakerApproved(@PathVariable Long id) {
+        return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, TransactionState.DEPOSITED));
     }
 
     @GetMapping("/by-post/{postId}")
     public ResponseEntity<List<Transaction>> getTransactionsByPostId(@PathVariable Long postId) {
-        List<Transaction> transactions=transactionService.getTransactionsByPostId(postId);
+        List<Transaction> transactions = transactionService.getTransactionsByPostId(postId);
         return ResponseEntity.ok(transactions);
     }
 
@@ -104,4 +122,20 @@ public class TransactionController {
     public void deleteTransaction(@PathVariable Long id) {
         transactionService.deleteTransaction(id);
     }
+
+    //helper method
+    private ResponseEntity<?> handleTransactionUpdate(Long id, Supplier<Transaction> updateFunction) {
+        try {
+            Transaction tr = updateFunction.get();
+            if (tr == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no such transaction");
+            } else {
+                // Handle success case if needed
+                return ResponseEntity.ok("Transaction updated successfully");
+            }
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }

@@ -15,7 +15,7 @@ export default function CommentComponent({commentList}){
         <Disclosure.Panel className={`text-gray-900`}>
           {/* <CommentItem likeNo={2} isReplyComment={false} commenterName={"Tuna"} commenterText={"Sağlam iş çıkartıyor."}/>
           <CommentItem likeNo={1} isReplyComment={true} commenterName={"Ahmet Tarık"} commenterText={"Aynen abi."}/> */}
-            {commentList.map((comment,index)=><CommentItem key={index} isReplyComment={comment.isReply}
+            {commentList && Array.isArray(commentList) && commentList.map((comment,index)=><CommentItem key={index} isReplyComment={comment.isReply}
              commenterName={comment.userName} commenterText={comment.text} likeNo={comment.likeNo}/>)}
         </Disclosure.Panel>
         </>)}
