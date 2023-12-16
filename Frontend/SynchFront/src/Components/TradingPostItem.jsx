@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Drowpdown from '../statics/DropDown';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import Dropdown from '../statics/DropDown';
@@ -17,7 +17,6 @@ export default function TradingPostItem({post, isProfile}) {
     const [transactionComplete, setTransactionComplete] = useState(false);
     const [isSold, setIsSold] = useState(post.isHeld || false);
     const {user} = useData();
-    
     const navigate = useNavigate();
 
     const handleBuyNow = (postId) => {
@@ -43,6 +42,29 @@ export default function TradingPostItem({post, isProfile}) {
             // Handle the case where the transaction failed
           });
         navigate(`/transaction/${post.id}`, );;
+      };
+      const arrayBufferToBase64 = (arrayBuffer) => {
+        var binary = '';
+        var bytes = new Uint8Array( arrayBuffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        return window.btoa( binary );
+      }
+      const [imageSrc, setImageSrc] = useState(null);
+      useEffect(() => {
+        // const base64String = arrayBufferToBase64(post.imageData);
+        // const fileExtension = getImageFileExtension(post.imageName);
+        // Set the base64 string as the image source
+       // var blob = new Blob([new Uint8Array(post.imageData)],{type:`image/fileExtension`})
+        
+
+        setImageSrc(new Uint8Array(post.imageData));
+      }, []);
+      const getImageFileExtension = (imageName) => {
+        const parts = imageName.split('.');
+        return parts[parts.length - 1].toLowerCase();
       };
   return (
     <div className='mx-5 my-4 flex flex-col items-center bg-gray-100 rounded-lg divide-y'>
@@ -74,7 +96,7 @@ export default function TradingPostItem({post, isProfile}) {
         {isSold && <p className="text-green-500 font-bold">This item has been sold!</p>}
 
         {!isProfile && <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
-            <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>
+            {post.imageName===403 ? <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>: <img source={imageSrc} alt={`${post.imageName}`}></img>}
             <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
                 <h2>{post.price}TL</h2>
                 <div className='flex gap-5'>
