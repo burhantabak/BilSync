@@ -12,23 +12,26 @@ const reportPostCalling = (description,user, reportedEntityId) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${user.token}`
       },  
-      body:raw
+      body: raw
     }).then((response) => {
       console.log(response);
-      if (response.ok) {
-        console.log(response);
-  
+    
+      if (!response.ok) {
+        throw new Error('Post report failed. Please try again.');
+      }
+    
+      // Check if the response has a body before trying to parse it
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
         return response.json();
       } else {
-        throw new Error('Post report failed. Please try again.');
+        // If the response doesn't have a JSON body, return nothing bro
+        return null;
       }
     }).catch((error) => {
       console.error('Error making API call:', error);
-      console.log(response);
-      console.log(response);
-  
       throw new Error('An error occurred. Please try again later.');
     });
-  };
-  
+  }
+
   export default reportPostCalling;

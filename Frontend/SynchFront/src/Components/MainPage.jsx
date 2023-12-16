@@ -76,7 +76,7 @@ export default function MainPage() {
             </svg>
           </button>
         </div>
-            {chatList && chatList.filter((chat) => chat.chatName.toLowerCase().includes(searchInput.toLowerCase())
+            {Array.isArray(chatList) && chatList.filter((chat) => chat.chatName.toLowerCase().includes(searchInput.toLowerCase())
             ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)}
         </div>
     </div>
@@ -87,7 +87,7 @@ function ChatItem({chat,handleChat}){
     console.log(chat)
     const {groupChat,chatName} = chat;
     console.log(`isGroupChat=${groupChat}`)
-    if(chat=null){
+    if(chat==null){
     }
     return(
         <div onClick={()=>{handleChat();console.log("Clicked chat")}} 
