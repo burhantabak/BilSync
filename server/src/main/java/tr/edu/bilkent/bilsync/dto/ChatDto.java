@@ -26,7 +26,7 @@ public class ChatDto {
     }
     private Long chatId;
 
-    public ChatDto(Chat chat) {
+    public ChatDto(Chat chat) { // returns a chat with the name of other user if it is private
         this(chat.getChatName(),
                 chat.getUsers().stream().map(ChatUser::getUser).map(UserEntity::getId).toList(),
                 chat.getId(),
