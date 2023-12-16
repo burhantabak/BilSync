@@ -75,7 +75,7 @@ export default function MainPage() {
             </svg>
           </button>
         </div>
-            {chatList.filter((chat) => chat.userName.toLowerCase().includes(searchInput.toLowerCase())
+            {chatList && chatList.filter((chat) => chat.chatName.toLowerCase().includes(searchInput.toLowerCase())
             ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)}
         </div>
     </div>
@@ -84,18 +84,18 @@ export default function MainPage() {
 
 function ChatItem({chat,handleChat}){
     console.log(chat)
-    const {isGroupChat,userName} = chat;
+    const {groupChat,chatName} = chat;
     console.log(`isGroupChat=${isGroupChat}`)
     if(chat=null){
     }
     return(
         <div onClick={()=>{handleChat();console.log("Clicked chat")}} 
         className='flex rounded-lg py-3 my-2 items-center hover:bg-gray-200'>
-            <div>{isGroupChat ? <img className='w-4 h-4 mr-1' alt='group-icon' src='./group.svg'/>:
+            <div>{groupChat ? <img className='w-4 h-4 mr-1' alt='group-icon' src='./group.svg'/>:
             <img className='w-4 h-4 mr-1' alt='person-icon' src='./person.svg'/>}</div>
             <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
             <div className='text-sm'>
-                <p>{userName}</p>
+                <p>{chatName}</p>
             </div>
         </div>
     );

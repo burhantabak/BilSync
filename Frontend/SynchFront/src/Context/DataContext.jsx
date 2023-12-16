@@ -5,12 +5,14 @@ import { useState } from "react";
 import { getAllPosts } from "../calling/postCalling";
 import getAllUsers from "../calling/userCalling";
 import matchUserID from "../calling/matchUserId";
+import { getChats } from "../calling/chatsCalling";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", {});
   const [error, setError] = useState(""); // New state to store authentication error
   const [postList, setPostList] = useState([]);
+  const [chatList, setChatList] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [isPostsLoading, setIsPostsLoading] = useState(true);
   const login = async (userName, password) =>{
@@ -46,70 +48,14 @@ export const DataProvider = ({ children }) => {
       setIsPostsLoading(false);
     });
   }
-  
+  const getTheChats = ()=>{
+    getChats(user).then(result=>setChatList(result));
+  }
   const logout = ()=>{
     setUser(null);
   }
   
-  const chatList = [
-    {
-      userName: "Tuna Saygın",
-      isGroupChat: false,
-      messages: [
-        {
-          message: "Merhabalar hocam yarın CS319 dersi olacak mı?",
-          date: "15th October 20:53",
-          isReceived: true,
-          userName: "Eray Tüzün",
-        },
-        {
-          message: "Evet, yarın dersimiz olacak. Saat 14:30'da buluşalım.",
-          date: "15th October 21:05",
-          isReceived: false,
-        },
-        {
-          message: "Tamamdır, görüşmek üzere.",
-          date: "15th October 21:06",
-          isReceived: true,
-        },
-      ],
-    },
-    {
-      userName: "Kenan Zeynalov",
-      isGroupChat: false,
-      messages: [
-        {
-          message: "Günaydın, ders materyalleri paylaşılacak mı?",
-          date: "16th October 08:30",
-          isReceived: true,
-          userName: "Eray Tüzün",
-        },
-        {
-          message: "Evet, hemen paylaşacağım.",
-          date: "16th October 08:35",
-          isReceived: false,
-        },
-      ],
-    },
-    {
-      userName: "CS Dream Group",
-      isGroupChat: true,
-      messages: [
-        {
-          message: "Bugün laboratuvar çalışması ile ilgili toplantımız var.",
-          date: "16th October 14:00",
-          isReceived: true,
-        },
-        {
-          message: "Evet, hatırlatma için teşekkür ederim. Gerekli hazırlıkları yapacağım.",
-          date: "16th October 14:05",
-          isReceived: false,
-        },
-      ],
-    },
-    // Add more entries as needed
-  ];
-  const value = useMemo(() => ({postList, chatList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
+  const value = useMemo(() => ({chatList,getTheChats,postList, chatList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

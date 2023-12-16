@@ -2,12 +2,17 @@ import React, { useState } from 'react'
 import { HashtagInput } from './ForumComponents/HashtagInput';
 import ImageInput from './ForumComponents/ImageInput';
 import InputField from './ForumComponents/InputField';
-
+import { uploadFileCall } from '../calling/imageCalling';
+import { createNormalPost } from '../calling/postCreationCalling';
+import { useData } from '../Context/DataContext';
 export default function ForumForm() {
     const [hashtags,setHashtags] = useState([]);
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
+    const [isSubmitted, setIsCompleted] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [imageFile, setImageFile] = useState(null);
+    const {user} = useData();
     const handlePostCreation = (event) => {
       event.preventDefault();
       let imageName = "";
@@ -16,17 +21,18 @@ export default function ForumForm() {
           uploadFileCall(imageFile,user).then((name)=>{imageName = name});
       }
       if(imageName !== "not uploaded")
-          {const borrowPost = {
+          {const normalForumPost = {
               title: title,
               description: description,
               imageName: imageName ? imageName : "",
-              tags: hashtags,              
+              tags: hashtags,  
+              isAnonymous: isAnonymity            
           };
       
           // Debugging: Log the post object
-          console.log("Post object:", borrowPost);
+          console.log("Post object:", normalForumPost);
   
-          createBasicForumPost(borrowPost,user).then((result) => {
+          createNormalPost(normalForumPost,user).then((result) => {
               console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
           });}
       else{
@@ -41,19 +47,8 @@ export default function ForumForm() {
     };
   
     const handlePrivacyChange = () => {
-      setIsPrivate(!isPrivate);
+      setIsAnonymity(!isAnonymityx);
     };
-    
-    const addTag= (event)=>{
-        if (event.target.value !== "") {
-            setHashtags([...hashtags, event.target.value]);
-            event.target.value = "";
-            console.log(hashtags)
-        }
-    };
-    const removeTags = indexToRemove => {
-        setHashtags([...hashtags.filter((_, index) => index !== indexToRemove)]);
-      };
     return (
     <div>
         <div className='flex justify-center mb-5'>
