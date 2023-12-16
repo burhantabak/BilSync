@@ -37,7 +37,7 @@ public class ChatController {
             @AuthenticationPrincipal UserEntity currentUser) {
         chatService.createChat(chatDto, currentUser);
         return ResponseEntity.ok("Chat created successfully");
-    }
+    } // todo check if the same private chat exists
 
     @GetMapping("/chats")
     public ResponseEntity<List<ChatDto>> getUserChats(@AuthenticationPrincipal UserEntity currentUser) {
