@@ -1,11 +1,14 @@
 package tr.edu.bilkent.bilsync.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.dto.TransactionDto;
+import tr.edu.bilkent.bilsync.entity.PostEntities.Post;
+import tr.edu.bilkent.bilsync.entity.PostEntities.TradingPost;
 import tr.edu.bilkent.bilsync.entity.Transaction;
 import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
-import tr.edu.bilkent.bilsync.repository.PostRepositories.NormalPostRepository;
 import tr.edu.bilkent.bilsync.repository.TransactionRepository;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 
@@ -19,18 +22,20 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
-
-
+    private final UserInfoService userService;
     private final PostService postService;
 
     /**
      * Constructs a new instance of the {@code TransactionService}.
      *
      * @param transactionRepository The repository for handling transactions.
-     * @param postService        The repository for handling posts (assuming it exists).
+     * @param userService           The user service to check the existence of users
+     * @param postService           The repository for handling posts (assuming it exists).
      */
-    public TransactionService(TransactionRepository transactionRepository, PostService postService) {
+    @Autowired
+    public TransactionService(TransactionRepository transactionRepository, UserInfoService userService, PostService postService) {
         this.transactionRepository = transactionRepository;
+        this.userService = userService;
         this.postService = postService;
     }
 
@@ -70,6 +75,23 @@ public class TransactionService {
      * @return The created {@link Transaction}.
      */
     public Transaction createTransaction(TransactionDto trDto, UserEntity currentUser) {
+        UserEntity giver = userService.findById(trDto.getGiverId());
+        if (giver == null) {
+            throw new EntityNotFoundException("Giver does not exist");
+        }
+        Post post = postService.getPostByID(trDto.getPostId());
+        if (post == null) {
+            throw new EntityNotFoundException("Post does not exist");
+        } else if (post instanceof TradingPost) {
+            TradingPost tradingPost = (TradingPost) post;
+
+            // Additional checks for TradingPost
+            if (tradingPost.getIsHeld()) {
+                throw new IllegalStateException("The trading post is already being bought by someone else");
+            }
+        } else {
+            throw new IllegalStateException("The specified item cannot be bought");
+        }
         Transaction transaction = new Transaction();
         transaction.setTransactionAmount(trDto.getTransactionAmount());
         transaction.setTakerId(currentUser.getId());
@@ -84,21 +106,21 @@ public class TransactionService {
     /**
      * Updates an existing transaction.
      *
-     * @param id                 The ID of the transaction to update.
+     * @param id The ID of the transaction to update.
      * @return The updated {@link Transaction}, or {@code null} if the transaction with the given ID is not found.
      */
     public Transaction updateTransaction(Long id, TransactionState newState) {
         Transaction existingTransaction = transactionRepository.findById(id).orElse(null);
         if (existingTransaction != null) {
-            existingTransaction.setStatus(newState);
-            if(newState == TransactionState.PENDING_TAKER_APPROVAL)
-            {
-                existingTransaction.setGiverApproveDate(new Date());
+            if (existingTransaction.getStatus() == TransactionState.REFUNDED || existingTransaction.getStatus() == TransactionState.DEPOSITED) {
+                throw new IllegalStateException("Cannot update resolved transactions.");
             }
-            else if(newState == TransactionState.DEPOSITED)
-            {
-                postService.setHeld(existingTransaction.getPostId(),false);
-                postService.setAsResolved(existingTransaction.getPostId(),true);
+            existingTransaction.setStatus(newState);
+            if (newState == TransactionState.PENDING_TAKER_APPROVAL) {
+                existingTransaction.setGiverApproveDate(new Date());
+            } else if (newState == TransactionState.DEPOSITED) {
+                postService.setHeld(existingTransaction.getPostId(), false);
+                postService.setAsResolved(existingTransaction.getPostId(), true);
                 existingTransaction.setTakerApproveDate(new Date());
             }
             return transactionRepository.save(existingTransaction);
@@ -149,8 +171,8 @@ public class TransactionService {
                         if (daysDifference >= 3) {
                             // Update the transaction state here
                             transaction.setStatus(TransactionState.REFUNDED);
-                            postService.setAsResolved(transaction.getPostId(),false);
-                            postService.setHeld(transaction.getPostId(),false);
+                            postService.setAsResolved(transaction.getPostId(), false);
+                            postService.setHeld(transaction.getPostId(), false);
                             // Save the updated transaction to the repository
                             this.transactionRepository.save(transaction);
                         }
