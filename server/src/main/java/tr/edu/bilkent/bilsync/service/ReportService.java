@@ -71,5 +71,12 @@ public class ReportService {
     }
 
 
-
+    public boolean createReport(Report report) {
+        try{
+            reportRepository.save(report);
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
 }
