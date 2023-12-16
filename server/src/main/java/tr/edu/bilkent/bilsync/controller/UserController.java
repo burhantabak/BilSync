@@ -38,7 +38,7 @@ public class UserController {
                         userEntity.getId(),
                         userEntity.getEmail(),
                         userEntity.getName(),
-                        userEntity.getProfileImagePath(),
+                        userEntity.getProfileImageName(),
                         userEntity.isBanned()
                 ))
                 .collect(Collectors.toList());
