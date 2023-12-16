@@ -36,7 +36,7 @@ export default function SecondHandForum() {
             {const post = {
                 title: title,
                 description: description,
-                imagePath: imageName ? imageName : "",
+                imageName: imageName ? imageName : "",
                 iban: iban,
                 tags: hashtags,
                 price: price,
