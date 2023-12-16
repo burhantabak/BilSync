@@ -16,10 +16,20 @@ import java.io.IOException;
 public class FileController {
     private final FileService fileService;
 
+    /**
+     * Constructor for FileController, injecting the required service.
+     *
+     * @param fileService The service for handling file operations.
+     */
     @Autowired
     public FileController(FileService fileService) { this.fileService = fileService; }
 
-
+    /**
+     * Handles the upload of a file as an image.
+     *
+     * @param file The MultipartFile representing the uploaded file.
+     * @return ResponseEntity with a status code and a message indicating the result of the upload.
+     */
     @PostMapping("/uploadFile")
     public ResponseEntity<?> uploadFileAsImage(@RequestParam("image") MultipartFile file) {
         if(file == null)
@@ -32,6 +42,13 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FILE_COULD_NOT_BE_SAVED");
     }
 
+    /**
+     * Handles the download of a file as an image.
+     *
+     * @param fileName The name of the file to be downloaded.
+     * @return ResponseEntity with the file data as bytes and appropriate content type.
+     * @throws IOException If an I/O exception occurs during file download.
+     */
     @GetMapping("/fileSystem/{fileName}")
     public ResponseEntity<?> downloadFileAsImage(@PathVariable String fileName) throws IOException {
         byte[] fileData = fileService.downloadFile(fileName);

@@ -9,6 +9,10 @@ import jakarta.persistence.*;
 public class ForumPost extends Post {
     public ForumPost() {}
 
+    /**
+     * Executes pre-persistence operations before saving the entity to the database.
+     * Invokes the prePersist method from the superclass for common pre-persistence operations.
+     */
     @PrePersist
     public void prePersist() {
         super.prePersist();

@@ -8,7 +8,7 @@ export default async function getAllUsers(user) {
         headers: myHeaders,
       };
     
-      const response = await fetch("http://localhost:8080/user/users", requestOptions);
+      const response = await fetch("http://localhost:8080/user/usersSecure", requestOptions);
     
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

@@ -11,10 +11,21 @@ public class SecondHandTradingPostService {
 
     private final SecondHandTradingPostRepository secondHandTradingPostRepository;
 
+    /**
+     * Constructor for SecondHandTradingPostService, injecting the required repository.
+     *
+     * @param secondHandTradingPostRepository The repository for SecondHandTradingPost entities.
+     */
     public SecondHandTradingPostService(SecondHandTradingPostRepository secondHandTradingPostRepository) {
         this.secondHandTradingPostRepository = secondHandTradingPostRepository;
     }
 
+    /**
+     * Creates or saves a SecondHandTradingPost entity in the repository.
+     *
+     * @param secondHandTradingPost The SecondHandTradingPost entity to be created or saved.
+     * @return True if the operation is successful, false otherwise.
+     */
     public boolean createOrSavePost(SecondHandTradingPost secondHandTradingPost) {
         try {
             secondHandTradingPost.setGiverID(secondHandTradingPost.getAuthorID());
@@ -26,14 +37,30 @@ public class SecondHandTradingPostService {
         }
     }
 
+    /**
+     * Retrieves a list of SecondHandTradingPost entities sorted by date from the repository.
+     *
+     * @return A list of SecondHandTradingPost entities sorted by date.
+     */
     public List<SecondHandTradingPost> getPostsSortedByDate() {
         return secondHandTradingPostRepository.findSecondHandTradingPostsSortedByDate();
     }
 
+    /**
+     * Retrieves a SecondHandTradingPost entity by its ID from the repository.
+     *
+     * @param id The ID of the SecondHandTradingPost entity to retrieve.
+     * @return The SecondHandTradingPost entity with the specified ID.
+     */
     public SecondHandTradingPost getPostByID(long id) {
         return secondHandTradingPostRepository.findById(id);
     }
 
+    /**
+     * Deletes a SecondHandTradingPost entity by its ID from the repository.
+     *
+     * @param id The ID of the SecondHandTradingPost entity to delete.
+     */
     public void deleteById(long id) {
         secondHandTradingPostRepository.deleteById(id);
     }

@@ -28,6 +28,10 @@ public class UserInfoService implements UserDetailsService {
         return repository.findByEmail(username);
     }
 
+    public UserDetails loadUserById(long id) throws UsernameNotFoundException {
+        return repository.findById(id);
+    }
+
     /**
      * Changes the email of a user identified by the given user ID.
      *
