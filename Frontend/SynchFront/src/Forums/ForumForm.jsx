@@ -36,47 +36,51 @@ export default function ForumForm() {
     </div>
   )
 }
-function  RadioButton(){
-    const [isAnonymity, setIsAnonymity] = useState(true); // Set the default value based on your requirements
+function RadioButton() {
+  const [isAnonymity, setIsAnonymity] = useState(true);
 
-  // Function to handle radio button change
   const handleRadioChange = (event) => {
-    setIsAnonymity(event.target.id === 'flexRadioDefault01');
+    setIsAnonymity(event.target.value === 'true');
   };
 
   return (
     <div className='flex'>
       <p className='font-bold mr-3 '>Anonymity:</p>
-      {/* Radio button for Anonymous */}
+
       <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
         <input
           type="radio"
-          name="flexRadioDefault"
+          name="anonymity"
           id="radioDefault01"
-          value={isAnonymity}
+          value={true}
+          checked={isAnonymity}
           onChange={handleRadioChange}
         />
         <label
           className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
           htmlFor="radioDefault01"
         >
-          Anonymous
+          Private
         </label>
       </div>
 
-      {/* Radio button for Public */}
       <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
-      <input type="radio" id="publicRadio" name="name1" value={!isAnonymity} onChange={handleRadioChange}/>
+        <input
+          type="radio"
+          id="publicRadio"
+          name="anonymity"
+          value={false}
+          checked={!isAnonymity}
+          onChange={handleRadioChange}
+        />
         <label
           className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-          htmlFor="radioDefault02"
+          htmlFor="publicRadio"
         >
           Public
         </label>
       </div>
 
-      {/* Display the value of isAnonymity */}
-      <p>Is Anonymous: {isAnonymity ? 'Yes' : 'No'}</p>
     </div>
   );
 }
