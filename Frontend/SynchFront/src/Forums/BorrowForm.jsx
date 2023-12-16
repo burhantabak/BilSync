@@ -47,7 +47,7 @@ export default function BorrowForm() {
         // Debugging: Log the post object
         console.log("Post object:", borrowPost);
 
-        createBorrowingPost(borrowPost,user).then((result) => {
+        createDonationPost(borrowPost,user).then((result) => {
             console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
         });}
     else{

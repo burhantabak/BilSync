@@ -15,42 +15,32 @@ export default function SecondHandForum() {
     const [price, setPrice] = useState(0);
     const [iban, setIban] = useState("");
     const [hashtags,setHashtags] = useState([]);
-    const addTag= (event)=>{
-        if (event.target.value !== "") {
-            setHashtags([...hashtags, event.target.value]);
-            event.target.value = "";
-            console.log(hashtags)
-          }
-    };
-    const removeTags = indexToRemove => {
-        setHashtags([...hashtags.filter((_, index) => index !== indexToRemove)]);
-      };
-      const handlePostCreation = (event) => {
-        event.preventDefault();
-        let imageName = "";
-        if(imageFile)
-        {
-            uploadFileCall(imageFile,user).then((name)=>{imageName = name});
-        }
-        if(imageName !== "not uploaded")
-            {const post = {
-                title: title,
-                description: description,
-                imageName: imageName ? imageName : "",
-                iban: iban,
-                tags: hashtags,
-                price: price,
-            };
-        
-            // Debugging: Log the post object
-            console.log("Post object:", post);
+    const handlePostCreation = (event) => {
+    event.preventDefault();
+    let imageName = "";
+    if(imageFile)
+    {
+        uploadFileCall(imageFile,user).then((name)=>{imageName = name});
+    }
+    if(imageName !== "not uploaded")
+        {const post = {
+            title: title,
+            description: description,
+            imageName: imageName ? imageName : "",
+            iban: iban,
+            tags: hashtags,
+            price: price,
+        };
+    
+        // Debugging: Log the post object
+        console.log("Post object:", post);
 
-            createTradingPost(post,user).then((result) => {
-                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
-            });}
-        else{
-            setErrorMessage(imageName)
-        }
+        createTradingPost(post,user).then((result) => {
+            console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+        });}
+    else{
+        setErrorMessage(imageName)
+    }
     };
     
   return (
