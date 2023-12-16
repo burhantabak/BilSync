@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import tr.edu.bilkent.bilsync.entity.Comment;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
 
@@ -28,7 +27,7 @@ public class Post {
     private String description;
 
     @Column(nullable = false)
-    private String imagePath = "OUR_DEFAULT_IMAGE_PATH";
+    private String imageName = "OUR_DEFAULT_IMAGE_PATH";
 
     @Column(nullable = false)
     private long votes = 0;
@@ -102,11 +101,11 @@ public class Post {
         this.description = description;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageName() {
+        return imageName;
     }
 
-    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+    public void setImageName(String imagePath) { this.imageName = imagePath; }
 
     public long getVotes() {
         return votes;

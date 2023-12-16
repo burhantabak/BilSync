@@ -92,9 +92,9 @@ public class UserInfoService implements UserDetailsService {
         //String endpoint = "/auth/login";
 
         String mailTitle = "Welcome to BilSync";
-        String mailBody = "Hello There,\nWe enjoy seeing you in our community. Here is your initial password:\n"
-                + password + "\nWe encourage to start Syncing with other Bilkenters! You can start your journey here:"
-                + baseUrl  + "\nBilSync DevTeam ";
+        String mailBody = "Hello There,\n\nWe enjoy seeing you in our community. Here is your initial password:\n"
+                + password + "\n\nWe encourage to start Syncing with other Bilkenters! You may want to change your password first. Start your journey here: "
+                + baseUrl  + "\n\nBilSync DevTeam ";
         String recipientMail = userDto.getEmail();
         mailService.sendMail(mailTitle, mailBody, recipientMail);
         repository.save(user);
