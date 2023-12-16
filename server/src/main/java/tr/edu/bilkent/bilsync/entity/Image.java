@@ -8,10 +8,10 @@ import jakarta.persistence.Table;
 @Table(name = "image")
 public class Image {
 
+    private static final String IMAGE_BASE_PATH = "./chatImages";
+
     @Id
     private Long id;
-
-    private String path;
 
     public void setId(Long id) {
         this.id = id;
@@ -21,11 +21,7 @@ public class Image {
         return id;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
+    public String getPath(){
+        return IMAGE_BASE_PATH + "image_" + id + ".dat";
     }
 }
