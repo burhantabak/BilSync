@@ -2,6 +2,11 @@ package tr.edu.bilkent.bilsync.dto;
 
 import tr.edu.bilkent.bilsync.entity.ChatMessage;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.Date;
 
 public class ChatMessageDto {
@@ -15,7 +20,7 @@ public class ChatMessageDto {
 
     private String body;
 
-    private String image; // todo to be changed
+    private String image;
 
     public ChatMessageDto(Long messageId, Long senderId, Long chatId, Date date, String body, String image) {
         this.messageId = messageId;
@@ -26,8 +31,21 @@ public class ChatMessageDto {
         this.image = image;
     }
 
+    public ChatMessageDto(Long messageId, Long senderId, Long chatId, Date date, String body) {
+        this.messageId = messageId;
+        this.senderId = senderId;
+        this.chatId = chatId;
+        this.date = date;
+        this.body = body;
+    }
+
     public ChatMessageDto(ChatMessage chatMessage){
-        this(chatMessage.getId(), chatMessage.getSender().getId(), chatMessage.getChat().getId(), chatMessage.getDate(), chatMessage.getBody(), chatMessage.getImagePath());
+        this(chatMessage.getId(), chatMessage.getSender().getId(), chatMessage.getChat().getId(), chatMessage.getDate(), chatMessage.getBody());
+        try {
+            this.image = Base64.getEncoder().encodeToString(Files.readAllBytes(Paths.get(chatMessage.getImage().getPath())));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public Long getMessageId() {
         return messageId;
