@@ -1,8 +1,22 @@
 import React, { useState } from 'react'
 import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
+import { useData } from '../Context/DataContext';
+
 export default function CommentComponent({commentList}){
   console.log('commentList:', commentList);
+  const {user} = useData();
+  
+  const handleReportClick = () => {
+    // Implement your logic for handling report click here
+    console.log('Report clicked for comment:');
+
+    // Set showReportBox to true to open the modal
+    setShowReportBox(true);
+  };
+
+  const [showReportBox, setShowReportBox] = useState(false);
+  const [reportReason,setReportReason]=useState("");
 
     return (
       <Disclosure>
@@ -15,14 +29,36 @@ export default function CommentComponent({commentList}){
         <Disclosure.Panel className={`text-gray-900`}>
           {/* <CommentItem likeNo={2} isReplyComment={false} commenterName={"Tuna"} commenterText={"Sağlam iş çıkartıyor."}/>
           <CommentItem likeNo={1} isReplyComment={true} commenterName={"Ahmet Tarık"} commenterText={"Aynen abi."}/> */}
-            {commentList && Array.isArray(commentList) && commentList.map((comment,index)=><CommentItem key={index} isReplyComment={comment.isReply}
-             commenterName={comment.userName} commenterText={comment.text} likeNo={comment.likeNo}/>)}
+            {commentList && Array.isArray(commentList) && commentList.map((comment,index)=><CommentItem 
+            key={index} 
+            isReplyComment={comment.isReply}
+            commenterName={comment.userName} 
+            commenterText={comment.text} 
+            likeNo={comment.likeNo}
+            setShowReportBox={setShowReportBox}
+            showReportBox={showReportBox}
+            handleReportClick={handleReportClick}
+            setReportReason={setReportReason}
+            reportReason={reportReason}
+            />)}
         </Disclosure.Panel>
         </>)}
       </Disclosure>
     )
   }
-function CommentItem({isReplyComment, commenterName, commenterText,likeNo}){
+function CommentItem({isReplyComment, commenterName, commenterText,likeNo,handleReportClick,showReportBox,setShowReportBox,setReportReason,reportReason}){
+  
+  // const [showReportBox, setShowReportBox] = useState(false);
+
+   //const handleReportClick = () => {
+  //   // Implement your logic for handling report click here
+  //   console.log('Report clicked for comment:', commenterText);
+
+  //   // Set showReportBox to true to open the modal
+  //   setShowReportBox(true);
+  // };
+
+
     const [isLiked, setisLiked] = useState(false);
     const [like, setLikeNo] = useState(likeNo);
     return(
@@ -43,8 +79,8 @@ function CommentItem({isReplyComment, commenterName, commenterText,likeNo}){
                             <small>Reply</small>
                         </button>
                         <small className="self-center">.</small>
-                        <button href="#" className="hover:underline">
-                            <small>Report</small>
+                        <button onClick={handleReportClick} className="hover:underline">
+                        <small className="text-red-500 cursor-pointer">Report</small>
                         </button>
                         <small className="self-center">.</small>
                 </div>
@@ -54,6 +90,51 @@ function CommentItem({isReplyComment, commenterName, commenterText,likeNo}){
                     <h2 className='text-sm font-semibold'>17th October 2023</h2>
                     <p className='text-sm'>17:54</p>
             </div>
+            <PostInteraction 
+              showReportBox={showReportBox}
+              setShowReportBox={setShowReportBox}
+              reportReason={reportReason}
+              setReportReason={setReportReason}
+                  />
         </div>
     );
+}
+
+function PostInteraction({ isStarred, setStarred, postId,showReportBox,setShowReportBox ,reportReason,setReportReason}) {
+
+  const { user } = useData();
+
+
+
+  const handleReportSubmit = () => {
+    console.log('Report submitted with reason:', reportReason);
+    // Reset state after submission
+    setShowReportBox(false);
+    setReportReason('');
+  };
+
+  return (
+    <div className='pl-1 flex items-center'>
+      {/* Report Box */}
+      {showReportBox && (
+        <div className="fixed  bottom-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center zIndex = 200 " style={{ zIndex: 110 }}>
+          <div className="bg-white p-4 rounded-md">
+            <p>Report Reason:</p>
+            <textarea
+              value={reportReason}
+              onChange={(e) => setReportReason(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              placeholder="Enter your report reason..."
+            />
+            <button
+              onClick={handleReportSubmit}
+              className="mt-2 px-4 py-2 bg-blue-700 text-white rounded-md"
+            >
+              Submit Report
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
