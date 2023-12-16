@@ -6,16 +6,18 @@ public class UserEntityDto {
     private String email;
     private String name;
     private String profileImageName;
+    private String bio;
     private boolean isBanned;
 
     // Constructors
     public UserEntityDto() {}
 
-    public UserEntityDto(long id, String email, String name, String profileImageName, boolean isBanned) {
+    public UserEntityDto(long id, String email, String name, String profileImageName, String bio, boolean isBanned) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.profileImageName = profileImageName;
+        this.bio = bio;
         this.isBanned = isBanned;
     }
 
@@ -35,6 +37,10 @@ public class UserEntityDto {
     public String getProfileImageName() { return profileImageName; }
 
     public void setProfileImageName(String profileImageName) { this.profileImageName = profileImageName; }
+
+    public String getBio() { return this.bio; }
+
+    public void setBio(String bio) { this.bio = bio; }
 
     public boolean getIsBanned() { return isBanned; }
 
