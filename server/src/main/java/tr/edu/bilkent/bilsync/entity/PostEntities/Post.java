@@ -27,16 +27,14 @@ public class Post {
     private String description;
 
     @Column(nullable = false)
-    private String imageName = "OUR_DEFAULT_IMAGE_PATH";
+    private String imageName = "OUR_DEFAULT_IMAGE_NAME";
 
     @Column(nullable = false)
     private long votes = 0;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "voters", joinColumns = @JoinColumn(name = "post_id"))
-    @MapKeyColumn(name = "user_id")
-    @Column(name = "vote")
-    private Map<Long, Integer> voters = new HashMap<>();
+    @OneToMany
+    @Column(name = "listVotes")
+    private List<Vote> listVotes = new ArrayList<>();
 
     @Column(nullable = false)
     private long views = 0;
@@ -115,17 +113,13 @@ public class Post {
         this.votes = votes;
     }
 
-    public Map<Long, Integer> getVoters() {
-        return voters;
+    public List<Vote> getListVotes() {
+        return listVotes;
     }
 
-    public void setVoters(Map<Long, Integer> voters) {
-        this.voters = voters;
+    public void setListVotes(List<Vote> voters) {
+        this.listVotes = voters;
     }
-
-    public void vote(long userId, int vote) { this.voters.put(userId, vote); }
-
-    public void removeVote(long userId) { this.voters.remove(userId); }
 
     public long getViews() {
         return views;
@@ -167,6 +161,10 @@ public class Post {
 
     public void setPostDate(Timestamp postDate) { this.postDate = postDate; }
 
+    /**
+     * Executes pre-persistence operations before saving the entity to the database.
+     * Initializes votes, views, and commentList. Sets the postDate to the current time in the Turkish time zone.
+     */
     public void prePersist() {
         this.votes = 0;
         this.views = 0;
@@ -177,6 +175,11 @@ public class Post {
         this.postDate = Timestamp.from(trClock);
     }
 
+    /**
+     * Adds a comment to the commentList associated with this post.
+     *
+     * @param comment The comment to be added.
+     */
     public void addComment(Comment comment) {
         this.commentList.add(comment);
     }

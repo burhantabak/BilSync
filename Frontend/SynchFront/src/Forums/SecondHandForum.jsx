@@ -4,6 +4,7 @@ import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
 import { createTradingPost } from '../calling/postCreationCalling';
 import { useData } from '../Context/DataContext';
+import { uploadFileCall } from '../calling/imageCalling';
 export default function SecondHandForum() {
     const [title, setTitle] = useState("");
     const [isSubmitted, setIsCompleted] = useState(false);
@@ -26,21 +27,30 @@ export default function SecondHandForum() {
       };
       const handlePostCreation = (event) => {
         event.preventDefault();
-        const post = {
-            title: title,
-            description: description,
-            imagePath: imageFile ? imageFile.name : "",
-            iban: iban,
-            tags: hashtags,
-            price: price,
-        };
-    
-        // Debugging: Log the post object
-        console.log("Post object:", post);
+        let imageName = "";
+        if(imageFile)
+        {
+            imageName = uploadFileCall(imageFile,user);
+        }
+        if(imageName !== "not uploaded")
+            {const post = {
+                title: title,
+                description: description,
+                imagePath: imageName ? imageName : "",
+                iban: iban,
+                tags: hashtags,
+                price: price,
+            };
+        
+            // Debugging: Log the post object
+            console.log("Post object:", post);
 
-        createTradingPost(post,user).then((result) => {
-            console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
-        });
+            createTradingPost(post,user).then((result) => {
+                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+            });}
+        else{
+            setErrorMessage(imageName)
+        }
     };
     
   return (
