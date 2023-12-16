@@ -4,7 +4,7 @@ import CommentCreate from '../statics/CommentCreate';
 import formatDate, { formatTime } from './HelperFunctions/DateFormat';
 
 
-export default function ForumPost({post,isLostnFound}) {
+export default function ForumPost({post,isLostnFound, isAnynomous}) {
     console.log("entered Forum Post");
     if(post==null){
         return <h1>Loading</h1>
@@ -18,9 +18,16 @@ export default function ForumPost({post,isLostnFound}) {
     if(post== null){
         return <h1>Not Loaded</h1>
     }
+
+    console.log("IS IT ANYNYMOUS", isAnynomous);
+
+    if(post.isAnonymous){
+        return null;
+    }
+
   return (
-        <div className='mx-5 my-4 flex flex-col items-center bg-gray-100 rounded-lg divide-y'>
-            <div className='flex justify-between w-full items-center px-2'>
+       <div className='mx-5 my-4 flex flex-col items-center bg-gray-100 rounded-lg divide-y'>
+           <div className='flex justify-between w-full items-center px-2'>
                 <div className='flex items-center'>
                     <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
                     <div>
@@ -41,7 +48,7 @@ export default function ForumPost({post,isLostnFound}) {
             <div className='w-full text-center'>
                 {post.description}
             </div>
-            <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
+              <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
                 <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-1/2 h-1/2 overflow-hidden'></img>
                 <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
                     <div className='flex gap-5'>
@@ -65,6 +72,6 @@ export default function ForumPost({post,isLostnFound}) {
         commentList ={commentList}
         />
             </div>
-        </div>
+        </div> 
   )
 }

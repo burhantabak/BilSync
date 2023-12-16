@@ -24,16 +24,6 @@ export default function TransactionPage(handleBuyNow) {
     }
 
 
-    createTransaction(
-      postId,
-      user
-    
-    ).then((response) => {
-      setTransactionComplete(true);
-      setError(''); // Reset error if the transaction is successful
-    }).catch((error) => {
-      setError(error.message);
-    });
 
 
     // Validate card number length
@@ -52,7 +42,6 @@ export default function TransactionPage(handleBuyNow) {
 
     // Handle the buy now action, e.g., setTransactionComplete(true)
     setTransactionComplete(true);
-    handleBuyNow(postId);
     setError(''); // Reset error if the transaction is successful
     
   };

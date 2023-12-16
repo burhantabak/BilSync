@@ -15,7 +15,7 @@ export default function TradingPostItem({post, isProfile}) {
     const [isDownvote,setDownvote] = useState(false)
     const [commentList, setCommentList] = useState(post.commentList);
     const [transactionComplete, setTransactionComplete] = useState(false);
-    const [isSold, setIsSold] = useState(post.isSold || false);
+    const [isSold, setIsSold] = useState(post.isHeld || false);
     const {user} = useData();
     const navigate = useNavigate();
 
