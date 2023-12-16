@@ -123,26 +123,7 @@
               </TradingPostItem>
             ))}
           </div>
-          {/* Starred Posts Section */}
-          <div className="mt-8">
-            <h2 className="text-dark font-bold text-2xl">Starred Posts</h2>
-            {/* Display Starred Posts or a message */}
-            {starredPosts.length > 0 ? (
-              <div className="space-y-4">
-                {starredPosts.map((post) => (
-                  <div
-                    key={post.id}
-                    className="flex flex-col bg-white border-gray-300 rounded-md p-4 shadow-md"
-                  >
-                    <h3 className="text-dark font-bold text-xl mb-2">{post.title}</h3>
-                    <p className="text-gray-600">{post.content}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-600 text-center">No starred posts yet!</p>
-            )}
-          </div>
+          
         </div>
       </div>
     );

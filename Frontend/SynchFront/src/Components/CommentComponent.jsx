@@ -3,6 +3,8 @@ import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { useData } from '../Context/DataContext';
 import commentReportCall from '../calling/commentReportCall';
+import formatDate, { formatTime } from './HelperFunctions/DateFormat';
+
 export default function CommentComponent({commentList}){
   console.log('commentList:', commentList);
   const {user} = useData();
@@ -36,6 +38,7 @@ export default function CommentComponent({commentList}){
             commenterText={comment.text} 
             commentId = {comment.id}
             likeNo={comment.likeNo}
+            commentDate = {comment.publishDate}
             setShowReportBox={setShowReportBox}
             showReportBox={showReportBox}
             handleReportClick={handleReportClick}
@@ -47,7 +50,7 @@ export default function CommentComponent({commentList}){
       </Disclosure>
     )
   }
-function CommentItem({isReplyComment, commenterName, commenterText,likeNo,handleReportClick,showReportBox,setShowReportBox,setReportReason,reportReason, commentId}){
+function CommentItem({isReplyComment, commenterName, commenterText,likeNo,handleReportClick,showReportBox,setShowReportBox,setReportReason,reportReason, commentId, commentDate}){
   
   // const [showReportBox, setShowReportBox] = useState(false);
 
@@ -88,8 +91,8 @@ function CommentItem({isReplyComment, commenterName, commenterText,likeNo,handle
                 </div>
                 </div>
             <div className='text-center'>
-                    <h2 className='text-sm font-semibold'>17th October 2023</h2>
-                    <p className='text-sm'>17:54</p>
+                    <h2 className='text-sm font-semibold'>{formatDate(commentDate)}</h2>
+                    <p className='text-sm'>{formatTime(commentDate)}</p>
             </div>
             <PostInteraction 
               showReportBox={showReportBox}
