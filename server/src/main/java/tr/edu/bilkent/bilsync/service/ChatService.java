@@ -9,6 +9,7 @@ import tr.edu.bilkent.bilsync.repository.ChatRepository;
 import tr.edu.bilkent.bilsync.repository.ImageRepository;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -121,10 +122,17 @@ public class ChatService {
         chatMessage.setChat(chat);
         Image image = new Image();
         image = imageRepository.save(image);
-        try {
-            Files.write(Paths.get(image.getPath()), Base64.getDecoder().decode(chatMessageDto.getImage()));
+        System.err.println(new File(".").getAbsolutePath());
+        try{
+            File file = new File(image.getPath());
+            if(!file.createNewFile()){
+                throw new RuntimeException("File already exists");
+            }
+
+            Files.write(Paths.get(image.getPath()), chatMessageDto.getImage());
         } catch (IOException e) {
-            throw new RuntimeException("Unable to save image");
+            imageRepository.delete(image);
+            throw new RuntimeException(e);
         }
         chatMessage.setImage(image);
         return new ChatMessageDto(chatMessageRepository.save(chatMessage));
