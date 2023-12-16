@@ -1,33 +1,36 @@
 package tr.edu.bilkent.bilsync.service;
 
-import org.apache.logging.log4j.message.Message;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.dto.ChatDto;
 import tr.edu.bilkent.bilsync.dto.ChatMessageDto;
 import tr.edu.bilkent.bilsync.entity.*;
 import tr.edu.bilkent.bilsync.repository.ChatMessageRepository;
 import tr.edu.bilkent.bilsync.repository.ChatRepository;
+import tr.edu.bilkent.bilsync.repository.ImageRepository;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
-
     private final ChatMessageRepository chatMessageRepository;
+    private final ImageRepository imageRepository;
 
-    public ChatService(UserRepository userRepository, ChatRepository chatRepository, ChatMessageRepository chatMessageRepository) {
+    public ChatService(UserRepository userRepository, ChatRepository chatRepository, ChatMessageRepository chatMessageRepository, ImageRepository imageRepository) {
         this.userRepository = userRepository;
         this.chatRepository = chatRepository;
         this.chatMessageRepository = chatMessageRepository;
+        this.imageRepository = imageRepository;
     }
 
-    public List<ChatMessageDto> getMessagesByChatId(Long chatId){
+    public List<ChatMessageDto> getMessagesByChatId(Long chatId) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
         List<ChatMessage> chatMessages = chat.getChatMessages();
         return chatMessages.stream().map(ChatMessageDto::new).toList();
@@ -82,11 +85,6 @@ public class ChatService {
         return chatRepository.findChatsByUsersContaining(user);
     }
 
-    public List<Chat> getChatsByUserId(Long userId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found."));
-        return getChatsByUser(user);
-    }
-
     public void inviteUsers(Long chatId, List<Long> inviteeIds, UserEntity currentUser) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
         ChatUser adminUser = chat.getUsers().stream()
@@ -115,14 +113,27 @@ public class ChatService {
         chatRepository.save(chat);
     }
 
-    public void sendMessageToChat(Long chatId, ChatMessageDto chatMessageDto, UserEntity currentUser) {
+    public ChatMessageDto sendMessageToChat(Long chatId, ChatMessageDto chatMessageDto, UserEntity currentUser) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setSender(currentUser);
         chatMessage.setBody(chatMessageDto.getBody());
-        chatMessage.setImagePath(null); // todo to be changed later
         chatMessage.setDate(new Date());
         chatMessage.setChat(chat);
-        chatMessageRepository.save(chatMessage);
+        Image image = new Image();
+        image = imageRepository.save(image);
+        try{
+            Files.write(Paths.get(image.getPath()), chatMessageDto.getImage());
+        } catch (IOException e) {
+            imageRepository.delete(image);
+            throw new RuntimeException(e);
+        }
+        chatMessage.setImage(image);
+        return new ChatMessageDto(chatMessageRepository.save(chatMessage));
+    }
+
+    public boolean userHasAccessToChat(UserEntity currentUser, Long chatId) {
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        return chat.getUsers().stream().filter(chatUser -> Objects.equals(chatUser.getId(), currentUser.getId())).count() == 1;
     }
 }
