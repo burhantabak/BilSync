@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.entity.*;
 import tr.edu.bilkent.bilsync.entity.PostEntities.*;
+import tr.edu.bilkent.bilsync.repository.PostRepositories.VoteRepository;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 
 import java.sql.Timestamp;
@@ -22,13 +23,17 @@ import java.util.regex.Pattern;
 @RequestMapping("/post")
 public class PostController {
     private final PostService postService;
+    private final VoteRepository voteRepository;
 
     /**
      * Constructor for PostController, injecting the required PostService.
      *
      * @param postService The PostService for handling post-related operations.
      */
-    public PostController(PostService postService) { this.postService = postService; }
+    public PostController(PostService postService, VoteRepository voteRepository) {
+        this.postService = postService;
+        this.voteRepository = voteRepository;
+    }
 
     /**
      * Creates a new post based on the provided JSON node.
@@ -154,7 +159,7 @@ public class PostController {
      * @return A ResponseEntity with a status code and a message.
      */
     @PostMapping("/vote/{postID}")
-    public ResponseEntity<?> vote(@PathVariable long postID, @RequestParam String type) {
+    public ResponseEntity<?> vote(@PathVariable long postID, @RequestBody String type) {
         long userId = getUser().getId();
 
         Post post = postService.getPostByID(postID);
@@ -162,24 +167,35 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post does not exist");
         }
 
-        Integer votes = post.getVoters().get(userId);
+        Vote vote = voteRepository.getVoteByVoterIDAndPostID(userId, postID);
+        if(vote == null) {
+            vote = new Vote(postID, userId, 0);
+        }
+        int previousVote = vote.getVoteValue();
         int voteValue;
 
         switch (type) {
             case "upvote":
-                voteValue = votes == null ? 1 : (votes == 1 ? -1 : (votes == 0 ? 1 : 2));
+                if(previousVote == 0 || previousVote == -1)
+                    voteValue = 1;
+                else
+                    voteValue = 0;
                 break;
             case "downvote":
-                voteValue = votes == null ? -1 : (votes == -1 ? 1 : (votes == 0 ? -1 : -2));
+                if(previousVote == 0 || previousVote == 1)
+                    voteValue = -1;
+                else
+                    voteValue = 0;
                 break;
             default:
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid vote type");
         }
 
-        post.getVoters().put(userId, Integer.compare(voteValue, 0));
-        post.setVotes(post.getVotes() + voteValue);
+        vote.setVoteValue(voteValue);
+        post.setVotes(post.getVotes() + (voteValue - previousVote));
         if(!postService.createOrSavePost(post))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Server could not save the post");
+        voteRepository.save(vote);
         return ResponseEntity.ok().build();
     }
 
