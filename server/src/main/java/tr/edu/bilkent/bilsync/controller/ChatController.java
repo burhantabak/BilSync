@@ -11,9 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.dto.ChatDto;
 import tr.edu.bilkent.bilsync.dto.ChatMessageDto;
-import tr.edu.bilkent.bilsync.entity.Chat;
-import tr.edu.bilkent.bilsync.entity.ChatMessage;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
+import tr.edu.bilkent.bilsync.repository.UserRepository;
 import tr.edu.bilkent.bilsync.service.ChatService;
 
 import java.util.List;
@@ -24,9 +23,12 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    private final UserRepository userRepository;
+
     @Autowired
-    public ChatController(ChatService chatService) {
+    public ChatController(ChatService chatService, UserRepository userRepository) {
         this.chatService = chatService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/create")
@@ -39,7 +41,13 @@ public class ChatController {
 
     @GetMapping("/chats")
     public ResponseEntity<List<ChatDto>> getUserChats(@AuthenticationPrincipal UserEntity currentUser) {
-        List<ChatDto> userChats = chatService.getChatsByUser(currentUser).stream().map(ChatDto::new).toList();
+        List<ChatDto> userChats = chatService.getChatsByUser(currentUser).stream().map(chat -> {
+            ChatDto chatDto = new ChatDto(chat);
+            Long otherUserId = chatDto.getUserIds().stream().filter(id -> id != currentUser.getId()).findFirst().orElseThrow(() -> new RuntimeException("Invalid chat"));
+            UserEntity otherUser = userRepository.findById(otherUserId).orElseThrow(() -> new RuntimeException("Invalid Chat"));
+            chatDto.setChatName(otherUser.getName());
+            return chatDto;
+        }).toList();
         return ResponseEntity.ok(userChats);
     }
 
@@ -47,19 +55,19 @@ public class ChatController {
     public ResponseEntity<String> inviteUsersToGroup(
             @PathVariable Long chatId,
             @RequestBody List<Long> inviteeIds,
-            @AuthenticationPrincipal UserEntity currentUser){
+            @AuthenticationPrincipal UserEntity currentUser) {
         chatService.inviteUsers(chatId, inviteeIds, currentUser);
         return ResponseEntity.ok("Invite sent successfully.");
     }
 
     @PostMapping("/{chatId}/sendMessage")
-    public ResponseEntity<String> sendMessageToChat(@PathVariable Long chatId, @RequestBody ChatMessageDto chatMessageDto, @AuthenticationPrincipal UserEntity currentUser){
+    public ResponseEntity<String> sendMessageToChat(@PathVariable Long chatId, @RequestBody ChatMessageDto chatMessageDto, @AuthenticationPrincipal UserEntity currentUser) {
         chatService.sendMessageToChat(chatId, chatMessageDto, currentUser);
         return ResponseEntity.ok("Message sent successfully.");
     }
 
     @GetMapping("/{chatId}")
-    public ResponseEntity<List<ChatMessageDto>> getMessages(@PathVariable Long chatId, @AuthenticationPrincipal UserEntity currentUser){
+    public ResponseEntity<List<ChatMessageDto>> getMessages(@PathVariable Long chatId, @AuthenticationPrincipal UserEntity currentUser) {
         List<ChatMessageDto> messages = chatService.getMessagesByChatId(chatId);
         return ResponseEntity.ok(messages);
     }
