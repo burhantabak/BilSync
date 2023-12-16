@@ -23,7 +23,9 @@ export async function uploadFileCall(file, user) {
   };
 export function getImage(imageName, user) {
     const imageUrl = `http://localhost:8080/file/fileSystem/${imageName}`;
-
+    if(!imageName){
+        return "";
+    }
     return fetch(imageUrl, {
         method: 'GET',
         headers: {

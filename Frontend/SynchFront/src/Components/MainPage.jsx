@@ -5,9 +5,9 @@ import ChatScreen from './ChatScreen.jsx';
 import { getChats } from '../calling/chatsCalling.jsx';
 
 export default function MainPage() {
-    const {postList,chatList,getThePosts,isPostsLoading,getTheChats} = useData();
+    const {postList,chatList,getThePosts,isPostsLoading,getTheChats,getTheUsers} = useData();
     console.log(isPostsLoading)
-    useEffect(()=> {getThePosts();getTheChats();}
+    useEffect(()=> {getThePosts();getTheChats();getTheUsers();}
         ,[]
     );
     const [filterTrading, setFilterTrading] = useState(true);
