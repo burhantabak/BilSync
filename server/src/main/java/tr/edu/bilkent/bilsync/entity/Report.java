@@ -46,7 +46,7 @@ public class Report {
         return reportedUserId;
     }
 
-    public void setReportedUserId(long reportedId) {
+    public void setReportedUserId(long reportedUserId) {
         this.reportedUserId = reportedUserId;
     }
 

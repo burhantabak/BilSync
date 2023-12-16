@@ -65,8 +65,10 @@ public class ReportController {
         if(user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User cannot be found");
         report.setReportType(ReportType.POST_REPORT);
         report.setReporterId(user.getId());
-        if(postService.getPostByID(report.getReportedEntityId()) == null)
+        Post post = postService.getPostByID(report.getReportedEntityId());
+        if(post == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post could not be found");
+        report.setReportedUserId(post.getAuthorID());
         return uploadValidReport(report, user);
     }
 
@@ -83,8 +85,10 @@ public class ReportController {
         if(user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User cannot be found");
         report.setReportType(ReportType.COMMENT_REPORT);
         report.setReporterId(user.getId());
-        if(commentService.getCommentByID(report.getReportedEntityId()) == null)
+        Comment comment = commentService.getCommentByID(report.getReportedEntityId());
+        if(comment == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Comment could not be found");
+        report.setReportedUserId(comment.getAuthorID());
         return uploadValidReport(report, user);
     }
 
