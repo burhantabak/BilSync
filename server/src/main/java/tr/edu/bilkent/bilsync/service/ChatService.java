@@ -122,7 +122,6 @@ public class ChatService {
         chatMessage.setChat(chat);
         Image image = new Image();
         image = imageRepository.save(image);
-        System.err.println(new File(".").getAbsolutePath());
         try{
             File file = new File(image.getPath());
             if(!file.createNewFile()){
