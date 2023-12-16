@@ -40,10 +40,11 @@ export const DataProvider = ({ children }) => {
       if(data >= 400){
         setUser(null);
       }
+
       getAllUsers(user).then((users)=>{
         console.log("usersssssssssssssss:");
   console.log(users);
-
+        console.log(data)
   const updatedPostList = matchUserID(users, data).map(async (post) => {
     // Fetch image for each post
     const imageData = await getImage(post.imageName, user);
@@ -70,7 +71,7 @@ export const DataProvider = ({ children }) => {
     });
   }
   const getTheChats = ()=>{
-    getChats(user).then(result=>{console.log("chatt");console.log(result);setChatList(result)});
+    getChats(user).then(result=>{if(result){console.log("chatt");console.log(result);setChatList(result)}});
   } 
   const logout = ()=>{
     setUser(null);
