@@ -21,29 +21,43 @@ export async function uploadFileCall(file, user) {
       throw new Error(`Error during file upload: ${error.message}`);
     });
   };
-  export function getImage(imageName, user){
-    const sentUrl = `http://localhost:8080/file/fileSystem/${imageName}`;
+export function getImage(imageName, user) {
+    const imageUrl = `http://localhost:8080/file/fileSystem/${imageName}`;
 
-  return fetch(sentUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${user.token}`
-    },
-  })
-  .then(response => {
-    console.log("finished fetch");
-    console.log(response);
+    return fetch(imageUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+        },
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.blob();
+            } else {
+                throw new Error(`Failed to fetch image. Status: ${response.status}`);
+            }
+        })
+        .then(blob => {
+            // Create a data URL from the blob
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        })
+        .then(dataUrl => {
+            // Display the image
+            const image = new Image();
+            image.src = dataUrl;
+            document.body.appendChild(image); // Append the image to the body or any other container
 
-    if (response.status === 200) {
-      return response.body.arrayBuffer();
-    }
-     else {
-      return response.status;
-    }
-  })
-  .catch(err => {
-    console.log("Error:", err);
-    throw err;
-  });
-  }
+            return dataUrl;
+        })
+        .catch(error => {
+            console.error('Error fetching image:', error);
+            throw error;
+        });
+}
+

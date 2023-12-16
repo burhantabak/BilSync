@@ -54,13 +54,13 @@ export default function TradingPostItem({post, isProfile}) {
       }
       const [imageSrc, setImageSrc] = useState(null);
       useEffect(() => {
-        const base64String = arrayBufferToBase64(post.imageData);
-        const fileExtension = getImageFileExtension(post.imageName);
+        // const base64String = arrayBufferToBase64(post.imageData);
+        // const fileExtension = getImageFileExtension(post.imageName);
         // Set the base64 string as the image source
-        var blob = new Blob([new Uint8Array(post.imageData)],{type:`image/fileExtension`})
+       // var blob = new Blob([new Uint8Array(post.imageData)],{type:`image/fileExtension`})
         
 
-        setImageSrc(URL.createObjectURL(blob));
+        setImageSrc(new Uint8Array(post.imageData));
       }, []);
       const getImageFileExtension = (imageName) => {
         const parts = imageName.split('.');
