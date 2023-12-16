@@ -13,7 +13,7 @@ export async function uploadFileCall(file, user) {
       if (response.ok) {
         return response.text();
       } else {
-        throw new Error('File upload failed');
+        return "not uploaded";
       }
     })
     .then(result=>{console.log(result);return result;})
