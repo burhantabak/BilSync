@@ -1,10 +1,22 @@
 import { ArrowLeftIcon } from '@heroicons/react/20/solid'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { getChatById } from '../calling/chatsCalling';
+import { useData } from '../Context/DataContext';
 export default function ChatScreen({chat,setSelectedChat}) {
-  if(!chat){
-    return <h1>loading chat...</h1>
-  }
-    const {messages,userName} = chat;
+  const {user} = useData();
+  
+  const [chatInfo, setChatInfo] = useState(null);
+  useEffect(
+    ()=>{
+      if(chat)
+      {
+        getChatById(chat.chatId,user).then(result=>{console.log("chatInfO:");console.log(result);setChatInfo(result)})
+      }
+    }
+    ,[chat])
+    if(!chat || !chatInfo){
+      return <h1>loading chat...</h1>
+    }
   return (
     <div className='flex flex-col w-full divide-y h-screen justify-around pb-3 '
     style = {{}}>
@@ -16,13 +28,13 @@ export default function ChatScreen({chat,setSelectedChat}) {
         <div className='flex justify-center gap-1 items-center'>
         <div className='rounded-full bg-gray-300 w-7 h-7 mr-3'></div>
           <div>
-            {userName}
+            {chat.chatName}
           </div>
         </div>
         <div></div>
         </div>
         <div className='flex-grow overflow-y-auto'>
-          <MessageScreen messages={messages}/>
+          <MessageScreen messages={chatInfo}/>
         </div>
         <div className='flex-grow-0'>
           <CreateChat/>
@@ -36,13 +48,14 @@ function MessageScreen({messages}){
   </div>)
 }
 function MessageItem({messageData}){
-  const {message,isReceived} = messageData;
-
+  const {body,senderId} = messageData;
+    const {user} = useData();
+    const isReceived = senderId == user.userId; 
     return(
       <div className={`flex ${isReceived || "flex-row-reverse"} py-2 gap-2`}>
         <div className='h-8 w-8 rounded-full bg-gray-400'></div>
         <div className={`max-w-md ${isReceived ? "bg-gray-400":"bg-primary-400"} text-white p-3 rounded-3xl`}>
-            <p>{message}</p>
+            <p>{body}</p>
         </div>
       </div>
     )

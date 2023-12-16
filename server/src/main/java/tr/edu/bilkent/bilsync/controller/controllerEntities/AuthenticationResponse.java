@@ -11,8 +11,10 @@ public class AuthenticationResponse {
     public String email;
     @JsonProperty("isAdmin")
     public boolean isAdmin;
-
-    public AuthenticationResponse(String token, String name, String email, boolean isAdmin){
+    @JsonProperty("userId")
+    public long userId;
+    public AuthenticationResponse(String token, String name, String email, boolean isAdmin, long userId){
+        this.userId = userId;
         this.token = token;
         this.name = name;
         this.email = email;

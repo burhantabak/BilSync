@@ -32,7 +32,23 @@ export default function BorrowForm() {
     let imageName = "";
     if(imageFile)
     {
-        uploadFileCall(imageFile,user).then((name)=>{imageName = name});
+        uploadFileCall(imageFile,user).then((name)=>{
+            const borrowPost = {
+                title: title,
+                description: description,
+                imageName: imageName ? imageName : "",
+                startDate:startDate.toISOString(),
+                tags: hashtags,
+                endDate:endDate.toISOString(),
+            };
+        
+            // Debugging: Log the post object
+            console.log("Post object:", borrowPost);
+    
+            createDonationPost(borrowPost,user).then((result) => {
+                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+            });
+        });
     }
     if(imageName !== "not uploaded")
         {const borrowPost = {
