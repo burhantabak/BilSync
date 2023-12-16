@@ -10,13 +10,13 @@ export default function DateInput({title, handleInput}) {
       <DatePicker
       showIcon
       selected={startDate}
-      onChange={(date) => setStartDate(date)}
+      onChange={(date) => {console.log(date);setStartDate(date)}}
     />
     <span className='font-semibold mx-5'>to</span>
     <DatePicker
       showIcon
       selected={endDate}
-      onChange={(date) => setEndDate(date)}
+      onChange={(date) => {console.log(date);setEndDate(date)}}
     />
     </div>
   );
