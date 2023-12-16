@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { useData } from '../Context/DataContext';
-
+import commentReportCall from '../calling/commentReportCall';
 export default function CommentComponent({commentList}){
   console.log('commentList:', commentList);
   const {user} = useData();
@@ -34,6 +34,7 @@ export default function CommentComponent({commentList}){
             isReplyComment={comment.isReply}
             commenterName={comment.userName} 
             commenterText={comment.text} 
+            commentId = {comment.id}
             likeNo={comment.likeNo}
             setShowReportBox={setShowReportBox}
             showReportBox={showReportBox}
@@ -46,7 +47,7 @@ export default function CommentComponent({commentList}){
       </Disclosure>
     )
   }
-function CommentItem({isReplyComment, commenterName, commenterText,likeNo,handleReportClick,showReportBox,setShowReportBox,setReportReason,reportReason}){
+function CommentItem({isReplyComment, commenterName, commenterText,likeNo,handleReportClick,showReportBox,setShowReportBox,setReportReason,reportReason, commentId}){
   
   // const [showReportBox, setShowReportBox] = useState(false);
 
@@ -95,12 +96,13 @@ function CommentItem({isReplyComment, commenterName, commenterText,likeNo,handle
               setShowReportBox={setShowReportBox}
               reportReason={reportReason}
               setReportReason={setReportReason}
+              commentId = {commentId}
                   />
         </div>
     );
 }
 
-function PostInteraction({ isStarred, setStarred, postId,showReportBox,setShowReportBox ,reportReason,setReportReason}) {
+function PostInteraction({ isStarred, setStarred, postId,showReportBox,setShowReportBox ,reportReason,setReportReason, commentId}) {
 
   const { user } = useData();
 
@@ -108,6 +110,19 @@ function PostInteraction({ isStarred, setStarred, postId,showReportBox,setShowRe
 
   const handleReportSubmit = () => {
     console.log('Report submitted with reason:', reportReason);
+    console.log(reportReason);
+    console.log("Comment ID", commentId);
+    console.log("Comment reason report", reportReason);
+
+    // Call  reporting function with post ID
+    commentReportCall(reportReason, user, commentId)
+      .then(() => {
+        console.log('Report submitted successfully.');
+      })
+      .catch((error) => {
+        console.error('Error submitting report:', error);
+      });
+
     // Reset state after submission
     setShowReportBox(false);
     setReportReason('');
