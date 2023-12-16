@@ -36,7 +36,7 @@ export async function uploadFileCall(file, user) {
     console.log(response);
 
     if (response.status === 200) {
-      return response.arrayBuffer();
+      return response.body.arrayBuffer();
     }
      else {
       return response.status;
