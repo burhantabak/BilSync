@@ -22,4 +22,5 @@ export default async function getAllUsers(user) {
       throw error; // Rethrow the error for the calling code to handle
     }
   }
+
   

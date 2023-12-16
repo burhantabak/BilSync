@@ -8,7 +8,9 @@ export default function ChatScreen({chat,setSelectedChat}) {
   const [chatInfo, setChatInfo] = useState(null);
   function sendMessageHandler(){
     if(chatBody !== ""){
-      sendMessage(chat.chatId,chatBody,user,()=>{getChatById(chat.chatId,user).then(result=>{console.log("chatInfO:");console.log(result);setChatInfo(result)})});
+      sendMessage(chat.chatId,chatBody,user,()=>{
+        getChatById(chat.chatId,user).then(result=>{console.log("chatInfO:");console.log(result);setChatInfo(result);setChatBody("")});
+    });
     }
   }
   useEffect(

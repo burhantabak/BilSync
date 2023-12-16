@@ -31,7 +31,26 @@ export const DataProvider = ({ children }) => {
   }
   const getTheUsers =async ()=>{
     console.log("get the users");
-    await getAllUsers(user).then(users=>{setAllUsers(users);console.log(allUsers);});
+    await getAllUsers(user).then(users=>{
+      const imagedUserList = users.map(async (user)=>{
+        const imageData = await getImage(users.profileImage,user);
+        return {...user, imageData};
+      })
+
+      Promise.all(imagedUserList).then(
+        (imagedUsers)=>{
+          setAllUsers(imagedUsers)
+          console.log("images with users")
+          console.log(imagedUsers);
+          const registeredUser = imagedUsers.find((claimedUser)=>claimedUser.id==user.userId)
+          console.log(registeredUser)
+          console.log(user.userId)
+          if(registeredUser){setUser({...user,profileImageName: registeredUser.profileImageName,
+             imageData: registeredUser.imageData, bio:registeredUser.bio})
+             console.log(user)}
+        }
+      )
+    });
   }
   const getThePosts = ()=>{
     setIsPostsLoading(true);
@@ -57,8 +76,6 @@ export const DataProvider = ({ children }) => {
   Promise.all(updatedPostList)
     .then((postsWithImages) => {
       // Set the updated post list with image data
-      setPostList(postsWithImages);
-      console.log("images with posts")
       console.log(postsWithImages);
     })
     .catch((error) => {

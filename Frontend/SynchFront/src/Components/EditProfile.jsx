@@ -22,11 +22,8 @@
 
     /* Tuna im considering case where data was not fetched in that stage therefore i use effect to see wheres the problem and why data is not fetched but there is something wrong check console   */
     useEffect(() => { /* */ 
-      if (postList.length == 0) {
-        getThePosts(user); // Trigger data fetching
-        console.log("Size is 0 something is wrong with the datacontext");
-      }
-    }, [postList.length, isPostsLoading, user]); // Update useEffect dependencies
+      getThePosts()
+    }, [user]); // Update useEffect dependencies
 
     useEffect(() => {
       if (postList.length) { // Only run if posts are fetched
