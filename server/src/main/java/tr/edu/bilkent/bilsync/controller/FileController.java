@@ -27,7 +27,7 @@ public class FileController {
         String fileName = fileService.uploadFile(file);
         if(fileName != null) {
             FileData fileData = fileService.findByName(fileName);
-            return ResponseEntity.ok().body(fileData.getFilePath());
+            return ResponseEntity.ok().body(fileData.getName());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FILE_COULD_NOT_BE_SAVED");
     }
