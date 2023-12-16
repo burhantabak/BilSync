@@ -120,15 +120,17 @@ public class ChatService {
         chatMessage.setBody(chatMessageDto.getBody());
         chatMessage.setDate(new Date());
         chatMessage.setChat(chat);
-        Image image = new Image();
-        image = imageRepository.save(image);
-        try{
-            Files.write(Paths.get(image.getPath()), chatMessageDto.getImage());
-        } catch (IOException e) {
-            imageRepository.delete(image);
-            throw new RuntimeException(e);
+        byte[] dtoImage = chatMessageDto.getImage();
+        if (dtoImage != null) {
+            Image image = imageRepository.save(new Image());
+            try {
+                Files.write(Paths.get(image.getPath()), dtoImage);
+            } catch (IOException e) {
+                imageRepository.delete(image);
+                throw new RuntimeException(e);
+            }
+            chatMessage.setImage(image);
         }
-        chatMessage.setImage(image);
         return new ChatMessageDto(chatMessageRepository.save(chatMessage));
     }
 
