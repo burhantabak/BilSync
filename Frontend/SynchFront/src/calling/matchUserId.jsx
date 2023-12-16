@@ -27,5 +27,5 @@ export default function matchUserID(userList,postList){
         });
         return updatedPostList;
     }
-    return null;
+    return [];
 }

@@ -50,3 +50,27 @@ export function getChatById(chatId, user){
     throw err;
   });
 }
+export function sendMessage(chatId,messageBody, user,refreshChat){
+    var raw = JSON.stringify({
+    "body": messageBody
+    });
+    console.log(raw)
+    var requestOptions = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
+      },
+    body: raw,
+    };
+
+    return fetch(`http://localhost:8080/chat/${chatId}/sendMessage`, requestOptions)
+    .then(response => {
+        return response;
+    })
+    .then((result) => {
+        refreshChat(); // Update the commentList in your component state
+
+    })
+    .catch(error => console.log('error state: ', error));
+}
