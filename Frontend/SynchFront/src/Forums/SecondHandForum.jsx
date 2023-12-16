@@ -4,6 +4,7 @@ import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
 import { createTradingPost } from '../calling/postCreationCalling';
 import { useData } from '../Context/DataContext';
+import { uploadFileCall } from '../calling/imageCalling';
 export default function SecondHandForum() {
     const [title, setTitle] = useState("");
     const [isSubmitted, setIsCompleted] = useState(false);
@@ -26,6 +27,10 @@ export default function SecondHandForum() {
       };
       const handlePostCreation = (event) => {
         event.preventDefault();
+        if(imageFile)
+        {
+            console.log(uploadFileCall(imageFile,user));
+        }
         const post = {
             title: title,
             description: description,
