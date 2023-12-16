@@ -11,7 +11,7 @@ export async function uploadFileCall(file, user) {
   })
     .then((response) => {
       if (response.ok) {
-        return getImageName(response.text());
+        return response.text();
       } else {
         throw new Error('File upload failed');
       }
