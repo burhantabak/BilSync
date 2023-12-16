@@ -20,9 +20,9 @@ public class ChatMessageDto {
 
     private String body;
 
-    private String image;
+    private byte[] image;
 
-    public ChatMessageDto(Long messageId, Long senderId, Long chatId, Date date, String body, String image) {
+    public ChatMessageDto(Long messageId, Long senderId, Long chatId, Date date, String body, byte[] image) {
         this.messageId = messageId;
         this.senderId = senderId;
         this.chatId = chatId;
@@ -44,7 +44,7 @@ public class ChatMessageDto {
     public ChatMessageDto(ChatMessage chatMessage){
         this(chatMessage.getId(), chatMessage.getSender().getId(), chatMessage.getChat().getId(), chatMessage.getDate(), chatMessage.getBody());
         try {
-            this.image = Base64.getEncoder().encodeToString(Files.readAllBytes(Paths.get(chatMessage.getImage().getPath())));
+            this.image = Files.readAllBytes(Paths.get(chatMessage.getImage().getPath()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -89,11 +89,11 @@ public class ChatMessageDto {
         this.body = body;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 }
