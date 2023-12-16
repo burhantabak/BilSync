@@ -123,11 +123,6 @@ public class ChatService {
         Image image = new Image();
         image = imageRepository.save(image);
         try{
-            File file = new File(image.getPath());
-            if(!file.createNewFile()){
-                throw new RuntimeException("File already exists");
-            }
-
             Files.write(Paths.get(image.getPath()), chatMessageDto.getImage());
         } catch (IOException e) {
             imageRepository.delete(image);
