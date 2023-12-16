@@ -1,10 +1,10 @@
 package tr.edu.bilkent.bilsync.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.dto.UserEntityDto;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
@@ -58,6 +58,29 @@ public class UserController {
     public String userProfile() {
         return "Welcome to User Profile";
     }
+
+    @CrossOrigin
+    @GetMapping("/user/editProfile")
+    @PreAuthorize(value = "hasAuthority('ROLE_USER')")
+    public ResponseEntity<?> editUserProfile(@AuthenticationPrincipal UserEntity currentUser,
+                                             @RequestParam(required = false) String bio,
+                                             @RequestParam(required = false) String profileImageName) {
+        try {
+            if (bio != null) {
+                currentUser.setBio(bio);
+            }
+
+            if (profileImageName != null) {
+                currentUser.setProfileImageName(profileImageName);
+            }
+            repo.save(currentUser);
+
+            return ResponseEntity.ok("Profile updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update user profile");
+        }
+    }
+    //todo create endpoint for profile viewing
 
     @CrossOrigin
     @GetMapping("/admin/adminProfile")
