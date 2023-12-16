@@ -67,7 +67,7 @@ public class ReportController {
         report.setReporterId(user.getId());
         if(postService.getPostByID(report.getReportedEntityId()) == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post could not be found");
-        return uploadValidReport(report);
+        return uploadValidReport(report, user);
     }
 
     /**
@@ -85,7 +85,7 @@ public class ReportController {
         report.setReporterId(user.getId());
         if(commentService.getCommentByID(report.getReportedEntityId()) == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Comment could not be found");
-        return uploadValidReport(report);
+        return uploadValidReport(report, user);
     }
 
     /**
@@ -94,7 +94,9 @@ public class ReportController {
      * @param report The Report object to be validated and uploaded.
      * @return A ResponseEntity with a status code and a message.
      */
-    private ResponseEntity<?> uploadValidReport(Report report) {
+    private ResponseEntity<?> uploadValidReport(Report report, UserEntity user) {
+        if(user.getId() == report.getReportedUserId())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot report yourself");
         if(report.getDescription().length() < 10)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report description must be longer than 10 characters");
         if(report.getDescription().length() > 1000)
