@@ -1,7 +1,9 @@
   import React from 'react'
   import { useState } from 'react';
   import CreateComment from '../calling/commentCalling';
-import { useData } from '../Context/DataContext';
+  import { useData } from '../Context/DataContext';
+  import reportPostCalling from '../calling/reportsCalling';
+
   export default function CommentCreate({isUpvote, setUpvote,isDownvote , setDownvote, vote, postId, handlePostCreation,commentList}) {
     const [commentInput, setCommentInput] = useState("");
     const {user} = useData();
@@ -59,23 +61,34 @@ import { useData } from '../Context/DataContext';
                       </button>
                   </div>
               </div>
-              <PostInteraction/>
+              <PostInteraction postId={postId}/>
           </div>
     )
   }
-  function PostInteraction({isStarred,setStarred}){
+  function PostInteraction({isStarred,setStarred, postId}){
 
     const [showReportBox, setShowReportBox] = useState(false);
     const [reportReason, setReportReason] = useState('');
+    const {user} = useData();
+
 
     const handleReportClick = () => {
       setShowReportBox(true);
       console.log("Report clicked")
     };
-
     const handleReportSubmit = () => {
       console.log('Report submitted with reason:', reportReason);
-
+      console.log(reportReason);
+      console.log("POST ID", postId);
+      // Call  reporting function with post ID
+      reportPostCalling(reportReason, user, postId)
+        .then(() => {
+          console.log('Report submitted successfully.');
+        })
+        .catch((error) => {
+          console.error('Error submitting report:', error);
+        });
+  
       // Reset state after submission
       setShowReportBox(false);
       setReportReason('');
