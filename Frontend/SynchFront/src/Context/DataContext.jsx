@@ -32,9 +32,9 @@ export const DataProvider = ({ children }) => {
   const getTheUsers =async ()=>{
     console.log("get the users");
     await getAllUsers(user).then(users=>{
-      const imagedUserList = users.map(async (user)=>{
-        const imageData = await getImage(user.profileImageName,user);
-        return {...user, imageData};
+      const imagedUserList = users.map(async (userItem)=>{
+        const imageData = await getImage(userItem.profileImageName,user);
+        return {...userItem, imageData};
       })
 
       Promise.all(imagedUserList).then(
@@ -43,6 +43,7 @@ export const DataProvider = ({ children }) => {
           console.log("images with users")
           console.log(imagedUsers);
           const registeredUser = imagedUsers.find((claimedUser)=>claimedUser.id==user.userId)
+          console.log(registeredUser)
           console.log(registeredUser)
           console.log(user.userId)
           if(registeredUser){setUser({...user,profileImageName: registeredUser.profileImageName,

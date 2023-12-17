@@ -22,9 +22,9 @@ export async function uploadFileCall(file, user) {
     });
   };
 export function getImage(imageName, user) {
-  console.log("imageımı alayım lütfen" + imageName)
+  // console.log("imageımı alayım lütfen" + imageName)
     const imageUrl = `http://localhost:8080/file/${imageName}`;
-    if(!imageName){
+    if(!imageName || (imageName==="OUR_DEFAULT_IMAGE_PATH")){
         return "";
     }
     return fetch(imageUrl, {
