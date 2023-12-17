@@ -10,7 +10,13 @@ const MyTransactionPage = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [alreadyApproved, setAlreadyApproved] = useState({});
 
+  useEffect(() => {
+    // Call getThePosts only once when the component mounts
+    getThePosts();
+  }, []); // Empty depende
   const navigate = useNavigate();
+  const {postList} = useData();
+  console.log(postList);
 
   const handleApprove = async (transactionId) => {
     try {
@@ -62,6 +68,7 @@ const MyTransactionPage = () => {
             <div className="flex flex-col">
               <span className="text-lg font-medium">{transaction.title}</span>
               <span className="text-sm text-gray-500">Status: {transaction.status}</span>
+              <span className="text-sm text-gray-500">Post Title: {postList.find((post) => post.id === transaction.postId)?.title}</span>
             </div>
             <div className="flex flex-row space-x-2">
               {transaction.takerId === user.userId && transaction.status !== 'DEPOSITED' && (
