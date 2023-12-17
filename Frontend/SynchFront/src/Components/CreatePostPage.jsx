@@ -9,7 +9,7 @@ import BorrowForm from '../Forums/BorrowForm';
 
 export default function CreatePost() {
   const [selectedForm, setSelectedForm] = useState("Second Hand");
-  const categories = {"Trading":["Second Hand","Borrowing","Donation","Section Exchange"],"Lost&Found":[],"Forum":["Basic Forum","Announcement"]}
+  const categories = {"Trading":["Second Hand","Borrowing","Donation","Section Exchange"],"Lost&Found":[],"Forum":["Basic Forum"]}
   return (
     <div className='w-full flex divide-x mt-5'>
         <div className='w-1/4 divide-y flex flex-col items-center'>
