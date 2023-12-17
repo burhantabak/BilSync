@@ -23,6 +23,7 @@ import java.util.function.Supplier;
  * 3.2- else transaction in REFUNDED state (unsuccessful ending)
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/transactions")
 public class TransactionController {
 
@@ -107,7 +108,8 @@ public class TransactionController {
      * @param currentUser The current user
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#PENDING_TAKER_APPROVAL}.
      */
-    @PutMapping("update/giverApproved/{id}")
+    @CrossOrigin
+    @PostMapping("update/giverApproved/{id}")
     public ResponseEntity<?> updateTransactionToGiverApproved(@PathVariable Long id, @AuthenticationPrincipal UserEntity currentUser) {
         return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, currentUser.getId(), TransactionState.PENDING_TAKER_APPROVAL));
     }
@@ -119,7 +121,8 @@ public class TransactionController {
      *  @param currentUser The current user
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#DEPOSITED}.
      */
-    @PutMapping("update/takerApproved/{id}")
+   @CrossOrigin
+    @PostMapping("update/takerApproved/{id}")
     public ResponseEntity<?> updateTransactionToTakerApproved(@PathVariable Long id, @AuthenticationPrincipal UserEntity currentUser) {
         return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, currentUser.getId(), TransactionState.DEPOSITED));
     }

@@ -18,6 +18,7 @@ const MyTransactionPage = () => {
         } else if (user.userId === transactions.find((t) => t.id === transactionId)?.giverId) {
           // Approve as Giver
           await approveTransaction(user, transactionId);
+          console.log("Approved as Giver");
         }
 
         // Refresh posts after approval
