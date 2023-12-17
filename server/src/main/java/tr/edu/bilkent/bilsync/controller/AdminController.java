@@ -10,12 +10,20 @@ import tr.edu.bilkent.bilsync.exception.EmailAlreadyExistsException;
 import tr.edu.bilkent.bilsync.exception.UserIsBannedException;
 import tr.edu.bilkent.bilsync.service.UserInfoService;
 
+/**
+ * Controller class for handling admin-related operations on users.
+ */
 @RestController
 @RequestMapping("/admin/users")
 public class AdminController {
 
     private final UserInfoService userInfoService;
 
+    /**
+     * Constructor for the AdminController class.
+     *
+     * @param userInfoService The service responsible for handling user-related operations.
+     */
     @Autowired
     public AdminController(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;

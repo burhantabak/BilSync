@@ -11,6 +11,9 @@ import tr.edu.bilkent.bilsync.service.FileService;
 
 import java.io.IOException;
 
+/**
+ * Controller class for handling file-related operations.
+ */
 @RestController
 @RequestMapping("/file")
 public class FileController {

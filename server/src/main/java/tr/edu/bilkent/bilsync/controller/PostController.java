@@ -18,6 +18,9 @@ import java.time.Instant;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
+/**
+ * Controller class for handling post-related operations.
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/post")

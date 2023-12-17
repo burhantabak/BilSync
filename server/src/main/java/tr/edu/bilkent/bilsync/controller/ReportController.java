@@ -15,7 +15,6 @@ import tr.edu.bilkent.bilsync.entity.ReportType;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.exception.NoRecordFoundException;
 import tr.edu.bilkent.bilsync.exception.UserIsBannedException;
-import tr.edu.bilkent.bilsync.service.AuthService;
 import tr.edu.bilkent.bilsync.service.CommentService;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 import tr.edu.bilkent.bilsync.service.ReportService;

@@ -10,6 +10,9 @@ import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Date;
 
+/**
+ * Data Transfer Object (DTO) representing a chat message. Used for transferring chat message information between the server and the client.
+ */
 public class ChatMessageDto {
     private Long messageId;
 
@@ -23,6 +26,16 @@ public class ChatMessageDto {
 
     private byte[] image;
 
+    /**
+     * Constructor for creating a ChatMessageDto with specified values.
+     *
+     * @param messageId The unique identifier of the chat message.
+     * @param senderId  The ID of the user who sent the message.
+     * @param chatId    The ID of the chat associated with the message.
+     * @param date      The date and time when the message was sent.
+     * @param body      The content of the message.
+     * @param image     The image associated with the message as a byte array.
+     */
     public ChatMessageDto(Long messageId, Long senderId, Long chatId, Date date, String body, byte[] image) {
         this.messageId = messageId;
         this.senderId = senderId;
@@ -32,9 +45,21 @@ public class ChatMessageDto {
         this.image = image;
     }
 
+    /**
+     * Default constructor for creating an empty ChatMessageDto.
+     */
     public ChatMessageDto() {
     }
 
+    /**
+     * Constructor for creating a ChatMessageDto with specified values.
+     *
+     * @param messageId The unique identifier of the chat message.
+     * @param senderId  The ID of the user who sent the message.
+     * @param chatId    The ID of the chat associated with the message.
+     * @param date      The date and time when the message was sent.
+     * @param body      The content of the message.
+     */
     public ChatMessageDto(Long messageId, Long senderId, Long chatId, Date date, String body) {
         this.messageId = messageId;
         this.senderId = senderId;
@@ -43,6 +68,11 @@ public class ChatMessageDto {
         this.body = body;
     }
 
+    /**
+     * Constructor for creating a ChatMessageDto from a ChatMessage entity.
+     *
+     * @param chatMessage The ChatMessage entity from which to create the ChatMessageDto.
+     */
     public ChatMessageDto(ChatMessage chatMessage) {
         this(chatMessage.getId(), chatMessage.getSender().getId(), chatMessage.getChat().getId(), chatMessage.getDate(), chatMessage.getBody());
         Image i = chatMessage.getImage();
