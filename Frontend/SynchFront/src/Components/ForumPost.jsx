@@ -5,7 +5,7 @@ import formatDate, { formatTime } from './HelperFunctions/DateFormat';
 
 
 export default function ForumPost({post,isLostnFound, isAnynomous}) {
-    if(post){
+    if(!post){
         return <h1>loading</h1>
     }
     console.log("entered Forum Post");
