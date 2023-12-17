@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import FeedPage from './FeedPage';
 import { useData } from '../Context/DataContext';
 import ChatScreen from './ChatScreen.jsx';
-import { getChats } from '../calling/chatsCalling.jsx';
+import { createChat, getChats } from '../calling/chatsCalling.jsx';
 
 export default function MainPage() {
-    const {postList,chatList,getThePosts,isPostsLoading,getTheChats,getTheUsers} = useData();
+    const {postList,chatList,getThePosts,isPostsLoading,getTheChats,getTheUsers,allUsers} = useData();
     console.log(isPostsLoading)
     useEffect(()=> {getThePosts();getTheChats();getTheUsers();}
         ,[]
@@ -80,7 +80,7 @@ export default function MainPage() {
             {Array.isArray(chatList) && chatList.filter((chat) => chat.chatName.toLowerCase().includes(searchInput.toLowerCase())
             ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)}
         </div>
-        <CreateChatModal setIsCreateChatSelected={setIsCreateChatSelected} 
+        <CreateChatModal setIsCreateChatSelected={setIsCreateChatSelected} allUsers={allUsers}
         isChatSelected={isCreateChatSelected} selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers}/>
     </div>
   )
@@ -104,26 +104,27 @@ function ChatItem({chat,handleChat}){
         </div>
     );
 }
-function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsCreateChatSelected}){
-    const {allUsers} = useData();
-    console.log(allUsers)
+function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsCreateChatSelected,allUsers}){
+    const {user} = useData();
     const removeUser = (indexToRemove) => {
         setSelectedUsers([...selectedUsers.filter((_, index) => index !== indexToRemove)]);
       };
     
-      const addUser = (name) => {
-        console.log("adding")
-        console.log(name)
-        if (name !== "") {
-          if(!(selectedUsers.find((value)=>name === value)))
+      const addUser = (event) => {
+        if (event.target.value !== "") {
+          if(!(selectedUsers.find((value)=>event.target.value === value)))
           {
-            setSelectedUsers([...selectedUsers, name]);
+            setSelectedUsers([...selectedUsers, event.target.value]);
+            setIsFocused(false);
             setNameInput("");
           }
         }
       };
+      const [groupName,setGroupName] = useState("");
       const [nameInput, setNameInput] = useState("");
       const [isFocused, setIsFocused] = useState(false);
+      const [errorMessage,setErrorMessage] = useState("");
+      const [submitMessage,setSubmitMessage] = useState("");
       const searchResult = allUsers.filter((userItem)=>userItem.name.match(nameInput))
     return(
         <div>
@@ -137,27 +138,27 @@ function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsC
                   </svg>
                   </button>
               </div>
-              <div className='flex mb-2 justify-center font-bold'><h1>Create Chat</h1></div>
-             <div className='flex mb-5 items-center'>
-            <label htmlFor="" className='w-28 font-semibold'> AddUser: </label>
-            <div>
+              <div className='flex justify-center font-bold mb-2 '><h1>Create Chat</h1></div>
+             <div className='flex items-center mb-2'>
+            <label htmlFor="" className='w-28 font-semibold mb-2'> AddUser: </label>
+            <div className='w-full'>
             <input
             name='hashtag'
             type="text"
             value={nameInput}
             onFocus={()=>setIsFocused(true)}
+            onKeyUp={(event) => (event.key === "Enter" ? addUser(event) : setIsFocused(true))}
             onBlur={()=>setIsFocused(false)}
             onChange={(event)=>setNameInput(event.target.value)}
-            placeholder="Press enter to add tags"
+            placeholder="Press enter the users by their names"
             className="bg-gray-50 border border-gray-300
             text-gray-900 sm:text-sm rounded-lg focus:outline focus:outline-2
             focus:border-sky-500 block w-full p-2.5 px-3"
             />
             <div className='border absolute z-20 bg-slate-50 rounded-lg'>
-            {isFocused && searchResult.map((result=><div key={result.id}className='hover:bg-slate-400 px-1 py-1 text-center'>
-                <button onClick={()=>{console.log("result");addUser(result.name);setIsFocused(false)}}>
-                    {result.name}
-                </button>
+            {isFocused && searchResult.map((result=><div key={result.id}
+            className='hover:bg-slate-400 px-1 py-1 text-center'>
+                {result.name}
                 </div>))}
             </div>
             </div>
@@ -183,14 +184,13 @@ function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsC
             <input
             name='hashtag'
             type="text"
-            onKeyUp={(event) => (event.key === "Enter" ? addUser(event) : null)}
             placeholder="Press enter to add tags"
             className="bg-gray-50 border border-gray-300
             text-gray-900 sm:text-sm rounded-lg focus:outline focus:outline-2
             focus:border-sky-500 block w-full p-2.5 px-3"
             />
             </div>}
-            <button type="submit" onClick={(event)=>handlePostCreation(event)}
+            <button type="submit" onClick={()=>{createChat(allUsers,selectedUsers,groupName,user).then(response=>{response.status===200? getChats():null})}}
             className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 
             focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 
             text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
