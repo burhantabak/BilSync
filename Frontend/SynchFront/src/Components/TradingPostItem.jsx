@@ -29,8 +29,24 @@ export default function TradingPostItem({post, isProfile}) {
 
     
 
+      const handleBuyClick2 = () => {
+        // Navigate to the TransactionPage with the post id
+        createTransaction(
+            post.id, user
+            // Add other necessary data
+          ).then((response) => {
+            console.log(response)
+            console.log("SPAM", response);
+          }).catch((error) => {
+            // Handle the case where the transaction failed
+          });
+        }
+
     const handleBuyClick = () => {
         // Navigate to the TransactionPage with the post id
+        if(post.postType === 2 || post.postType === 1 || post.postType === 3){
+          handleBuyClick2();
+        }
         createTransaction(
             post.id, user
             // Add other necessary data
@@ -39,12 +55,15 @@ export default function TradingPostItem({post, isProfile}) {
             handleBuyNow(post.id);
             console.log(response)
             setIsSold(true); // Set isSold to true when the item is sold
-            post.postType===2 && navigate("/myTransactions")
           }).catch((error) => {
             // Handle the case where the transaction failed
           });
+
         
+          
+
         if(post.postType!==2){navigate(`/transaction/${post.id}`, );}
+        else{navigate('/myTransactions')}
       };
       
   return (
