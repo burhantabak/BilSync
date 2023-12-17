@@ -2,6 +2,10 @@ package tr.edu.bilkent.bilsync.entity.PostEntities;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents a trading post entity, serving as the base class for posts involving exchanges.
+ * This class is annotated with JPA annotations for entity mapping and uses the TABLE_PER_CLASS inheritance strategy.
+ */
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

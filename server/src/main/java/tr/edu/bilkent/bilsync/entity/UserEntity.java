@@ -14,6 +14,11 @@ import tr.edu.bilkent.bilsync.dto.UserDto;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * The UserEntity class represents a user entity in the application.
+ * It implements the UserDetails interface to integrate with Spring Security.
+ * This class is annotated with JPA annotations for entity mapping.
+ */
 @Entity
 @Table(name = "app_user")
 public class UserEntity implements UserDetails {
@@ -61,9 +66,19 @@ public class UserEntity implements UserDetails {
     public void setBanned(boolean banned) {
         isBanned = banned;
     }
-    // Constructors
+
+    /**
+     * Default constructor for UserEntity.
+     */
     public UserEntity() {}
 
+    /**
+     * Constructor to create a UserEntity with specified email, password, and name.
+     *
+     * @param email    The user's email address.
+     * @param password The user's password.
+     * @param name     The user's name.
+     */
     public UserEntity(String email, String password, String name) {
         this.password = password;
         this.name = name;
@@ -71,6 +86,11 @@ public class UserEntity implements UserDetails {
         this.isBanned=false;
     }
 
+    /**
+     * Constructor to create a UserEntity from a UserDto.
+     *
+     * @param dto The UserDto containing user information.
+     */
     public UserEntity(UserDto dto)
     {
         this.isBanned=false;

@@ -7,6 +7,10 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
 
+/**
+ * Represents a generic post entity, serving as the base class for various post types.
+ * This class is annotated with JPA annotations for entity mapping and uses the TABLE_PER_CLASS inheritance strategy.
+ */
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -64,7 +68,9 @@ public class Post {
     @Column(nullable = false)
     private byte postType;
 
-    // Constructors
+    /**
+     * Default constructor for Post.
+     */
     public Post() {
     }
 
