@@ -72,6 +72,21 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/{userId}/unban")
+    public ResponseEntity<String> unbanUser(@PathVariable long userId) {
+        try {
+            userInfoService.unbanUser(userId);
+            return ResponseEntity.status(HttpStatus.OK).body("User unbanned successfully");
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not currently banned");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+
+
 
     /**
      * Adds a new user based on the provided UserDto.
