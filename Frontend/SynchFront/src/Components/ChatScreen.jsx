@@ -24,7 +24,7 @@ export default function ChatScreen({chat,setSelectedChat}) {
   useEffect(()=>{
     const pollingInterval = 2500;
     const pollingId = setInterval(()=>{
-      getChatById(chat.chatId,user).then(result=>{console.log(result);setChatInfo(result)});
+      if(chat){getChatById(chat.chatId,user).then(result=>{setChatInfo(result)});}
       return ()=>clearInterval(pollingId);
     },pollingInterval)
   },[])

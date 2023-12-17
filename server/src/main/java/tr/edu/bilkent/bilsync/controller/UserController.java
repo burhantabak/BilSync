@@ -61,8 +61,7 @@ public class UserController {
     }
 
     @CrossOrigin
-    @GetMapping("/user/editProfile")
-    @PreAuthorize(value = "hasAuthority('ROLE_USER')")
+    @PostMapping("/user/editProfile")
     public ResponseEntity<?> editUserProfile(@AuthenticationPrincipal UserEntity currentUser,
                                              @RequestParam(required = false) String bio,
                                              @RequestParam(required = false) String profileImageName) {
