@@ -49,13 +49,14 @@ public class FileController {
      * @return ResponseEntity with the file data as bytes and appropriate content type.
      * @throws IOException If an I/O exception occurs during file download.
      */
-    @GetMapping("/fileSystem/{fileName}")
+    @GetMapping("/{fileName}")
     public ResponseEntity<?> downloadFileAsImage(@PathVariable String fileName) throws IOException {
-        byte[] fileData = fileService.downloadFile(fileName);
+        FileData fileData = fileService.findByName(fileName);
+        byte[] file = fileService.downloadFile(fileName);
         if(fileData == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FILE_DATA_IS_NULL");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File could not be loaded");
         return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
-                .body(fileData);
+                .contentType(MediaType.valueOf(fileData.getType()))
+                .body(file);
     }
 }

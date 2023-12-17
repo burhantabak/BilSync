@@ -16,22 +16,23 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    UserRepository repo;
+    UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
-        this.repo = userRepository;
+        this.userRepository = userRepository;
     }
+
     @CrossOrigin
     @GetMapping("/users")
     public Iterable<UserEntity> listUsers(){
-        Iterable<UserEntity> users = repo.findAll();
+        Iterable<UserEntity> users = userRepository.findAll();
         return users;
     }
 
     @CrossOrigin
     @GetMapping("/usersSecure")
     public List<UserEntityDto> listUsersSecure() {
-        Iterable<UserEntity> users = repo.findAll();
+        Iterable<UserEntity> users = userRepository.findAll();
 
         List<UserEntityDto> userDtoList = StreamSupport.stream(users.spliterator(), false)
                 .map(userEntity -> new UserEntityDto(
@@ -48,20 +49,14 @@ public class UserController {
     }
 
     @CrossOrigin
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
-
-    @CrossOrigin
-    @GetMapping("/user/userProfile")
+    @GetMapping("/userProfile")
     @PreAuthorize(value = "hasAuthority('ROLE_USER')")
     public String userProfile() {
         return "Welcome to User Profile";
     }
 
     @CrossOrigin
-    @GetMapping("/user/editProfile")
+    @GetMapping("/editProfile")
     @PreAuthorize(value = "hasAuthority('ROLE_USER')")
     public ResponseEntity<?> editUserProfile(@AuthenticationPrincipal UserEntity currentUser,
                                              @RequestParam(required = false) String bio,
@@ -74,7 +69,7 @@ public class UserController {
             if (profileImageName != null) {
                 currentUser.setProfileImageName(profileImageName);
             }
-            repo.save(currentUser);
+            userRepository.save(currentUser);
 
             return ResponseEntity.ok("Profile updated successfully");
         } catch (Exception e) {
