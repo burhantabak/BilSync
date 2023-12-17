@@ -27,6 +27,9 @@ export default function Navbar() {
     else if(item == "Edit Account"){
       navigate("/editAccount");
     }
+    else if (item === "My Transactions") {
+      navigate("/myTransactions"); // 
+    }
   };
 
   return (
@@ -35,6 +38,9 @@ export default function Navbar() {
         className='text-3xl text-white font-bold font-mono py-3'>BilSync</h1>
         <div>
             <ul className='flex gap-5'>
+              {isLoggedIn && (
+                  <li className='text-white text-xl mr-4 hover:bg-gray-400 py-4 px-1'><a href="/myTransactions">My Transactions</a></li>
+                 )}
                 <li className='text-white text-xl mr-4 hover:bg-gray-400 py-4 px-1'><a href="/aboutUs">About Us</a></li>
                 {isLoggedIn||<li className='text-white py-4 text-xl mr-4 hover:bg-gray-400'><a href="/login">Login</a></li>}
                 {isLoggedIn&&<li className='h-full text-white text-xl mr-4 py-4 hover:bg-gray-400'><DropdownProfile itemList={itemList} handleItemClick={handleItemClick}/></li>}
