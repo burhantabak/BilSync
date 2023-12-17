@@ -22,6 +22,7 @@ export async function uploadFileCall(file, user) {
     });
   };
 export function getImage(imageName, user) {
+  console.log("imageımı alayım lütfen" + imageName)
     const imageUrl = `http://localhost:8080/file/fileSystem/${imageName}`;
     if(!imageName){
         return "";
@@ -34,6 +35,7 @@ export function getImage(imageName, user) {
         },
     })
         .then(response => {
+          console.log(response)
             if (response.status === 200) {
                 return response.blob();
             } else {

@@ -33,7 +33,7 @@ export const DataProvider = ({ children }) => {
     console.log("get the users");
     await getAllUsers(user).then(users=>{
       const imagedUserList = users.map(async (user)=>{
-        const imageData = await getImage(users.profileImage,user);
+        const imageData = await getImage(user.profileImageName,user);
         return {...user, imageData};
       })
 

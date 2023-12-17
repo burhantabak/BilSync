@@ -46,7 +46,7 @@ export function getChatById(chatId, user){
     }
   })
   .catch(err => {
-    console.log("Error:", err);
+    // console.log("Error:", err);
     throw err;
   });
 }
