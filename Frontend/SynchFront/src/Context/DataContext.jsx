@@ -77,7 +77,14 @@ export const DataProvider = ({ children }) => {
   Promise.all(updatedPostList)
     .then((postsWithImages) => {
       // Set the updated post list with image data
+      console.log("posts with imagesss")
       console.log(postsWithImages);
+      
+      // getImage(postsWithImages.profileImageName,user).then(result=>{
+      //   const imageDataPosts = {...postsWithImages,authorProfileData: result}
+      //   console.log("image Data posts")
+      //   console.log(imageDataPosts)
+      // })
       setPostList(postsWithImages);
     })
     .catch((error) => {
