@@ -9,7 +9,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgresqldata:/var/lib/postgresql/data
+      - bilsync-sqldata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
-  postgresqldata:
+  bilsync-sqldata:
     external: true
