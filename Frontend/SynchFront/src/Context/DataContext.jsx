@@ -26,7 +26,6 @@ export const DataProvider = ({ children }) => {
     catch(error){
       setError("Invalid email or password"); // Set error state on unsuccessful login
       console.log("are we in data context")
-      error = "Invalid email or password"; 
     }
   }
   const getTheUsers =async ()=>{
@@ -97,7 +96,7 @@ export const DataProvider = ({ children }) => {
     setUser(null);
   }
   
-  const value = useMemo(() => ({chatList,getTheChats,postList, chatList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
+  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
