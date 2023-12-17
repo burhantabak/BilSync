@@ -5,8 +5,8 @@ const BASE_URL = 'http://localhost:8080'; // Adjust this based on your backend U
 
 const takerApproval = (user, id) => {
 
-  return fetch(`${BASE_URL}/transactions/update/giverApproved/${id}`, {
-    method: 'POST',
+  return fetch(`${BASE_URL}/transactions/update/takerApproved/${id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${user.token}`

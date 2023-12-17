@@ -19,6 +19,8 @@ export const DataProvider = ({ children }) => {
   const [chatList, setChatList] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [isPostsLoading, setIsPostsLoading] = useState(true);
+  const [transactions, setTransactions] = useState([]);  // Add transactions state
+
   const login = async (userName, password) =>{
 
     try{
@@ -70,6 +72,7 @@ export const DataProvider = ({ children }) => {
             console.log('No transactions yet.');
             return;
           }
+          setTransactions(transactions);
   
           // Update your state with the retrieved transactions
           // Assuming the transactions are an array, update as needed
@@ -82,6 +85,7 @@ export const DataProvider = ({ children }) => {
       fetchTransactions();
     }
   }, [user]);
+
 
   // if(transactions.takerId == user.userId()&& transaction.status == PENDING TAKER APPROVAL){ display transactiosn } (button name = Approve As Taker. onCLick request; )
   
@@ -136,7 +140,7 @@ export const DataProvider = ({ children }) => {
     setUser(null);
   }
   
-  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
+  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers, transactions}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error, transactions]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
