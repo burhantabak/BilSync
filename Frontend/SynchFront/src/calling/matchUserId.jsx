@@ -1,30 +1,32 @@
-export default function matchUserID(userList,postList){
-    console.log("match User ID ");
-    console.log(postList);
+import { getImage } from "./imageCalling";
+
+export default function matchUserID(userList,postList,user){
     if (userList.length > 0 && postList.length > 0) {
         // Map over postList and add userName and userImage to each post
         const updatedPostList = postList.map(post => {
           // Find the corresponding user in the userList
-          const correspondingUser = userList.find(user => user.id === post.authorID);
+          const correspondingUser = userList.find(userItem => userItem.id === post.authorID);
             const newCommentList = post.commentList.map((comment)=>{
-                console.log("comment:")
-                console.log(comment)
-                const commentUser = userList.find(user=>user.id === comment.authorID)
+                const commentUser = userList.find(userData=>userData.id === comment.authorID)
                 if(commentUser){
+                    console.log("comment user")
+                    console.log(commentUser)
                     return {
                         ...comment,
                         userName: commentUser.name,
+                        profileImageName:commentUser.profileImageName,
                     }
                 }
             })
-            console.log("new comment List");
-            console.log(newCommentList)
           // If user is found, update the post with userName and userImage
           if (correspondingUser) {
+            console.log("corr user");
+            console.log(correspondingUser);
             return {
               ...post,
               commentList: newCommentList,
               name: correspondingUser.name,
+              profileImageName: correspondingUser.profileImageName,
             };
           }
         
@@ -33,5 +35,5 @@ export default function matchUserID(userList,postList){
         });
         return updatedPostList;
     }
-    return null;
+    return [];
 }

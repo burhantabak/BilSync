@@ -1,8 +1,9 @@
-export default function CreateComment(commentText,postId){
+export default function CreateComment(commentText,postId, user, handlePostCreation){
+    console.log(postId);
     var raw = JSON.stringify({
     "isReply": false,
     "text": commentText,
-    "postId": postId,
+    "primaryPostID": postId,
     });
     console.log(raw)
     var requestOptions = {
@@ -20,6 +21,8 @@ export default function CreateComment(commentText,postId){
     })
     .then((result) => {
         console.log(result);
+        handlePostCreation(result); // Update the commentList in your component state
+
     })
     .catch(error => console.log('error state: ', error));
 }

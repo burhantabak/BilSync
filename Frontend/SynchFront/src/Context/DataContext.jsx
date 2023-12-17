@@ -5,14 +5,24 @@ import { useState } from "react";
 import { getAllPosts } from "../calling/postCalling";
 import getAllUsers from "../calling/userCalling";
 import matchUserID from "../calling/matchUserId";
+import { getChats } from "../calling/chatsCalling";
+import { getImage } from "../calling/imageCalling";
+import retrieveTransactions from "../calling/TransactionCaller.jsx/getAllTransactions";
+
+import { useEffect } from "react";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", {});
   const [error, setError] = useState(""); // New state to store authentication error
   const [postList, setPostList] = useState([]);
+  const [chatList, setChatList] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [isPostsLoading, setIsPostsLoading] = useState(true);
+  const [transactions, setTransactions] = useState([]);  // Add transactions state
+  const [voteCounts, setVoteCounts] = useState({}); // New state to store vote counts
+
+
   const login = async (userName, password) =>{
 
     try{
@@ -21,15 +31,69 @@ export const DataProvider = ({ children }) => {
       setError(""); // Reset error state on successful login
     }
     catch(error){
-      setError("Invalid username or password"); // Set error state on unsuccessful login
+      setError("Invalid email or password"); // Set error state on unsuccessful login
       console.log("are we in data context")
-      error = "Invalid username or password"; 
     }
   }
   const getTheUsers =async ()=>{
     console.log("get the users");
-    await getAllUsers(user).then(users=>{setAllUsers(users);console.log(allUsers);});
+    await getAllUsers(user).then(users=>{
+      const imagedUserList = users.map(async (userItem)=>{
+        const imageData = await getImage(userItem.profileImageName,user);
+        return {...userItem, imageData};
+      })
+
+      Promise.all(imagedUserList).then(
+        (imagedUsers)=>{
+          setAllUsers(imagedUsers)
+          console.log("images with users")
+          console.log(imagedUsers);
+          const registeredUser = imagedUsers.find((claimedUser)=>claimedUser.id==user.userId)
+          console.log(registeredUser)
+          console.log(registeredUser)
+          console.log(user.userId)
+          if(registeredUser){setUser({...user,profileImageName: registeredUser.profileImageName,
+             imageData: registeredUser.imageData, bio:registeredUser.bio, accountType: registeredUser.accountType})
+             console.log(user)}
+          return imagedUsers;
+        }
+      )
+    });
   }
+
+  useEffect(() => {
+    if (user && user.token) {
+      const fetchTransactions = async () => {
+        try {
+          const transactions = await retrieveTransactions(user);
+          console.log(transactions);
+          console.log("TRANSACTIONNNNNNNNNNNNNNNNNNNNNNNNNNNN", transactions[0].id);
+
+          // Check if transactions is undefined or null
+          if (transactions == null) {
+            console.log('No transactions yet.');
+            return;
+          }
+          setTransactions(transactions);
+
+          // Update your state with the retrieved transactions
+          // Assuming the transactions are an array, update as needed
+          console.log(transactions); // Ensure you see the transactions in the console
+        } catch (error) {
+          console.error('Error fetching transactions:', error);
+        }
+      };
+
+      fetchTransactions();
+    }
+  }, [user]);
+
+
+ 
+
+  // if(transactions.takerId == user.userId()&& transaction.status == PENDING TAKER APPROVAL){ display transactiosn } (button name = Approve As Taker. onCLick request; )
+
+
   const getThePosts = ()=>{
     setIsPostsLoading(true);
     console.log("get the posts called");
@@ -37,79 +101,60 @@ export const DataProvider = ({ children }) => {
       if(data >= 400){
         setUser(null);
       }
+
       getAllUsers(user).then((users)=>{
-        console.log("usersssssssssssssss:")
-        console.log(users)
-        setPostList(matchUserID(users,data))
+        console.log("usersssssssssssssss:");
+        console.log(users);
+        console.log(data)
+        const updatedPostList = matchUserID(users, data,user).map(async (post) => {
+    // Fetch image for each post
+        const imageData = await getImage(post.imageName, user);
+    
+    // Update the post object with the image data
+    return { ...post, imageData };
+  });
+
+  // Wait for all image fetch operations to complete
+  Promise.all(updatedPostList)
+    .then((postsWithImages) => {
+      // Set the updated post list with image data
+      console.log("posts with imagesss")
+      console.log(postsWithImages);
+
+      const updatedVoteCounts = postsWithImages.reduce((acc, post) => {
+        acc[post.id] = post.votes; // Replace 'voteCount' with the actual field in your post object
+        return acc;
+      }, {});
+
+      setVoteCounts (updatedVoteCounts);
+
+      // getImage(postsWithImages.profileImageName,user).then(result=>{
+      //   const imageDataPosts = {...postsWithImages,authorProfileData: result}
+      //   console.log("image Data posts")
+      //   console.log(imageDataPosts)
+      // })
+      setPostList(postsWithImages);
+
+
+
+    })
+    .catch((error) => {
+      console.error('Error fetching images:', error);
+    });
+
       })
       console.log("mathcing user ID::::")
       setIsPostsLoading(false);
     });
   }
-  
+  const getTheChats = ()=>{
+    getChats(user).then(result=>{if(result){console.log("chatt");console.log(result);setChatList(result)}});
+  } 
   const logout = ()=>{
     setUser(null);
   }
   
-  const chatList = [
-    {
-      userName: "Tuna Saygın",
-      isGroupChat: false,
-      messages: [
-        {
-          message: "Merhabalar hocam yarın CS319 dersi olacak mı?",
-          date: "15th October 20:53",
-          isReceived: true,
-          userName: "Eray Tüzün",
-        },
-        {
-          message: "Evet, yarın dersimiz olacak. Saat 14:30'da buluşalım.",
-          date: "15th October 21:05",
-          isReceived: false,
-        },
-        {
-          message: "Tamamdır, görüşmek üzere.",
-          date: "15th October 21:06",
-          isReceived: true,
-        },
-      ],
-    },
-    {
-      userName: "Kenan Zeynalov",
-      isGroupChat: false,
-      messages: [
-        {
-          message: "Günaydın, ders materyalleri paylaşılacak mı?",
-          date: "16th October 08:30",
-          isReceived: true,
-          userName: "Eray Tüzün",
-        },
-        {
-          message: "Evet, hemen paylaşacağım.",
-          date: "16th October 08:35",
-          isReceived: false,
-        },
-      ],
-    },
-    {
-      userName: "CS Dream Group",
-      isGroupChat: true,
-      messages: [
-        {
-          message: "Bugün laboratuvar çalışması ile ilgili toplantımız var.",
-          date: "16th October 14:00",
-          isReceived: true,
-        },
-        {
-          message: "Evet, hatırlatma için teşekkür ederim. Gerekli hazırlıkları yapacağım.",
-          date: "16th October 14:05",
-          isReceived: false,
-        },
-      ],
-    },
-    // Add more entries as needed
-  ];
-  const value = useMemo(() => ({ postList, chatList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
+  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers, transactions, allUsers,voteCounts}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error, transactions,voteCounts]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

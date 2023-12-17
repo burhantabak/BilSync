@@ -4,16 +4,21 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.entity.Comment;
 import tr.edu.bilkent.bilsync.entity.PostEntities.Post;
 import tr.edu.bilkent.bilsync.entity.Report;
+import tr.edu.bilkent.bilsync.entity.ReportType;
+import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.exception.NoRecordFoundException;
 import tr.edu.bilkent.bilsync.exception.UserIsBannedException;
 import tr.edu.bilkent.bilsync.service.CommentService;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 import tr.edu.bilkent.bilsync.service.ReportService;
+import tr.edu.bilkent.bilsync.service.UserInfoService;
 
 /**
  * REST controller for handling admin-related operations on reports.
@@ -28,13 +33,89 @@ public class ReportController {
 
     private final CommentService commentService;
 
+    private final UserInfoService userInfoService;
+
+    /**
+     * Constructor for ReportController, autowiring required services.
+     *
+     * @param reportService   The ReportService for handling report-related operations.
+     * @param postService     The PostService for handling post-related operations.
+     * @param commentService  The CommentService for handling comment-related operations.
+     * @param userInfoService The UserInfoService for handling user information.
+     */
     @Autowired
-    public ReportController(ReportService reportService, PostService postService, CommentService commentService) {
+    public ReportController(ReportService reportService, PostService postService, CommentService commentService, UserInfoService userInfoService) {
         this.reportService = reportService;
         this.postService = postService;
         this.commentService = commentService;
+        this.userInfoService = userInfoService;
     }
 
+    /**
+     * Creates a report for a post.
+     *
+     * @param report The Report object containing details of the report.
+     * @return A ResponseEntity with a status code and a message.
+     */
+    @PostMapping("/createPostReport")
+    public ResponseEntity<?> createPostReport(@RequestBody Report report) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = (UserEntity) authentication.getPrincipal();
+        if (user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User cannot be found");
+        report.setReportType(ReportType.POST_REPORT);
+        report.setReporterId(user.getId());
+        Post post = postService.getPostByID(report.getReportedEntityId());
+        if (post == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post could not be found");
+        report.setReportedUserId(post.getAuthorID());
+        return uploadValidReport(report, user);
+    }
+
+    /**
+     * Creates a report for a comment.
+     *
+     * @param report The Report object containing details of the report.
+     * @return A ResponseEntity with a status code and a message.
+     */
+    @PostMapping("/createCommentReport")
+    public ResponseEntity<?> createCommentReport(@RequestBody Report report) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = (UserEntity) authentication.getPrincipal();
+        if (user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User cannot be found");
+        report.setReportType(ReportType.COMMENT_REPORT);
+        report.setReporterId(user.getId());
+        Comment comment = commentService.getCommentByID(report.getReportedEntityId());
+        if (comment == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Comment could not be found");
+        report.setReportedUserId(comment.getAuthorID());
+        return uploadValidReport(report, user);
+    }
+
+    /**
+     * Validates and uploads a report to the database.
+     *
+     * @param report The Report object to be validated and uploaded.
+     * @return A ResponseEntity with a status code and a message.
+     */
+    private ResponseEntity<?> uploadValidReport(Report report, UserEntity user) {
+        if (user.getId() == report.getReportedUserId())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You cannot report yourself");
+        if (report.getDescription().length() < 10)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report description must be longer than 10 characters");
+        if (report.getDescription().length() > 1000)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report description must be shorter than 1000 characters");
+        if (userInfoService.loadUserById(report.getReportedUserId()) == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reported user cannot be found");
+        if (!reportService.createReport(report))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report could not be saved");
+
+        Report rep = reportService.getPreviousReport(user.getId(),report.getReportedEntityId(),report.getReportType());
+        if (rep != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You already reported this content");
+        }
+
+        return ResponseEntity.ok().build();
+    }
 
     /**
      * Retrieves all reports.

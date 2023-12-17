@@ -6,37 +6,23 @@
   import { useNavigate } from "react-router-dom";  
 
   const ProfilePage = () => {
-    const [profilePicture, setProfilePicture] = useState("https://media.licdn.com/dms/image/C5603AQEYoQTc9d-tyg/profile-displayphoto-shrink_200_200/0/1516280847373?e=2147483647&v=beta&t=3oQIHia8rF_NV4W8hCAqEt64KQxzEtYTcH1eyOl_Xos");
-    const [userType, setUserType] = useState("Instructor");
-    const [bio, setBio] = useState(
-      "I am a Computer Engineering Instructor at Bilkent University"
-    );
+    const [profilePicture, setProfilePicture] = useState("https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png");
+    const { postList, isPostsLoading, getThePosts, user } = useData();
+    const [userType, setUserType] = useState(user?user.accountType:"");
 
     const navigate = useNavigate();
 
-    const authorId = 1;
-    const { postList, isPostsLoading, getThePosts, user } = useData();
     const [userPosts, setUserPosts] = useState([]); // Add this line to define userPosts state
 
     const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(false); // New state for user posts loading
-
-    /* Tuna im considering case where data was not fetched in that stage therefore i use effect to see wheres the problem and why data is not fetched but there is something wrong check console   */
-    useEffect(() => { /* */ 
-      if (postList.length == 0) {
-        getThePosts(user); // Trigger data fetching
-        console.log("Size is 0 something is wrong with the datacontext");
-      }
-    }, [postList.length, isPostsLoading, user]); // Update useEffect dependencies
-
     useEffect(() => {
       if (postList.length) { // Only run if posts are fetched
         console.log("Checkpoint useeffectseocnd" , postList);
         setIsLoadingUserPosts(true); // Set loading state
-        const userPosts = postList.filter((post) => post.authorID === authorId);
+        const userPosts = postList.filter((post) => post.authorID === user.userId);
         console.log("Checkpoint userposts" , userPosts);
         setUserPosts(userPosts); // Update user posts state
         setIsLoadingUserPosts(false); // Reset loading state
-        console.log("Gijdillag react test 1" , postList[2]);
 
       }
     }, [postList]); // Update useEffect dependency
@@ -74,11 +60,11 @@
       <div className="w-1/3 flex flex-col p-4">
         <div className="flex flex-col items-center">
           <p className="text-dark font-bold text-2xl mb-2">{user.name}</p>
-          <img
+          {user.imageData? <img src={user.imageData} className="rounded-full h-40 w-40 border-2 border-gray-300" alt="denemeee" />:<img
             className="rounded-full h-40 w-40 border-2 border-gray-300"
             src={profilePicture}
             alt="Profile Picture"
-          />
+          />}
           <div className="mt-4">
             <p className="text-dark font-bold text-xl">{userType}</p>
             <button
@@ -91,7 +77,7 @@
         </div>
         <div className="mt-4 bg-gradient-to-r from-blue-200 to-blue-300 p-4 rounded-md">
           <p className="text-dark text-lg font-bold mb-2">Bio:</p>
-          <p className="text-gray-700 leading-relaxed">{bio}</p>
+          <p className="text-gray-700 leading-relaxed">{user.bio}</p>
         </div>
       </div>
         <div className="w-2/3 flex flex-col p-4">
@@ -123,26 +109,7 @@
               </TradingPostItem>
             ))}
           </div>
-          {/* Starred Posts Section */}
-          <div className="mt-8">
-            <h2 className="text-dark font-bold text-2xl">Starred Posts</h2>
-            {/* Display Starred Posts or a message */}
-            {starredPosts.length > 0 ? (
-              <div className="space-y-4">
-                {starredPosts.map((post) => (
-                  <div
-                    key={post.id}
-                    className="flex flex-col bg-white border-gray-300 rounded-md p-4 shadow-md"
-                  >
-                    <h3 className="text-dark font-bold text-xl mb-2">{post.title}</h3>
-                    <p className="text-gray-600">{post.content}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-600 text-center">No starred posts yet!</p>
-            )}
-          </div>
+          
         </div>
       </div>
     );

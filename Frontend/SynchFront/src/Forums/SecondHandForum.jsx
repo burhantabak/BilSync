@@ -4,6 +4,10 @@ import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
 import { createTradingPost } from '../calling/postCreationCalling';
 import { useData } from '../Context/DataContext';
+import { useNavigate } from "react-router-dom";  
+import { uploadFileCall } from '../calling/imageCalling';
+
+
 export default function SecondHandForum() {
     const [title, setTitle] = useState("");
     const [isSubmitted, setIsCompleted] = useState(false);
@@ -13,23 +17,47 @@ export default function SecondHandForum() {
     const [imageFile, setImageFile] = useState(null);
     const [price, setPrice] = useState(0);
     const [iban, setIban] = useState("");
+    const navigate = useNavigate();
     const [hashtags,setHashtags] = useState([]);
-    const addTag= (event)=>{
-        if (event.target.value !== "") {
-            setHashtags([...hashtags, event.target.value]);
-            event.target.value = "";
-            console.log(hashtags)
-          }
-    };
-    const removeTags = indexToRemove => {
-        setHashtags([...hashtags.filter((_, index) => index !== indexToRemove)]);
-      };
-      const handlePostCreation = (event) => {
-        event.preventDefault();
-        const post = {
+    const handlePostCreation = (event) => {
+    event.preventDefault();
+    let imageName = "";
+    if(imageFile)
+    {
+        uploadFileCall(imageFile,user).then((name)=>{
+            const post = {
+                title: title,
+                description: description,
+                imageName: name,
+                iban: iban,
+                tags: hashtags,
+                price: price,
+            };
+        
+            // Debugging: Log the post object
+            console.log("Post object:", post);
+    
+            createTradingPost(post,user).then((result) => {
+                console.log(result);
+                if(result === 200) { 
+                     setIsCompleted(true) 
+                     navigate('/mainPage');
+                 } 
+                 else {
+                    setErrorMessage(result);
+                 }
+            })
+
+
+
+
+        });
+    }
+    else if(imageName !== "not uploaded")
+        {const post = {
             title: title,
             description: description,
-            imagePath: imageFile ? imageFile.name : "",
+            imageName: imageName ? imageName : "",
             iban: iban,
             tags: hashtags,
             price: price,
@@ -40,7 +68,10 @@ export default function SecondHandForum() {
 
         createTradingPost(post,user).then((result) => {
             console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
-        });
+        });}
+    else{
+        setErrorMessage(imageName)
+    }
     };
     
   return (

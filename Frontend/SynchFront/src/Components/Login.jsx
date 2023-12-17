@@ -49,7 +49,7 @@ export default function LoginForm({handleLogin}) {
                   <div>
                       <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                       <input type="email" name="email" id="email" onChange={(event)=>setUserName(event.target.value)}
-                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline focus:outline-2 focus:border-sky-500 block w-full p-2.5" placeholder="username" required=""/>
+                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline focus:outline-2 focus:border-sky-500 block w-full p-2.5" placeholder="email" required=""/>
                   </div>
                   <div>
                       <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
@@ -59,12 +59,8 @@ export default function LoginForm({handleLogin}) {
                   {error && <p className="text-red-500">{error}</p>}
                   <div className="flex items-center justify-between">
                       <div className="flex items-start">
-                          <div className="flex items-center h-5">
-                            <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required=""/>
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label htmlFor="remember" className="text-gray-500 dark:text-gray-500">Remember me</label>
-                          </div>
+                          
+                    
                       </div>
                       <a href="/changePassword" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
                   </div>

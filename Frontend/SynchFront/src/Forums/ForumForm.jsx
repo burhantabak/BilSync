@@ -2,19 +2,82 @@ import React, { useState } from 'react'
 import { HashtagInput } from './ForumComponents/HashtagInput';
 import ImageInput from './ForumComponents/ImageInput';
 import InputField from './ForumComponents/InputField';
+import { uploadFileCall } from '../calling/imageCalling';
+import { createNormalPost } from '../calling/postCreationCalling';
+import { useData } from '../Context/DataContext';
+import { useNavigate } from "react-router-dom";
 
 export default function ForumForm() {
     const [hashtags,setHashtags] = useState([]);
-    const addTag= (event)=>{
-        if (event.target.value !== "") {
-            setHashtags([...hashtags, event.target.value]);
-            event.target.value = "";
-            console.log(hashtags)
-        }
-    };
-    const removeTags = indexToRemove => {
-        setHashtags([...hashtags.filter((_, index) => index !== indexToRemove)]);
+    const [title,setTitle] = useState("");
+    const [description,setDescription] = useState("");
+    const [isSubmitted, setIsCompleted] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [imageFile, setImageFile] = useState(null);
+    const {user} = useData();
+    const navigate = useNavigate();
+
+    const handlePostCreation = (event) => {
+      event.preventDefault();
+      let imageName = "";
+      if(imageFile)
+      {
+          uploadFileCall(imageFile,user).then((name)=>{
+            const normalForumPost = {
+                title: title,
+                description: description,
+                imageName: name,
+                tags: hashtags,  
+                isAnonymous: isAnonymity            
+            };
+        
+            // Debugging: Log the post object
+            console.log("Post object:", normalForumPost);
+    
+            createNormalPost(normalForumPost,user).then((result) => {
+                console.log(result);
+                if(result === 200) { 
+                  setIsCompleted(true) 
+                  navigate('/mainPage');
+              } 
+              else {
+                 setErrorMessage(result);
+              }
+            });
+
+           
+
+          });
+      }
+      else if(imageName !== "not uploaded")
+          {const normalForumPost = {
+              title: title,
+              description: description,
+              imageName: imageName ? imageName : "",
+              tags: hashtags,  
+              isAnonymous: isAnonymity            
+          };
+      
+          // Debugging: Log the post object
+          console.log("Post object:", normalForumPost);
+  
+          createNormalPost(normalForumPost,user).then((result) => {
+              console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+          });}
+      else{
+          setErrorMessage(imageName)
+      }
       };
+
+    const [isAnonymity, setIsAnonymity] = useState(true);
+
+    const handleRadioChange = (event) => {
+      setIsAnonymity(event.target.value === 'true');
+    };
+  
+    const handlePrivacyChange = () => {
+      setIsAnonymity(!isAnonymityx);
+    };
     return (
     <div>
         <div className='flex justify-center mb-5'>
@@ -22,11 +85,18 @@ export default function ForumForm() {
         </div>
         <HashtagInput tags={hashtags} setTags={setHashtags}/>
         <form>
-            <ImageInput/>
-            <InputField type={"number"} name={"Add Title"} handleEvent={null}/>
-            <InputField type={"text"} name={"Add Description"} handleEvent={null}/>
-            <RadioButton/>
-            <button type="submit" 
+            <ImageInput imageFile={imageFile} setImageFile={setImageFile}/>
+            <InputField type={"text"} name={"Add Title"} handleEvent={setTitle}/>
+            <InputField type={"text"} name={"Add Description"} handleEvent={setDescription}/>
+            <RadioButton isAnonymity={isAnonymity} handleRadioChange={handleRadioChange}/>
+            <div className='flex items-center mb-3'>
+          <input
+            checked={isAnonymity}
+            onChange={handlePrivacyChange}
+          />
+        </div>
+
+            <button type="submit "  onClick={(event)=>handlePostCreation(event)}
             className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 
             focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 
             text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -36,39 +106,46 @@ export default function ForumForm() {
     </div>
   )
 }
-function  RadioButton(){
-    return (
-        <div className='flex'>
-            <p className='font-bold mr-3 '>Anonymity:</p>
-            <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
-                <input
-                className="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
-                type="radio"
-                name="flexRadioDefault"
-                id="radioDefault01"
-                />
-                <label
-                className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-                htmlFor="radioDefault01"
-                >
-                Anonymous
-                </label>
-            </div>
-            <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
-                <input
-                className="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
-                type="radio"
-                name="flexRadioDefault"
-                id="radioDefault02"
-                defaultChecked
-                />
-                <label
-                className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-                htmlFor="radioDefault02"
-                >
-                Public
-                </label>
-            </div>
-        </div>
-    )
+function RadioButton({ isAnonymity, handleRadioChange }) {
+
+  return (
+    <div className='flex'>
+      <p className='font-bold mr-3 '>Anonymity:</p>
+
+      <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
+        <input
+          type="radio"
+          name="anonymity"
+          id="radioDefault01"
+          value={true}
+          checked={isAnonymity}
+          onChange={handleRadioChange}
+        />
+        <label
+          className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+          htmlFor="radioDefault01"
+        >
+          Private
+        </label>
+      </div>
+
+      <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
+        <input
+          type="radio"
+          id="publicRadio"
+          name="anonymity"
+          value={false}
+          checked={!isAnonymity}
+          onChange={handleRadioChange}
+        />
+        <label
+          className="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+          htmlFor="publicRadio"
+        >
+          Public
+        </label>
+      </div>
+
+    </div>
+  );
 }

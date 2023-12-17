@@ -2,9 +2,62 @@ import React, { useState } from 'react'
 import ImageInput from './ForumComponents/ImageInput'
 import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
+import { useData } from '../Context/DataContext';
+import { createSectionExchangePost } from '../calling/postCreationCalling';
+import { uploadFileCall } from '../calling/imageCalling';
+import { useNavigate } from 'react-router-dom';
+
+
 export default function SectionExchangeForm() {
     const [hashtags,setHashtags] = useState([]);
+    const [title, setTitle] = useState("");
+    const [isSubmitted, setIsCompleted] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const {user} = useData();
+    const [description, setDescription] = useState("");
+    const [imageFile, setImageFile] = useState(null);
+    const [price, setPrice] = useState(0);
+    const [iban, setIban] = useState("");
+    const navigate = useNavigate();
 
+    const handlePostCreation = (event) => {
+        event.preventDefault();
+        let imageName = "";
+        if(imageFile)
+        {
+            uploadFileCall(imageFile,user).then((name)=>{imageName = name});
+        }
+        if(imageName !== "not uploaded")
+            {const post = {
+                title: title,
+                description: description,
+                imageName: imageName ? imageName : "",
+                iban: iban,
+                tags: hashtags,
+                price: price,
+            };
+        
+            // Debugging: Log the post object
+            console.log("Post object:", post);
+    
+            createSectionExchangePost(post,user).then((result) => {
+                console.log(result);
+                if(result === 200) { 
+                    setIsCompleted(true) 
+                    navigate('/mainPage');
+                } 
+                else {
+                   setErrorMessage(result);
+                }
+            });
+            
+            
+        
+        }
+        else{
+            setErrorMessage(imageName)
+        }
+    }
   return (
     <div>
         <div className='flex justify-center mb-5'>
@@ -12,14 +65,17 @@ export default function SectionExchangeForm() {
         </div>
         <HashtagInput tags={hashtags} setTags={setHashtags}/>
         <form>
-            <ImageInput/>
-            <InputField type={"number"} name={"Add Title"} handleEvent={null}/>
-            <InputField type={"text"} name={"Add Description"} handleEvent={null}/>
+            <ImageInput imageFile={imageFile} setImageFile={setImageFile}/>
+            <InputField value={title} type={"text"} name={"Add Title"} handleEvent={setTitle}/>
+            <InputField value={description} type={"text"} name={"Add Description"} handleEvent={setDescription}/>
             <div className='flex justify-between'>
-            <InputField type={"number"} name={"Price"} handleEvent={null}/>
-            <InputField type={"text"} name={"IBAN"} handleEvent={null}/>
+            <InputField value= {price} type={"number"} name={"Price"} handleEvent={setPrice}/>
+            <InputField value={iban} type={"text"} name={"IBAN"} handleEvent={setIban}/>
             </div>
-            <button type="submit" 
+            <div className='flex justify-center mb-1'>
+            <p className='text-red-600'>{errorMessage}</p>
+            </div>
+            <button type="submit" onClick={(event)=>handlePostCreation(event)}
             className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 
             focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 
             text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">

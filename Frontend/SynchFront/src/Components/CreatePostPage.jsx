@@ -29,7 +29,7 @@ export default function CreatePost() {
         </div>
         <div className='w-2/3'>
             {selectedForm ==="Second Hand" && <SecondHandForum/>}
-            {selectedForm ==="Basic Forum Post" && <ForumForm/>}
+            {selectedForm ==="Basic Forum" && <ForumForm/>}
             {selectedForm === "Section Exchange" && <SectionExchangeForm/>}
             {selectedForm === "Donation" && <DonationForm/>}
             {selectedForm === "Lost&Found" && <LostnFoundForm/>}

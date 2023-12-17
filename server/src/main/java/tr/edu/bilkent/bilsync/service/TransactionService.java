@@ -1,11 +1,12 @@
 package tr.edu.bilkent.bilsync.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.dto.TransactionDto;
+import tr.edu.bilkent.bilsync.entity.PostEntities.*;
 import tr.edu.bilkent.bilsync.entity.Transaction;
 import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
-import tr.edu.bilkent.bilsync.repository.PostRepositories.NormalPostRepository;
 import tr.edu.bilkent.bilsync.repository.TransactionRepository;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
 
@@ -19,18 +20,20 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
-
-
+    private final UserInfoService userService;
     private final PostService postService;
 
     /**
      * Constructs a new instance of the {@code TransactionService}.
      *
      * @param transactionRepository The repository for handling transactions.
-     * @param postService        The repository for handling posts (assuming it exists).
+     * @param userService           The user service to check the existence of users
+     * @param postService           The repository for handling posts (assuming it exists).
      */
-    public TransactionService(TransactionRepository transactionRepository, PostService postService) {
+    @Autowired
+    public TransactionService(TransactionRepository transactionRepository, UserInfoService userService, PostService postService) {
         this.transactionRepository = transactionRepository;
+        this.userService = userService;
         this.postService = postService;
     }
 
@@ -66,41 +69,95 @@ public class TransactionService {
     /**
      * Creates a new transaction.
      *
-     * @param trDto The transaction data object to turned into transaction.
+     * @param postId The post that the transaction is based on.
      * @return The created {@link Transaction}.
      */
-    public Transaction createTransaction(TransactionDto trDto, UserEntity currentUser) {
-        Transaction transaction = new Transaction();
-        transaction.setTransactionAmount(trDto.getTransactionAmount());
-        transaction.setTakerId(currentUser.getId());
-        transaction.setGiverId(trDto.getGiverId());
-        transaction.setPostId(trDto.getPostId());
-        transaction.setMoneyFetchDate(new Date());
-        transaction.setStatus(TransactionState.PENDING_GIVER_APPROVAL);
-        postService.setHeld(trDto.getPostId(), true);
-        return transactionRepository.save(transaction);
+    public Transaction createTransaction(Long postId, UserEntity currentUser) {
+        Post post = postService.getPostByID(postId);
+        TradingPost tradingPost = null;
+        double price = 0;
+        UserEntity giver;
+        if (post == null) {
+            throw new EntityNotFoundException("Post does not exist");
+        } else if (post instanceof SecondHandTradingPost) {
+            SecondHandTradingPost secondHandTradingPost = (SecondHandTradingPost) post;
+            price = secondHandTradingPost.getPrice();
+            if (price < 0) {
+                throw new IllegalStateException("The transaction amount cannot be negative");
+            }
+        } else if (post instanceof AnnouncementPost || post instanceof NormalPost) {
+            throw new IllegalStateException("This item cannot be bought");
+        }
+
+
+        tradingPost = (TradingPost) post;
+
+
+        if (tradingPost.getIsHeld()) {
+            throw new IllegalStateException("The trading post is already in someone else's cart");
+        } else if (tradingPost.isResolved()) {
+            throw new IllegalStateException("The trading post is already bought by someone else");
+        } else {
+            giver = userService.findById(tradingPost.getAuthorID());
+            if (giver == null) {
+                throw new EntityNotFoundException("Giver does not exist");
+            } else if (tradingPost.getAuthorID() == currentUser.getId()) {
+                throw new IllegalStateException("It is not possible to trade the item that you are the lister of");
+            }
+            Transaction transaction = new Transaction();
+            transaction.setTransactionAmount(price);
+            transaction.setTakerId(currentUser.getId());
+            transaction.setGiverId(post.getAuthorID());
+            transaction.setPostId(postId);
+            transaction.setMoneyFetchDate(new Date());
+            transaction.setStatus(TransactionState.PENDING_GIVER_APPROVAL);
+            postService.setHeld(postId, true);
+            postService.setTakerId(tradingPost,currentUser.getId());
+            return transactionRepository.save(transaction);
+        }
+
     }
 
     /**
      * Updates an existing transaction.
      *
-     * @param id                 The ID of the transaction to update.
+     * @param id The ID of the transaction to update.
      * @return The updated {@link Transaction}, or {@code null} if the transaction with the given ID is not found.
      */
-    public Transaction updateTransaction(Long id, TransactionState newState) {
+    public Transaction updateTransaction(Long id, long userId, TransactionState newState) {
         Transaction existingTransaction = transactionRepository.findById(id).orElse(null);
         if (existingTransaction != null) {
+            if (existingTransaction.getStatus() == TransactionState.REFUNDED || existingTransaction.getStatus() == TransactionState.DEPOSITED) {
+                throw new IllegalStateException("Cannot update resolved transactions.");
+            }
+            if (newState == TransactionState.PENDING_TAKER_APPROVAL) {//giver approved
+                if (this.amITheGiver(id, userId)) {
+                    if (this.giverApprovalNeeded(id)) {
+                        existingTransaction.setGiverApproveDate(new Date());
+                    } else {
+                        throw new IllegalStateException("Cannot update this transaction as it is waiting for taker approval.");
+                    }
+                } else {
+                    throw new IllegalStateException("You cannot approve as giver to the listing you are not the lister of.");
+                }
+
+            } else if (newState == TransactionState.DEPOSITED) {//taker approved
+
+                if (this.amITheTaker(id, userId)) {
+                    if (this.takerApprovalNeeded(id)) {
+                        postService.setHeld(existingTransaction.getPostId(), false);
+                        postService.setAsResolved(existingTransaction.getPostId(), true);
+                        existingTransaction.setTakerApproveDate(new Date());
+                    } else {
+                        throw new IllegalStateException("Cannot update this transaction as it is waiting for giver approval.");
+                    }
+                } else {
+                    throw new IllegalStateException("You cannot approve as taker to the listing you are not the taker of.");
+                }
+
+
+            }
             existingTransaction.setStatus(newState);
-            if(newState == TransactionState.PENDING_TAKER_APPROVAL)
-            {
-                existingTransaction.setGiverApproveDate(new Date());
-            }
-            else if(newState == TransactionState.DEPOSITED)
-            {
-                postService.setHeld(existingTransaction.getPostId(),false);
-                postService.setAsResolved(existingTransaction.getPostId(),true);
-                existingTransaction.setTakerApproveDate(new Date());
-            }
             return transactionRepository.save(existingTransaction);
         }
         return null;
@@ -127,6 +184,18 @@ public class TransactionService {
     }
 
     /**
+     * Retrieves a list of transactions involving the specified user as either the taker or giver.
+     *
+     * @param user The user for whom transactions are retrieved.
+     * @return List of transactions involving the specified user.
+     */
+    public List<Transaction> getTransactionsByUser(UserEntity user) {
+        // Retrieve transactions where the user is either taker or giver
+        return transactionRepository.findByTakerIdOrGiverId(user.getId(), user.getId());
+    }
+
+
+    /**
      * Updates the state of transactions based on their associated dates.
      * Transactions with a specified threshold of days difference from the reference date
      * will have their state updated. The updated transactions are then saved to the repository.
@@ -149,8 +218,8 @@ public class TransactionService {
                         if (daysDifference >= 3) {
                             // Update the transaction state here
                             transaction.setStatus(TransactionState.REFUNDED);
-                            postService.setAsResolved(transaction.getPostId(),false);
-                            postService.setHeld(transaction.getPostId(),false);
+                            postService.setAsResolved(transaction.getPostId(), false);
+                            postService.setHeld(transaction.getPostId(), false);
                             // Save the updated transaction to the repository
                             this.transactionRepository.save(transaction);
                         }
@@ -188,4 +257,19 @@ public class TransactionService {
         return timeDifferenceMillis / (24 * 60 * 60 * 1000);
     }
 
+    public boolean giverApprovalNeeded(Long id) {
+        return (this.getTransactionById(id).getStatus() == TransactionState.PENDING_GIVER_APPROVAL);
+    }
+
+    public boolean amITheGiver(Long id, long userId) {
+        return (this.getTransactionById(id).getGiverId() == userId);
+    }
+
+    public boolean takerApprovalNeeded(Long id) {
+        return (this.getTransactionById(id).getStatus() == TransactionState.PENDING_TAKER_APPROVAL);
+    }
+
+    public boolean amITheTaker(Long id, long userId) {
+        return (this.getTransactionById(id).getTakerId() == userId);
+    }
 }

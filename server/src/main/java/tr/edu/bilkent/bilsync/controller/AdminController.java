@@ -10,12 +10,21 @@ import tr.edu.bilkent.bilsync.exception.EmailAlreadyExistsException;
 import tr.edu.bilkent.bilsync.exception.UserIsBannedException;
 import tr.edu.bilkent.bilsync.service.UserInfoService;
 
+/**
+ * Controller class for handling admin-related operations on users.
+ */
+@CrossOrigin
 @RestController
 @RequestMapping("/admin/users")
 public class AdminController {
 
     private final UserInfoService userInfoService;
 
+    /**
+     * Constructor for the AdminController class.
+     *
+     * @param userInfoService The service responsible for handling user-related operations.
+     */
     @Autowired
     public AdminController(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
@@ -28,7 +37,8 @@ public class AdminController {
      * @param newEmail  The new email to be set for the user.
      * @return ResponseEntity indicating the result of the operation with an appropriate message.
      */
-    @PutMapping("/{userId}/change-email")
+    @CrossOrigin
+    @PostMapping("/{userId}/change-email")
     public ResponseEntity<String> changeEmail(@PathVariable long userId, @RequestBody String newEmail) {
         try {
             userInfoService.changeEmail(userId, newEmail);
@@ -48,7 +58,7 @@ public class AdminController {
      * @param userId The ID of the user to be banned.
      * @return ResponseEntity indicating the result of the operation with an appropriate message.
      */
-    @PutMapping("/{userId}/ban")
+    @PostMapping("/{userId}/ban")
     public ResponseEntity<String> banUser(@PathVariable long userId) {
         try {
             userInfoService.banUser(userId);
@@ -61,6 +71,21 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
+
+    @PostMapping("/{userId}/unban")
+    public ResponseEntity<String> unbanUser(@PathVariable long userId) {
+        try {
+            userInfoService.unbanUser(userId);
+            return ResponseEntity.status(HttpStatus.OK).body("User unbanned successfully");
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not currently banned");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+
 
 
     /**

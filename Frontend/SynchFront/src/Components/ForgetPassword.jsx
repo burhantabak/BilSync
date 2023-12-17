@@ -4,11 +4,24 @@ import { forgotPasswordRequest } from '../calling/authCalling';
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState('');
+  const [errorMessage,setErrorMessage] = useState("");
+  const [successMessage,setSuccessMessage] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    forgotPasswordRequest(email).then(response=>{
+      console.log( "response:");
+      console.log(response);
+      if(response === 200){
+        setSuccessMessage("Password reset link is sent.\n It will be valid for 1 hour");
+        setErrorMessage("");
+      }
+      else{
+        setSuccessMessage("");
+        setErrorMessage("Mail cannot be found");
+      }
+    })
   };
-
   const navigate = useNavigate(); // Call the hook
 
   const handleGoBack = () => { // Create a handler function
@@ -43,10 +56,15 @@ const ForgetPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-
+          {successMessage&&<div className='flex justify-center'>
+            <p className='text-green-400 font-semibold'>{successMessage}</p>
+            </div>}
+          {errorMessage&&<div className='flex justify-center'>
+            <p className='text-red-700 font-semibold'>{errorMessage}</p>
+            </div>}
           <div className="flex justify-center">
             <button onClick={()=> forgotPasswordRequest(email)}
-            type="submit" className="bg-white text-blue-500 font-bold px-4 py-2 rounded">
+            type="submit" className="text-white bg-blue-500 font-bold px-4 py-2 rounded">
               Send Reset Link
             </button>
           </div>

@@ -4,10 +4,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.Report;
+import tr.edu.bilkent.bilsync.entity.ReportType;
 import tr.edu.bilkent.bilsync.exception.NoRecordFoundException;
 import tr.edu.bilkent.bilsync.repository.ReportRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -70,6 +70,31 @@ public class ReportService {
         return reports;
     }
 
+    /**
+     * Creates a report and saves it in the repository.
+     *
+     * @param report The Report object to be created and saved.
+     * @return true if the report is successfully created and saved, false otherwise.
+     */
+    public boolean createReport(Report report) {
+        try{
+            reportRepository.save(report);
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
 
-
+    /**
+     * Retrieves a previous report based on reporter ID, reported entity ID, and report type.
+     *
+     * @param reporterId        The ID of the user who reported.
+     * @param reportedEntityId The ID of the reported entity.
+     * @param reportType        The type of the report.
+     * @return The previous report with the specified criteria.
+     */
+    public Report getPreviousReport(long reporterId, long reportedEntityId, ReportType reportType)
+    {
+        return  reportRepository.findByReporterIdAndReportedEntityIdAndReportType( reporterId,  reportedEntityId,  reportType);
+    }
 }

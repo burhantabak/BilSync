@@ -2,6 +2,10 @@ package tr.edu.bilkent.bilsync.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents a user's participation in a chat, storing information about the associated chat, user, and user status.
+ * This class is annotated with JPA annotations for entity mapping.
+ */
 @Entity
 public class ChatUser {
     @Id

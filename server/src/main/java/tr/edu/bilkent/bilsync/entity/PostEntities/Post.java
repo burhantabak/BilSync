@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import tr.edu.bilkent.bilsync.entity.Comment;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
 
+/**
+ * Represents a generic post entity, serving as the base class for various post types.
+ * This class is annotated with JPA annotations for entity mapping and uses the TABLE_PER_CLASS inheritance strategy.
+ */
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -28,16 +31,14 @@ public class Post {
     private String description;
 
     @Column(nullable = false)
-    private String imagePath = "OUR_DEFAULT_IMAGE_PATH";
+    private String imageName = "";
 
     @Column(nullable = false)
     private long votes = 0;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "voters", joinColumns = @JoinColumn(name = "post_id"))
-    @MapKeyColumn(name = "user_id")
-    @Column(name = "vote")
-    private Map<Long, Integer> voters = new HashMap<>();
+    @OneToMany
+    @Column(name = "listVotes")
+    private List<Vote> listVotes = new ArrayList<>();
 
     @Column(nullable = false)
     private long views = 0;
@@ -67,7 +68,9 @@ public class Post {
     @Column(nullable = false)
     private byte postType;
 
-    // Constructors
+    /**
+     * Default constructor for Post.
+     */
     public Post() {
     }
 
@@ -102,11 +105,11 @@ public class Post {
         this.description = description;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageName() {
+        return imageName;
     }
 
-    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+    public void setImageName(String imagePath) { this.imageName = imagePath; }
 
     public long getVotes() {
         return votes;
@@ -116,17 +119,13 @@ public class Post {
         this.votes = votes;
     }
 
-    public Map<Long, Integer> getVoters() {
-        return voters;
+    public List<Vote> getListVotes() {
+        return listVotes;
     }
 
-    public void setVoters(Map<Long, Integer> voters) {
-        this.voters = voters;
+    public void setListVotes(List<Vote> voters) {
+        this.listVotes = voters;
     }
-
-    public void vote(long userId, int vote) { this.voters.put(userId, vote); }
-
-    public void removeVote(long userId) { this.voters.remove(userId); }
 
     public long getViews() {
         return views;
@@ -168,6 +167,10 @@ public class Post {
 
     public void setPostDate(Timestamp postDate) { this.postDate = postDate; }
 
+    /**
+     * Executes pre-persistence operations before saving the entity to the database.
+     * Initializes votes, views, and commentList. Sets the postDate to the current time in the Turkish time zone.
+     */
     public void prePersist() {
         this.votes = 0;
         this.views = 0;
@@ -178,6 +181,11 @@ public class Post {
         this.postDate = Timestamp.from(trClock);
     }
 
+    /**
+     * Adds a comment to the commentList associated with this post.
+     *
+     * @param comment The comment to be added.
+     */
     public void addComment(Comment comment) {
         this.commentList.add(comment);
     }

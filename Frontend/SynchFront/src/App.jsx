@@ -19,8 +19,14 @@ import AdminPanel from "./Components/AdminPanel.jsx"
 import AddAccount from "./statics/AddAccount.jsx"
 import ReportsPage from "./Components/Reports.jsx"
 import EditProfilePage from "./statics/EditProfilePage.jsx"
+import TransactionPage from "./Components/Transaction.jsx"
+import MyTransactionPage from "./statics/MyTransactions.jsx"
 
 function App() {
+  const handleBuyNow = () => {
+    // Implement your buy now logic here
+    console.log("Buy now logic");
+  };
   const [results, setResults] = useState([]);
   const [isLoggedIn,setLoggedIn] = useState(false);
   return (
@@ -32,21 +38,25 @@ function App() {
             <Routes>
               <Route path="/login" element={<LoginForm handleLogin={()=>{setLoggedIn(true)}}/>}/>
               <Route path="/forgetPassword" element = {<ForgetPassword/>}/>
-              <Route path="/mainPage" element={<ProtectedRoute>
+              <Route path="/mainPage" element={<ProtectedRoute userOnly={true} adminOnly={false}>
                 <MainPage/>
                 </ProtectedRoute>}/>
 
               <Route path="/commentScreen" element={<CommentScreen/>}/>
-              <Route path="/admin/adminPanel" element={<AdminPanel/>}/>
-              <Route path="/editAccount" element={<ProtectedRoute><EditAccount/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
-              <Route path="/editProfile" element={<ProtectedRoute><EditProfilePage/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
-              <Route path="/profilePage" element={<ProtectedRoute><EditProfile/></ProtectedRoute>}/>{/**Kardeşim elinden öper */}
-              <Route path="/aboutUs" element = {<AboutUs/>}/>
-              <Route path="/createPost" element = {<ProtectedRoute><CreatePost/></ProtectedRoute>}/>
+              <Route path="/editAccount" element={<ProtectedRoute userOnly={true} adminOnly={false}><EditAccount/></ProtectedRoute>}/>
+              <Route path="/editProfile" element={<ProtectedRoute userOnly={true} adminOnly={false}><EditProfilePage/></ProtectedRoute>}/>
+              <Route path="/profilePage" element={<ProtectedRoute userOnly={true} adminOnly={false}><EditProfile/></ProtectedRoute>}/>
+              <Route path="/createPost" element = {<ProtectedRoute userOnly={true} adminOnly={false}><CreatePost/></ProtectedRoute>}/>
+              <Route path="/transaction" element = {<ProtectedRoute userOnly={true} adminOnly={false}><TransactionPage/></ProtectedRoute>}/>
+              <Route path="/transaction/:postId" element={<ProtectedRoute userOnly={true} adminOnly={false}><TransactionPage handleBuyNow={handleBuyNow} /></ProtectedRoute>} />
               <Route path="/resetPassword" element = {<ResetPassword/>}/>
               <Route path="/changePassword" element = {<ForgetPassword/>}/>
-              <Route path="/admin/addAccount" element = {<AddAccount/>}/>
-              <Route path="/admin/Reports" element = {<ReportsPage/>}/>
+              <Route path="/admin/addAccount" element={<ProtectedRoute adminOnly={true} userOnly={false}><AddAccount/></ProtectedRoute>}/>
+              <Route path="/admin/Reports" element = {<ProtectedRoute adminOnly={true} userOnly={false}><ReportsPage/></ProtectedRoute>}/>
+              <Route path="/admin/adminPanel" element={<ProtectedRoute adminOnly={true} userOnly={false}><AdminPanel/></ProtectedRoute>}/>
+              <Route path="/myTransactions" element={<ProtectedRoute userOnly={true} adminOnly={false}><MyTransactionPage/></ProtectedRoute>}/>
+
+              <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
           </BrowserRouter>
