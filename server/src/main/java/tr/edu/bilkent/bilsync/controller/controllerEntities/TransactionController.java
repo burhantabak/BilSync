@@ -77,8 +77,7 @@ public class TransactionController {
     @GetMapping("/by-user")
     public ResponseEntity<?> getTransactionsByUser(@AuthenticationPrincipal UserEntity currentUser) {
         List<Transaction> userTransactions = transactionService.getTransactionsByUser(currentUser);
-        if(userTransactions.isEmpty())
-        {
+        if (userTransactions.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is no transaction");
         }
         return ResponseEntity.ok(userTransactions);
@@ -87,7 +86,7 @@ public class TransactionController {
     /**
      * Creates a new transaction.
      *
-     * @param postId post that the transaction is based from
+     * @param postId      post that the transaction is based from
      * @param currentUser The current user is always accepted as TAKER!
      * @return The created {@link Transaction}.
      */
@@ -105,22 +104,24 @@ public class TransactionController {
      * Updates the state of a transaction to "Giver Approved".
      *
      * @param id The ID of the transaction to be updated.
+     * @param currentUser The current user
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#PENDING_TAKER_APPROVAL}.
      */
     @PutMapping("update/giverApproved/{id}")
-    public ResponseEntity<?> updateTransactionToGiverApproved(@PathVariable Long id) {
-        return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, TransactionState.PENDING_TAKER_APPROVAL));
+    public ResponseEntity<?> updateTransactionToGiverApproved(@PathVariable Long id, @AuthenticationPrincipal UserEntity currentUser) {
+        return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, currentUser.getId(), TransactionState.PENDING_TAKER_APPROVAL));
     }
 
     /**
      * Updates the state of a transaction to "Taker Approved".
      *
      * @param id The ID of the transaction to be updated.
+     *  @param currentUser The current user
      * @return The updated {@link Transaction} with the state set to {@link TransactionState#DEPOSITED}.
      */
     @PutMapping("update/takerApproved/{id}")
-    public ResponseEntity<?> updateTransactionToTakerApproved(@PathVariable Long id) {
-        return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, TransactionState.DEPOSITED));
+    public ResponseEntity<?> updateTransactionToTakerApproved(@PathVariable Long id, @AuthenticationPrincipal UserEntity currentUser) {
+        return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, currentUser.getId(), TransactionState.DEPOSITED));
     }
 
     /**
