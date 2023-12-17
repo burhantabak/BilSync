@@ -45,7 +45,12 @@ export default function ForumPost({post,isLostnFound, isAnynomous}) {
                 {post.description}
             </div>
               <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
-                <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-1/2 h-1/2 overflow-hidden'></img>
+              {!post.imageData ? 
+            <img alt='post-image' 
+            src='basys3.png'
+             className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>:
+              <img src={post.imageData} 
+              alt={`${post.imageName}`}/>}
                 <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
                     <div className='flex gap-5'>
                     <button onClick={()=>{setStarred(!isStarred)}}>
