@@ -48,6 +48,7 @@ export const DataProvider = ({ children }) => {
           if(registeredUser){setUser({...user,profileImageName: registeredUser.profileImageName,
              imageData: registeredUser.imageData, bio:registeredUser.bio})
              console.log(user)}
+          return imagedUsers;
         }
       )
     });

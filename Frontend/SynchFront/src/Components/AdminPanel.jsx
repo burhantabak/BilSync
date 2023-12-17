@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useData } from '../Context/DataContext';
+import getAllUsers from '../calling/userCalling';
+import { getImage } from '../calling/imageCalling';
 const mockUsers = [
   { id: 1, name: 'Tuna Saygin', email: 'tuna.saygin@ug.bilkent.edu.tr' , isBanned: false,   imageUrl: 'https://media.licdn.com/dms/image/C4D03AQFnedyongjCEw/profile-displayphoto-shrink_800_800/0/1668101973946?e=1706140800&v=beta&t=Rrw9xDrS-k7l0eLVvwz5VmWuNslnoFhzLlqQi6QfdAI' },
   { id: 2, name: 'Kanan Zeynalov', email: 'kanan.zeynalov@ug.bilkent.edu.tr', isBanned: true, imageUrl: 'https://media.licdn.com/dms/image/D4D03AQE9ip_PWaWaCA/profile-displayphoto-shrink_800_800/0/1702173044193?e=1707955200&v=beta&t=ozf-9tLZhMY5ZlOj0wJY8PC-fPxaoZf89ueyTUyHnME' },
@@ -10,10 +12,35 @@ const mockUsers = [
 export default function AdminPanel() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState(mockUsers);
-
+  const {allUsers,getTheUsers,user} = useData();
+  const [isUsersLoaded, setIsUsersLoaded] = useState(false);
   const navigate = useNavigate();
-  
+  useEffect(()=>{
+    //since function is not working here is the hardcoded version
+    getAllUsers(user).then(users=>{
+      const imagedUserList = users.map(async (user)=>{
+        const imageData = await getImage(users.profileImage,user);
+        return {...user, imageData};
+      })
 
+      Promise.all(imagedUserList).then(
+        (imagedUsers)=>{
+          setFilteredUsers(imagedUsers)
+          console.log("images with users")
+          console.log(imagedUsers);
+          const registeredUser = imagedUsers.find((claimedUser)=>claimedUser.id==user.userId)
+          console.log(registeredUser)
+          console.log(user.userId)
+          if(registeredUser){setUser({...user,profileImageName: registeredUser.profileImageName,
+             imageData: registeredUser.imageData, bio:registeredUser.bio})
+             console.log(user)}
+          return imagedUsers;
+        }
+      )
+    });
+  }
+    ,[]
+  )
   const handleChangeEmail = (userId) => {
     console.log(`Change email for user with ID: ${userId}`);
   };
@@ -75,11 +102,11 @@ export default function AdminPanel() {
             className="flex flex-row items-center justify-between py-2 px-4 mb-2 bg-gray-300 rounded-md"
           >
             <div className="flex flex-col">
-              <img
+              {user.profileImageName?<img
                 src={user.imageUrl} 
                 alt="Profile picture"
                 className="w-10 h-10 rounded-full mr-4"
-              />
+              />: <div className='w-10 h-10 bg-slate-500 rounded-full mr-4'></div>}
               <span className="text-lg font-medium">{user.name}</span>
               <span className="text-sm text-gray-500">{user.email}</span>
             </div>
