@@ -48,11 +48,16 @@ export default function LostnFoundForm() {
             // Debugging: Log the post object
             console.log("Post object:", lostnFoundPost);
             createLostnFoundPost(lostnFoundPost,user).then((result) => {
-                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+                console.log(result);
+                if(result === 200) { 
+                    setIsCompleted(true) 
+                    navigate('/mainPage');
+                } 
+                else {
+                   setErrorMessage(result);
+                }
             });
-            if(setIsCompleted){
-                navigate('/mainPage');
-            }
+           
         }
         else{
             setErrorMessage(imageName)

@@ -38,12 +38,18 @@ export default function SecondHandForum() {
             console.log("Post object:", post);
     
             createTradingPost(post,user).then((result) => {
-                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+                console.log(result);
+                if(result === 200) { 
+                     setIsCompleted(true) 
+                     navigate('/mainPage');
+                 } 
+                 else {
+                    setErrorMessage(result);
+                 }
             })
 
-            if(setIsCompleted){
-                navigate('/mainPage');
-            }
+
+
 
         });
     }

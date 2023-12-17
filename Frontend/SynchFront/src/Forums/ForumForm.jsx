@@ -35,12 +35,17 @@ export default function ForumForm() {
             console.log("Post object:", normalForumPost);
     
             createNormalPost(normalForumPost,user).then((result) => {
-                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+                console.log(result);
+                if(result === 200) { 
+                  setIsCompleted(true) 
+                  navigate('/mainPage');
+              } 
+              else {
+                 setErrorMessage(result);
+              }
             });
 
-            if(setIsCompleted){
-              navigate('/mainPage');
-          }
+           
 
           });
       }

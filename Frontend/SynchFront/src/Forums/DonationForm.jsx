@@ -46,11 +46,16 @@ export default function DonationForm() {
             // Debugging: Log the post object
             console.log("Post object:", borrowPost);
             createDonationPost(borrowPost,user).then((result) => {
-                console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
+                console.log(result);
+                if(result === 200) { 
+                    setIsCompleted(true) 
+                    navigate('/mainPage');
+                } 
+                else {
+                   setErrorMessage(result);
+                }
             });
-            if(setIsCompleted){
-                navigate('/mainPage');
-            }
+
         
         }
         else{
