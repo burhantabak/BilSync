@@ -58,7 +58,7 @@ public class AdminController {
      * @param userId The ID of the user to be banned.
      * @return ResponseEntity indicating the result of the operation with an appropriate message.
      */
-    @PutMapping("/{userId}/ban")
+    @PostMapping("/{userId}/ban")
     public ResponseEntity<String> banUser(@PathVariable long userId) {
         try {
             userInfoService.banUser(userId);
