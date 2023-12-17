@@ -37,12 +37,14 @@ export default function TradingPostItem({post, isProfile}) {
           ).then((response) => {
             setTransactionComplete(true);
             handleBuyNow(post.id);
-      
+            console.log(response)
             setIsSold(true); // Set isSold to true when the item is sold
+            post.postType===2 && navigate("/myTransactions")
           }).catch((error) => {
             // Handle the case where the transaction failed
           });
-        navigate(`/transaction/${post.id}`, );;
+        
+        if(post.postType!==2){navigate(`/transaction/${post.id}`, );}
       };
       
   return (

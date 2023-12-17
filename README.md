@@ -94,3 +94,9 @@ For the frontend ensure you are not using a headless environment, and you have n
 * Run `npm run dev`
 * Go to the link provided in the console.
 * From the link, you can start interacting with the frontend of the application.
+
+
+## Usage
+* To create a user, log in as admin, predefined in the code for now.
+* Log in with that user's email and password.
+* Enjoy the perfect world of Bilkent.
