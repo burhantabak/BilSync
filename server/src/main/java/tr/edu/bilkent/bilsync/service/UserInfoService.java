@@ -97,6 +97,25 @@ public class UserInfoService implements UserDetailsService {
         repository.save(user); // Save the updated user
     }
 
+    /**
+     * Unbans a user with the specified user ID.
+     *
+     * @param userId The ID of the user to be unbanned.
+     * @throws UsernameNotFoundException If no user is found with the given user ID.
+     * @throws IllegalStateException      If the user is not currently banned.
+     */
+    public void unbanUser(long userId) {
+        UserEntity user = repository.findById(userId);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with id: " + userId);
+        } else if (!user.isBanned()) {
+            throw new IllegalStateException("User is not currently banned");
+        }
+        user.setBanned(false); // Set the user as unbanned
+        repository.save(user); // Save the updated user
+    }
+
+
 
     /**
      * Adds a new user based on the provided UserDto.
