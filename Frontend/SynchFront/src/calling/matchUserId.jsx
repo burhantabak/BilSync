@@ -5,7 +5,7 @@ export default function matchUserID(userList,postList,user){
           // Find the corresponding user in the userList
           const correspondingUser = userList.find(userItem => userItem.id === post.authorID);
             const newCommentList = post.commentList.map((comment)=>{
-                const commentUser = userList.find(userData=>useData.id === comment.authorID)
+                const commentUser = userList.find(userData=>userData.id === comment.authorID)
                 if(commentUser){
                     
                     return {
