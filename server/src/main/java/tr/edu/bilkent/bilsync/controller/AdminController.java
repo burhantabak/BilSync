@@ -58,7 +58,7 @@ public class AdminController {
      * @param userId The ID of the user to be banned.
      * @return ResponseEntity indicating the result of the operation with an appropriate message.
      */
-    @PutMapping("/{userId}/ban")
+    @PostMapping("/{userId}/ban")
     public ResponseEntity<String> banUser(@PathVariable long userId) {
         try {
             userInfoService.banUser(userId);
@@ -71,6 +71,21 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
+
+    @PostMapping("/{userId}/unban")
+    public ResponseEntity<String> unbanUser(@PathVariable long userId) {
+        try {
+            userInfoService.unbanUser(userId);
+            return ResponseEntity.status(HttpStatus.OK).body("User unbanned successfully");
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is not currently banned");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
+
 
 
     /**
