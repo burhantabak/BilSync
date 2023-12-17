@@ -7,13 +7,13 @@ function classNames(...classes) {
 }
 
 export default function Dropdown({onCategoryChange}) {
-  const[selectedOne, setSelectedOne] = useState("Categories");
+  const[selectedOne, setSelectedOne] = useState("Search By Title");
 
   const [selectedCategory, setSelectedCategory] = useState("Title");
   const handleCategoryChange = (category) =>{
     setSelectedCategory(category);
     onCategoryChange(category);
-    console.log('Selected Category OF THIS SHIT :', category); // test //sakin abi sakin DEMO'da gösterecez
+    
 
   };
 

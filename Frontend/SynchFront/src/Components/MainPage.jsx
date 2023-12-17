@@ -33,9 +33,6 @@ export default function MainPage() {
                 <li className='text-center w-full'>
                     <button onClick={()=>{setFilterLostnFound(!filterLostnFound)}} className={`w-full rounded-lg py-3 px-2 text-center font-semibold mt-5 ${filterLostnFound?"bg-gray-300":""} hover:bg-gray-300`}>Forum</button>
                 </li>
-                <li className='text-center w-full'>
-                    <button onClick={()=>{setFilterLostnFound(!filterLostnFound)}} className={`w-full rounded-lg py-3 px-2 text-center font-semibold mt-5 ${filterLostnFound?"bg-gray-300":""} hover:bg-gray-300`}>Boş</button>
-                </li>
             </ul>
         </div>
         <div className='mx-auto w-3/4 overflow-y-auto px-2 divide-y'>
