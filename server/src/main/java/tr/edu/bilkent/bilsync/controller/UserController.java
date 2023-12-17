@@ -89,7 +89,7 @@ public class UserController {
      * @return ResponseEntity indicating the result of the operation with an appropriate message.
      */
     @CrossOrigin
-    @GetMapping("/editProfile")
+    @PostMapping("/editProfile")
     @PreAuthorize(value = "hasAuthority('ROLE_USER')")
     public ResponseEntity<?> editUserProfile(@AuthenticationPrincipal UserEntity currentUser,
                                              @RequestParam(required = false) String bio,
