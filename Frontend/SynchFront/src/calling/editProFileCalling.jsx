@@ -1,6 +1,6 @@
 export function editProfile(profileImageName, bio, user){
     const baseUrl = 'http://localhost:8080'; // Change this to your server's base URL
-    const endpoint = '/user/user/editProfile';
+    const endpoint = '/user/editProfile';
     const formdata = new FormData();
     formdata.append('bio', bio);
     formdata.append('profileImageName', profileImageName);

@@ -23,7 +23,7 @@ export async function uploadFileCall(file, user) {
   };
 export function getImage(imageName, user) {
   console.log("imageımı alayım lütfen" + imageName)
-    const imageUrl = `http://localhost:8080/file/fileSystem/${imageName}`;
+    const imageUrl = `http://localhost:8080/file/${imageName}`;
     if(!imageName){
         return "";
     }
