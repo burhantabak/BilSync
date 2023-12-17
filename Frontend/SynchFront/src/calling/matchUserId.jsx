@@ -15,10 +15,14 @@ export default function matchUserID(userList,postList){
             })
           // If user is found, update the post with userName and userImage
           if (correspondingUser) {
+            console.log("corr user");
+            console.log(correspondingUser);
             return {
               ...post,
               commentList: newCommentList,
               name: correspondingUser.name,
+              profileImageData: correspondingUser.imageData,
+              profileImageName: correspondingUser.profileImageName,
             };
           }
         
