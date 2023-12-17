@@ -1,20 +1,19 @@
 export function changeEmail(userId,newEmail,user){
-    const apiUrl = `http://localhost:8080/admin/users/${userId}/change-email`
-    const requestOptions = {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'text/plain',
-          'Authorization': `Bearer ${user.token}`
-        },
-        body: newEmail,
-      };
-    
-      return fetch(apiUrl, requestOptions)
-        .then(response => { 
-            console.log(response);
-            return response.status})  // Return the status code
-        .catch(error => {
-          console.error('Error:', error);
-          throw error;  // Re-throw the error for further handling if needed
-        });
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "text/plain");
+    myHeaders.append("Authorization", `Bearer ${user.token}`);
+
+    var raw = newEmail;
+
+    var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+    };
+
+    fetch(`http://localhost:8080/admin/users/${userId}/change-email`, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
 }

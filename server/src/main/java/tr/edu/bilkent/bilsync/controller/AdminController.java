@@ -28,6 +28,7 @@ public class AdminController {
      * @param newEmail  The new email to be set for the user.
      * @return ResponseEntity indicating the result of the operation with an appropriate message.
      */
+    @CrossOrigin
     @PutMapping("/{userId}/change-email")
     public ResponseEntity<String> changeEmail(@PathVariable long userId, @RequestBody String newEmail) {
         try {

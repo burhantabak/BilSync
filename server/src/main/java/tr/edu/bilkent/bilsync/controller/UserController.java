@@ -12,7 +12,7 @@ import tr.edu.bilkent.bilsync.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
