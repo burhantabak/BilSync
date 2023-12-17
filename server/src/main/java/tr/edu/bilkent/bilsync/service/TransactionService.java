@@ -3,14 +3,12 @@ package tr.edu.bilkent.bilsync.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.dto.TransactionDto;
 import tr.edu.bilkent.bilsync.entity.PostEntities.*;
 import tr.edu.bilkent.bilsync.entity.Transaction;
 import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.TransactionRepository;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
-import tr.edu.bilkent.bilsync.service.PostServices.SecondHandTradingPostService;
 
 import java.util.Date;
 import java.util.List;
@@ -125,20 +123,40 @@ public class TransactionService {
      * @param id The ID of the transaction to update.
      * @return The updated {@link Transaction}, or {@code null} if the transaction with the given ID is not found.
      */
-    public Transaction updateTransaction(Long id, TransactionState newState) {
+    public Transaction updateTransaction(Long id, long userId, TransactionState newState) {
         Transaction existingTransaction = transactionRepository.findById(id).orElse(null);
         if (existingTransaction != null) {
             if (existingTransaction.getStatus() == TransactionState.REFUNDED || existingTransaction.getStatus() == TransactionState.DEPOSITED) {
                 throw new IllegalStateException("Cannot update resolved transactions.");
             }
-            existingTransaction.setStatus(newState);
-            if (newState == TransactionState.PENDING_TAKER_APPROVAL) {
-                existingTransaction.setGiverApproveDate(new Date());
-            } else if (newState == TransactionState.DEPOSITED) {
-                postService.setHeld(existingTransaction.getPostId(), false);
-                postService.setAsResolved(existingTransaction.getPostId(), true);
-                existingTransaction.setTakerApproveDate(new Date());
+            if (newState == TransactionState.PENDING_TAKER_APPROVAL) {//giver approved
+                if (this.amITheGiver(id, userId)) {
+                    if (this.giverApprovalNeeded(id)) {
+                        existingTransaction.setGiverApproveDate(new Date());
+                    } else {
+                        throw new IllegalStateException("Cannot update this transaction as it is waiting for taker approval.");
+                    }
+                } else {
+                    throw new IllegalStateException("You cannot approve as giver to the listing you are not the lister of.");
+                }
+
+            } else if (newState == TransactionState.DEPOSITED) {//taker approved
+
+                if (this.amITheTaker(id, userId)) {
+                    if (this.takerApprovalNeeded(id)) {
+                        postService.setHeld(existingTransaction.getPostId(), false);
+                        postService.setAsResolved(existingTransaction.getPostId(), true);
+                        existingTransaction.setTakerApproveDate(new Date());
+                    } else {
+                        throw new IllegalStateException("Cannot update this transaction as it is waiting for giver approval.");
+                    }
+                } else {
+                    throw new IllegalStateException("You cannot approve as taker to the listing you are not the taker of.");
+                }
+
+
             }
+            existingTransaction.setStatus(newState);
             return transactionRepository.save(existingTransaction);
         }
         return null;
@@ -233,4 +251,19 @@ public class TransactionService {
         return timeDifferenceMillis / (24 * 60 * 60 * 1000);
     }
 
+    public boolean giverApprovalNeeded(Long id) {
+        return (this.getTransactionById(id).getStatus() == TransactionState.PENDING_GIVER_APPROVAL);
+    }
+
+    public boolean amITheGiver(Long id, long userId) {
+        return (this.getTransactionById(id).getGiverId() == userId);
+    }
+
+    public boolean takerApprovalNeeded(Long id) {
+        return (this.getTransactionById(id).getStatus() == TransactionState.PENDING_TAKER_APPROVAL);
+    }
+
+    public boolean amITheTaker(Long id, long userId) {
+        return (this.getTransactionById(id).getTakerId() == userId);
+    }
 }
