@@ -26,6 +26,7 @@ export default function TradingPostItem({post, isProfile}) {
         setIsSold(true); // Set isSold to true when the item is sold
 
       };
+
     
 
     const handleBuyClick = () => {
@@ -71,7 +72,7 @@ export default function TradingPostItem({post, isProfile}) {
         <div className='w-full text-center'>
             {post.description}    
         </div>
-        {isSold && <p className="text-green-500 font-bold">This item has been sold!</p>}
+        {post.resolved && <p className="text-green-500 font-bold">This item has been sold!</p>}
 
 
         

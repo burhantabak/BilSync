@@ -9,7 +9,7 @@ const ReportsPage = () => {
   const { postList, getThePosts, user} = useData();
   const [reportList,setReportList] = useState([]);
   const [posts,setPosts] = useState([]);
-  useEffect(()=>{getAllReports(user).then((reports)=>{console.log(reports)})},[]);
+  useEffect(()=>{getAllReports(user).then((reports)=>{console.log(reports);setReportList(reports)})},[]);
   useEffect(()=>setPosts(postList),[postList]);
   console.log(postList);
   // Define the initial reports state

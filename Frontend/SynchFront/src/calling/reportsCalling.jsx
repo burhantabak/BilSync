@@ -5,6 +5,7 @@ const reportPostCalling = (description,user, reportedEntityId) => {
     "description": description,
     "reportedEntityId": reportedEntityId,
     });
+    console.log(raw);
 
     return fetch(`${BASE_URL}/admin/reports/createPostReport`, {
       method: 'POST',

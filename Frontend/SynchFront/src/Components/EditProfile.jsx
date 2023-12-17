@@ -11,7 +11,10 @@
     const [userType, setUserType] = useState(user?user.accountType:"");
 
     const navigate = useNavigate();
+   
+    
 
+  
     const [userPosts, setUserPosts] = useState([]); // Add this line to define userPosts state
 
     const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(false); // New state for user posts loading
@@ -50,7 +53,7 @@
     console.log("are we okay" , postList[1]);
     console.log("Gijdillag react test 1" , postList[2]);
     console.log("Gijdillag react test 2" , postList[2]);
-
+    console.log("Are we here" , user.bio);
 
 
     const starredPosts = userPosts.filter((post) => post.isStarred);
