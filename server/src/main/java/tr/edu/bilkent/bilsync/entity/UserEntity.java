@@ -40,7 +40,7 @@ public class UserEntity implements UserDetails {
     private boolean isBanned;
 
     @Column
-    private String profileImageName = "OUR_DEFAULT_IMAGE_PATH";
+    private String profileImageName = "";
 
     public UserType getAccountType() {
         return accountType;

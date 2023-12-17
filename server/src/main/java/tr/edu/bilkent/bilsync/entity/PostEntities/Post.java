@@ -31,7 +31,7 @@ public class Post {
     private String description;
 
     @Column(nullable = false)
-    private String imageName = "OUR_DEFAULT_IMAGE_NAME";
+    private String imageName = "";
 
     @Column(nullable = false)
     private long votes = 0;
