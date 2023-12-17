@@ -33,7 +33,6 @@
         console.log("Checkpoint userposts" , userPosts);
         setUserPosts(userPosts); // Update user posts state
         setIsLoadingUserPosts(false); // Reset loading state
-        console.log("Gijdillag react test 1" , postList[2]);
 
       }
     }, [postList]); // Update useEffect dependency
