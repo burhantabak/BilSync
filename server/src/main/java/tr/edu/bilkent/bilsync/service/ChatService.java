@@ -31,7 +31,7 @@ public class ChatService {
 
     public List<ChatMessageDto> getMessagesByChatId(Long chatId, UserEntity currentUser) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
-        if (chat.getUsers().stream().noneMatch(chatUser -> chatUser.getId() == currentUser.getId())){
+        if (!userHasAccessToChat(currentUser, chatId)){
             throw new IllegalArgumentException("You are not a participant of this chat");
         }
         List<ChatMessage> chatMessages = chat.getChatMessages();
