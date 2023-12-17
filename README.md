@@ -90,6 +90,7 @@ We have used JDK 21 for development and test environments.
 For the frontend ensure you are not using a headless environment, and you have npm installed,
 
 * On the terminal, navigate to `Frontend/SynchFront`
+* Run `npm install`
 * Run `npm run dev`
 * Go to the link provided in the console.
-* 
+* From the link, you can start interacting with the frontend of the application.
