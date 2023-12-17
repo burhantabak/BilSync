@@ -102,7 +102,7 @@ export default function AdminPanel() {
             className="flex flex-row items-center justify-between py-2 px-4 mb-2 bg-gray-300 rounded-md"
           >
             <div className="flex flex-col">
-              {user.profileImageName?<img
+              {user.profileImageName && !(user.profileImageName === "OUR_DEFAULT_IMAGE_PATH")?<img
                 src={user.imageUrl} 
                 alt="Profile picture"
                 className="w-10 h-10 rounded-full mr-4"
