@@ -78,6 +78,7 @@ export const DataProvider = ({ children }) => {
     .then((postsWithImages) => {
       // Set the updated post list with image data
       console.log(postsWithImages);
+      setPostList(postsWithImages);
     })
     .catch((error) => {
       console.error('Error fetching images:', error);
