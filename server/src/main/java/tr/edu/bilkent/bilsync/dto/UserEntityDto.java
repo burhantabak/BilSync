@@ -1,5 +1,7 @@
 package tr.edu.bilkent.bilsync.dto;
 
+import tr.edu.bilkent.bilsync.entity.UserType;
+
 /**
  * Data Transfer Object (DTO) representing a user entity. Used for transferring user information between the server and the client.
  */
@@ -10,6 +12,7 @@ public class UserEntityDto {
     private String name;
     private String profileImageName;
     private String bio;
+    private UserType accountType;
     private boolean isBanned;
 
 
@@ -26,14 +29,16 @@ public class UserEntityDto {
      * @param name             The name of the user.
      * @param profileImageName The profile image name of the user.
      * @param bio              The biography of the user.
+     * @param accountType      The account type of the user
      * @param isBanned         A flag indicating whether the user is banned.
      */
-    public UserEntityDto(long id, String email, String name, String profileImageName, String bio, boolean isBanned) {
+    public UserEntityDto(long id, String email, String name, String profileImageName, String bio, UserType accountType, boolean isBanned) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.profileImageName = profileImageName;
         this.bio = bio;
+        this.accountType = accountType;
         this.isBanned = isBanned;
     }
 
@@ -61,4 +66,8 @@ public class UserEntityDto {
     public boolean getIsBanned() { return isBanned; }
 
     public void setIsBanned(boolean isBanned) { this.isBanned = isBanned; }
+
+    public UserType getAccountType() { return this.accountType; }
+
+    public void setAccountType(UserType accountType) { this.accountType = accountType; }
 }
