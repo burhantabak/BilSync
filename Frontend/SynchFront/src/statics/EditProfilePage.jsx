@@ -4,6 +4,7 @@ import { useData } from '../Context/DataContext';
 import ImageInput from '../Forums/ForumComponents/ImageInput';
 import { uploadFileCall } from '../calling/imageCalling';
 import { editProfile } from '../calling/editProFileCalling';
+import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 
 const EditProfilePage = () => {
   //const [newProfilePicture, setNewProfilePicture] = useState(user.profilePicture);
