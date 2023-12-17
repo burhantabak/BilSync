@@ -6,16 +6,26 @@ import takerApproval from '../calling/TransactionCaller.jsx/takerApproved';
 const MyTransactionPage = () => {
   const { user, transactions, getThePosts } = useData();
   const [isFetching, setIsFetching] = useState(false);
+  const [alreadyApproved, setAlreadyApproved] = useState({});
 
   const handleApprove = async (transactionId) => {
     try {
       setIsFetching(true);
 
       if (transactionId) {
-        if (user.userId === transactions.find((t) => t.id === transactionId)?.takerId) {
+        const transaction = transactions.find((t) => t.id === transactionId);
+
+        if (user.userId === transaction?.takerId) {
           // Approve as Taker
           await takerApproval(user, transactionId);
-        } else if (user.userId === transactions.find((t) => t.id === transactionId)?.giverId) {
+        } else if (user.userId === transaction?.giverId) {
+          // Check if already approved
+          if (transaction.status === 'PENDING_TAKER_APPROVAL') {
+            setAlreadyApproved((prev) => ({ ...prev, [transactionId]: true }));
+            alert('You have already approved this transaction as a giver.');
+            return; // Don't proceed with approval
+          }
+
           // Approve as Giver
           await approveTransaction(user, transactionId);
           console.log("Approved as Giver");
@@ -47,22 +57,30 @@ const MyTransactionPage = () => {
               <span className="text-sm text-gray-500">Status: {transaction.status}</span>
             </div>
             <div className="flex flex-row space-x-2">
-              {transaction.takerId === user.userId && (
+              {transaction.takerId === user.userId && transaction.status !== 'DEPOSITED' && (
                 <button
                   onClick={() => handleApprove(transaction.id)}
                   className="rounded-md bg-green-500 text-white px-4 py-1 hover:bg-green-600"
-                  disabled={transaction.status === 'Approved' || isFetching}
+                  disabled={transaction.status === 'DEPOSITED' || isFetching}
                 >
                   Approve As Taker
                 </button>
               )}
-              {transaction.giverId === user.userId && (
+              {transaction.giverId === user.userId && transaction.status !== 'DEPOSITED' && (
                 <button
                   onClick={() => handleApprove(transaction.id)}
                   className="rounded-md bg-blue-500 text-white px-4 py-1 hover:bg-blue-600"
-                  disabled={transaction.status === 'Approved' || isFetching}
+                  disabled={transaction.status === 'DEPOSITED' || alreadyApproved[transaction.id] || isFetching}
                 >
                   Approve As Giver
+                </button>
+              )}
+              {transaction.status === 'DEPOSITED' && (
+                <button
+                  className="rounded-md bg-red-500 text-white px-4 py-1 hover:bg-red-600"
+                  disabled
+                >
+                  DONE
                 </button>
               )}
             </div>
