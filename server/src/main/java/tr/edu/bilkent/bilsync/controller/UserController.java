@@ -74,7 +74,7 @@ public class UserController {
      * @return A welcome message for the user profile.
      */
     @CrossOrigin
-    @GetMapping("/userProfile")
+    @PostMapping("/userProfile")
     @PreAuthorize(value = "hasAuthority('ROLE_USER')")
     public String userProfile() {
         return "Welcome to User Profile";
