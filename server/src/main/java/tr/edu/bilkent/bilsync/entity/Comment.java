@@ -5,11 +5,14 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The {@code Comment} class represents a user-generated comment on a post or another comment.
+ * It includes information about the author, content, likes, replies, and other relevant details.
+ * This class is mapped to a database table for persistent storage using JPA annotations.
+ */
 @Entity
 @Table
 public class Comment {
@@ -124,6 +127,10 @@ public class Comment {
 
     public void setPrimaryPostID(long primaryPostID) { this.primaryPostID = primaryPostID; }
 
+    /**
+     * Executed before the entity is persisted to the database.
+     * Initializes default values such as likeCount, commentReplyList, and publishDate.
+     */
     @PrePersist
     public void prePersist() {
         this.likeCount = 0;
@@ -134,5 +141,10 @@ public class Comment {
         this.publishDate = Timestamp.from(trClock);
     }
 
+    /**
+     * Adds a comment ID to the list of comment replies associated with this comment.
+     *
+     * @param id The ID of the comment to be added to the list.
+     */
     public void addComment(long id) { this.commentReplyList.add(id); }
 }

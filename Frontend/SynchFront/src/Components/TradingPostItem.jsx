@@ -76,7 +76,7 @@ export default function TradingPostItem({post, isProfile}) {
 
         
         {!isProfile && <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
-            {post.imageName===403 ? 
+            {!post.imageData ? 
             <img alt='post-image' 
             src='basys3.png'
              className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>:
@@ -96,7 +96,12 @@ export default function TradingPostItem({post, isProfile}) {
             </div>
         </div>}
         {isProfile  && <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
-            <img alt='post-image' src='basys3.png' className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>
+        {!post.imageData ? 
+            <img alt='post-image' 
+            src='basys3.png'
+             className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>:
+              <img src={post.imageData} 
+              alt={`${post.imageName}`}/>}
             <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
                 <h2>{post.price}TL</h2>
                 <div className='flex gap-5'>

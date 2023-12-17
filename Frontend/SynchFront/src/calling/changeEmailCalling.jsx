@@ -6,7 +6,7 @@ export function changeEmail(userId,newEmail,user){
     var raw = newEmail;
 
     var requestOptions = {
-    method: 'PUT',
+    method: 'POST',
     headers: myHeaders,
     body: raw,
     redirect: 'follow'

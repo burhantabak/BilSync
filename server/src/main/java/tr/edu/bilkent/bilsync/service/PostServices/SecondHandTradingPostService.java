@@ -6,6 +6,11 @@ import tr.edu.bilkent.bilsync.repository.PostRepositories.SecondHandTradingPostR
 
 import java.util.List;
 
+/**
+ * Service class for handling operations related to SecondHandTradingPost entities.
+ * It contains methods for creating or saving posts, retrieving posts sorted by date,
+ * retrieving a post by its ID, and deleting a post by its ID.
+ */
 @Service
 public class SecondHandTradingPostService {
 

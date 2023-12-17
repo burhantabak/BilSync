@@ -6,12 +6,12 @@
   import { useNavigate } from "react-router-dom";  
 
   const ProfilePage = () => {
-    const [profilePicture, setProfilePicture] = useState("https://media.licdn.com/dms/image/C5603AQEYoQTc9d-tyg/profile-displayphoto-shrink_200_200/0/1516280847373?e=2147483647&v=beta&t=3oQIHia8rF_NV4W8hCAqEt64KQxzEtYTcH1eyOl_Xos");
-    const [userType, setUserType] = useState("Instructor");
+    const [profilePicture, setProfilePicture] = useState("https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png");
+    const { postList, isPostsLoading, getThePosts, user } = useData();
+    const [userType, setUserType] = useState(user?user.accountType:"");
 
     const navigate = useNavigate();
 
-    const { postList, isPostsLoading, getThePosts, user } = useData();
     const [userPosts, setUserPosts] = useState([]); // Add this line to define userPosts state
 
     const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(false); // New state for user posts loading

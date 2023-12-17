@@ -6,6 +6,9 @@ import tr.edu.bilkent.bilsync.repository.PostRepositories.LostAndFoundPostReposi
 
 import java.util.List;
 
+/**
+ * Service class for managing LostAndFoundPost entities.
+ */
 @Service
 public class LostAndFoundPostService {
     private final LostAndFoundPostRepository lostAndFoundPostRepository;

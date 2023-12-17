@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import FeedPage from './FeedPage';
 import { useData } from '../Context/DataContext';
 import ChatScreen from './ChatScreen.jsx';
-import { getChats } from '../calling/chatsCalling.jsx';
+import { createChat, getChats } from '../calling/chatsCalling.jsx';
 
 export default function MainPage() {
-    const {postList,chatList,getThePosts,isPostsLoading,getTheChats,getTheUsers} = useData();
+    const {postList,chatList,getThePosts,isPostsLoading,getTheChats,getTheUsers,allUsers} = useData();
     console.log(isPostsLoading)
     useEffect(()=> {getThePosts();getTheChats();getTheUsers();}
         ,[]
@@ -15,7 +15,8 @@ export default function MainPage() {
     const [filterLostnFound, setFilterLostnFound] = useState(true);
     const [selectedChat, setSelectedChat] = useState(null);
     const [searchInput, setSearchInput] = useState('');
-
+    const [selectedUsers,setSelectedUsers] = useState([]);
+    const [isCreateChatSelected,setIsCreateChatSelected] = useState(false);
     
     console.log("selected chat" + selectedChat)
   return (  
@@ -31,9 +32,6 @@ export default function MainPage() {
                 </li>
                 <li className='text-center w-full'>
                     <button onClick={()=>{setFilterLostnFound(!filterLostnFound)}} className={`w-full rounded-lg py-3 px-2 text-center font-semibold mt-5 ${filterLostnFound?"bg-gray-300":""} hover:bg-gray-300`}>Forum</button>
-                </li>
-                <li className='text-center w-full'>
-                    <button onClick={()=>{setFilterLostnFound(!filterLostnFound)}} className={`w-full rounded-lg py-3 px-2 text-center font-semibold mt-5 ${filterLostnFound?"bg-gray-300":""} hover:bg-gray-300`}>Boş</button>
                 </li>
             </ul>
         </div>
@@ -58,7 +56,7 @@ export default function MainPage() {
           onChange={(e) => setSearchInput(e.target.value)}
           required
         /> 
-        <button 
+        <button onClick={()=>setIsCreateChatSelected(true)}
             type = 'button'
             className='ml-4 bg-blue-400 text-white text-sm font-medium px-4 py-2 rounded-lg'>
             <svg 
@@ -79,6 +77,8 @@ export default function MainPage() {
             {Array.isArray(chatList) && chatList.filter((chat) => chat.chatName.toLowerCase().includes(searchInput.toLowerCase())
             ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)}
         </div>
+        <CreateChatModal setIsCreateChatSelected={setIsCreateChatSelected} allUsers={allUsers}
+        isChatSelected={isCreateChatSelected} selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers}/>
     </div>
   )
 }
@@ -100,4 +100,103 @@ function ChatItem({chat,handleChat}){
             </div>
         </div>
     );
+}
+function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsCreateChatSelected,allUsers}){
+    const {user} = useData();
+    const removeUser = (indexToRemove) => {
+        setSelectedUsers([...selectedUsers.filter((_, index) => index !== indexToRemove)]);
+      };
+    
+      const addUser = (event) => {
+        if (event.target.value !== "") {
+          if(!(selectedUsers.find((value)=>event.target.value === value)))
+          {
+            setSelectedUsers([...selectedUsers, event.target.value]);
+            setIsFocused(false);
+            setNameInput("");
+          }
+        }
+      };
+      const [groupName,setGroupName] = useState("");
+      const [nameInput, setNameInput] = useState("");
+      const [isFocused, setIsFocused] = useState(false);
+      const [errorMessage,setErrorMessage] = useState("");
+      const [submitMessage,setSubmitMessage] = useState("");
+      const searchResult = allUsers.filter((userItem)=>userItem.name.match(nameInput))
+    return(
+        <div>
+            {isChatSelected &&
+            <div className="fixed  bottom-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center zIndex = 200 " style={{ zIndex: 110 }}>
+             <div className="bg-white p-4 rounded-md">
+             <div className='flex justify-end'>
+                  <button onClick={()=>setIsCreateChatSelected(false)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  </button>
+              </div>
+              <div className='flex justify-center font-bold mb-2 '><h1>Create Chat</h1></div>
+             <div className='flex items-center mb-2'>
+            <label htmlFor="" className='w-28 font-semibold mb-2'> AddUser: </label>
+            <div className='w-full'>
+            <input
+            name='hashtag'
+            type="text"
+            value={nameInput}
+            onFocus={()=>setIsFocused(true)}
+            onKeyUp={(event) => (event.key === "Enter" ? addUser(event) : setIsFocused(true))}
+            onBlur={()=>setIsFocused(false)}
+            onChange={(event)=>setNameInput(event.target.value)}
+            placeholder="Press enter the users by their names"
+            className="bg-gray-50 border border-gray-300
+            text-gray-900 sm:text-sm rounded-lg focus:outline focus:outline-2
+            focus:border-sky-500 block w-full p-2.5 px-3"
+            />
+            <div className='border absolute z-20 bg-slate-50 rounded-lg'>
+            {isFocused && searchResult.map((result=><div key={result.id}
+            className='hover:bg-slate-400 px-1 py-1 text-center'>
+                {result.name}
+                </div>))}
+            </div>
+            </div>
+            </div>
+            <ul id="tags" className="flex flex-wrap pl-28 pr-4">
+            {selectedUsers.map((tag, index) => (
+                <li
+                key={index}
+                className="tag bg-blue-500 text-white h-8 flex items-center justify-center rounded-md m-2 p-2"
+                >
+                <span className="tag-title">{tag}</span>
+                <span
+                    className="tag-close-icon ml-2 cursor-pointer"
+                    onClick={() => removeUser(index)}
+                >
+                    x
+                </span>
+                </li>
+            ))}
+            </ul>
+            {selectedUsers.length>1 && <div>
+            <label htmlFor="" className='w-28 font-semibold'> AddGroupName: </label>
+            <input
+            name='hashtag'
+            type="text"
+            placeholder="Press enter to add tags"
+            className="bg-gray-50 border border-gray-300
+            text-gray-900 sm:text-sm rounded-lg focus:outline focus:outline-2
+            focus:border-sky-500 block w-full p-2.5 px-3"
+            />
+            </div>}
+            <button type="submit" onClick={()=>{createChat(allUsers,selectedUsers,groupName,user).then(response=>{response.status===200? getChats():null})}}
+            className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 
+            focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 
+            text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                Create Chat
+            </button>
+            </div>
+            
+            </div>
+          }
+        </div>
+    )
 }

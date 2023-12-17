@@ -6,6 +6,9 @@ import tr.edu.bilkent.bilsync.repository.PostRepositories.AnnouncementPostReposi
 
 import java.util.List;
 
+/**
+ * Service class for managing AnnouncementPost entities.
+ */
 @Service
 public class AnnouncementPostService {
 

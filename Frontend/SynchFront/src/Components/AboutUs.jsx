@@ -1,25 +1,19 @@
 
     import React from 'react';
     import { Link, useNavigate } from 'react-router-dom'; // Import the useNavigate hook
-
+import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 
     const AboutUs = () => {
 
         const navigate = useNavigate(); // Call the hook
 
-        const handleGoBack = () => { // Create a handler function
-            navigate(-1); // Navigate back to the previous page
-        };
 
         return (
             <div className="container mx-auto p-8">
                  <div className="flex items-center mb-4">
-                     <button
-                        className="text-blue-500 hover:underline"
-                        onClick={handleGoBack}
-                     >
-                        &larr; Back
-                    </button>
+                 <button onClick={() => navigate(-1)} className="text-xl text-blue-500">
+            <ArrowLeftIcon className="h-6 w-6" />
+      </button>
                 </div>
                 <h1 className="text-4xl font-bold mb-4">About Us</h1>
                 <p>

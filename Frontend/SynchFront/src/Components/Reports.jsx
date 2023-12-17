@@ -1,13 +1,15 @@
 // Import necessary dependencies and components
 import React, { useEffect, useState } from 'react';
 import { useData } from '../Context/DataContext';
+import { getAllReports } from '../calling/reportsCalling';
 
 // Define the ReportsPage component
 const ReportsPage = () => {
   // Retrieve postList from the DataContext
-  const { postList, getThePosts, } = useData();
+  const { postList, getThePosts, user} = useData();
+  const [reportList,setReportList] = useState([]);
   const [posts,setPosts] = useState([]);
-  useEffect(()=>getThePosts(),[]);
+  useEffect(()=>{getAllReports(user).then((reports)=>{console.log(reports)})},[]);
   useEffect(()=>setPosts(postList),[postList]);
   console.log(postList);
   // Define the initial reports state
@@ -17,17 +19,17 @@ const ReportsPage = () => {
       type: 'Post Report',
       reporter: 'Tuna Saygın',
       reported: 'Kenan Zeynalov',
-      description: 'Tuvaletten fotomu paylaşmış',
+      description: 'İletişime geçince bana küfür etti',
     },
     {
       id: 2,
       type: 'Comment Report',
       reporter: 'Kenan Zeynalov',
       reported: 'Tuna Saygın',
-      description: 'Küfürüme küfürle karşılık vermiyor abi',
+      description: 'Irkçı comment attı',
       comment: {
         id: 1,
-        content: 'Beni rezil et Kenanım ah',
+        content: 'k',
       },
     },
     // Add more reports as needed

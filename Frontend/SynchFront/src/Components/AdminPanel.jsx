@@ -4,6 +4,7 @@ import { useData } from '../Context/DataContext';
 import getAllUsers from '../calling/userCalling';
 import { getImage } from '../calling/imageCalling';
 import { changeEmail } from '../calling/changeEmailCalling';
+import { banUser, unBanUser } from '../calling/adminCalling';
 const mockUsers = [
   { id: 1, name: 'Tuna Saygin', email: 'tuna.saygin@ug.bilkent.edu.tr' , isBanned: false,   imageUrl: 'https://media.licdn.com/dms/image/C4D03AQFnedyongjCEw/profile-displayphoto-shrink_800_800/0/1668101973946?e=1706140800&v=beta&t=Rrw9xDrS-k7l0eLVvwz5VmWuNslnoFhzLlqQi6QfdAI' },
   { id: 2, name: 'Kanan Zeynalov', email: 'kanan.zeynalov@ug.bilkent.edu.tr', isBanned: true, imageUrl: 'https://media.licdn.com/dms/image/D4D03AQE9ip_PWaWaCA/profile-displayphoto-shrink_800_800/0/1702173044193?e=1707955200&v=beta&t=ozf-9tLZhMY5ZlOj0wJY8PC-fPxaoZf89ueyTUyHnME' },
@@ -50,11 +51,17 @@ export default function AdminPanel() {
   const handleChangeEmailForm = ()=>{
     if(newEmail !== ""){
       changeEmail(showChangeEmailBox.id,newEmail,user)
+      setShowChangeEmailBox(null);
     }
   }
 
-  const handleBanUser = (userId) => {
-    console.log(`Ban/Unban user with ID: ${userId}`);
+  const handleBanUser = (userItem) => {
+    if(!userItem.isBanned){
+      banUser(userItem.id,user).then(result => console.log(result));
+    }
+    else{
+      unBanUser(userItem.id,user);
+    }
   };
 
   const handleReports = () => {
@@ -110,7 +117,7 @@ export default function AdminPanel() {
             className="flex flex-row items-center justify-between py-2 px-4 mb-2 bg-gray-300 rounded-md"
           >
             <div className="flex flex-col">
-              {userItem.profileImageName && !(userItem.profileImageName === "OUR_DEFAULT_IMAGE_PATH")?<img
+              {userItem.imageData && !(userItem.profileImageName === "OUR_DEFAULT_IMAGE_PATH")?<img
                 src={userItem.imageUrl} 
                 alt="Profile picture"
                 className="w-10 h-10 rounded-full mr-4"
@@ -127,7 +134,7 @@ export default function AdminPanel() {
               </button>
               {}
               <button
-                onClick={() => handleBanUser(userItem.id)}
+                onClick={() => handleBanUser(userItem)}
                 className="rounded-md bg-blue-500 text-white px-4 py-1 hover:bg-blue-600"
               >
                 {userItem.isBanned ? 'Unban' : 'Ban'}

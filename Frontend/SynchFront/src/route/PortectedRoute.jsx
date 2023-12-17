@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useData } from "../Context/DataContext";
 
-export default function ProtectedRoute({children, adminOnly = false}){
+export default function ProtectedRoute({children, adminOnly, userOnly}){
     const {user} = useData();
     console.log(user);
 
@@ -10,8 +10,11 @@ export default function ProtectedRoute({children, adminOnly = false}){
         return <Navigate to="login"/>;
     }
 
-    if(adminOnly && user.name !== "admin"){
+    if(adminOnly && !user.isAdmin){
         return <Navigate to="/mainPage"/>;
+    }
+    else if(user.isAdmin && userOnly){
+        return <Navigate to="/admin/adminPanel"/>
     }
 
     return children;

@@ -35,3 +35,26 @@ const reportPostCalling = (description,user, reportedEntityId) => {
   }
 
   export default reportPostCalling;
+export function getAllReports(user){
+  const apiUrl = "http://localhost:8080/admin/reports/all"
+  return fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${user.token}`
+    },
+  })
+  .then(response => {
+    console.log(response)
+    if (response.status === 200) {
+      return response.json();
+    }
+     else {
+      return response.status;
+    }
+  })
+  .catch(err => {
+    console.log("Error:", err);
+    throw err;
+  });
+}

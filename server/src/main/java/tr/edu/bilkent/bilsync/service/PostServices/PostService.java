@@ -6,10 +6,13 @@ import tr.edu.bilkent.bilsync.entity.PostEntities.*;
 import tr.edu.bilkent.bilsync.service.CommentService;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
+/**
+ * Service class for managing various types of posts, comments, and related operations.
+ * Acts as a facade to interact with different post-related services.
+ */
 @Service
 public class PostService {
 
@@ -172,6 +175,23 @@ public class PostService {
             if(!(post instanceof TradingPost))
                 return false;
             ((TradingPost) post).setIsHeld(held);
+            createOrSavePost(post);
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Sets the taker ID of a trading post.
+     *
+     * @param post     The trading post to update.
+     * @param takerId  The taker ID to set.
+     * @return True if the operation is successful, false otherwise.
+     */
+    public boolean setTakerId(TradingPost post, Long takerId) {
+        try {
+            post.setTakerID(takerId);
             createOrSavePost(post);
             return true;
         } catch(Exception e) {
