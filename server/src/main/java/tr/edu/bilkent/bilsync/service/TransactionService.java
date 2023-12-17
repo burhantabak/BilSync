@@ -104,7 +104,7 @@ public class TransactionService {
             if (giver == null) {
                 throw new EntityNotFoundException("Giver does not exist");
             } else if (tradingPost.getAuthorID() == currentUser.getId()) {
-                throw new IllegalStateException("It is not possible to buy the item that you are the seller of");
+                throw new IllegalStateException("It is not possible to trade the item that you are the lister of");
             }
             Transaction transaction = new Transaction();
             transaction.setTransactionAmount(price);
@@ -114,6 +114,7 @@ public class TransactionService {
             transaction.setMoneyFetchDate(new Date());
             transaction.setStatus(TransactionState.PENDING_GIVER_APPROVAL);
             postService.setHeld(postId, true);
+            postService.setTakerId(tradingPost,currentUser.getId());
             return transactionRepository.save(transaction);
         }
 
