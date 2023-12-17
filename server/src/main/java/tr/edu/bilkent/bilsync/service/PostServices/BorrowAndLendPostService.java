@@ -6,6 +6,9 @@ import tr.edu.bilkent.bilsync.repository.PostRepositories.BorrowAndLendPostRepos
 
 import java.util.List;
 
+/**
+ * Service class for managing AnnouncementPost entities.
+ */
 @Service
 public class BorrowAndLendPostService {
     private final BorrowAndLendPostRepository borrowAndLendPostRepository;

@@ -3,14 +3,12 @@ package tr.edu.bilkent.bilsync.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tr.edu.bilkent.bilsync.dto.TransactionDto;
 import tr.edu.bilkent.bilsync.entity.PostEntities.*;
 import tr.edu.bilkent.bilsync.entity.Transaction;
 import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.TransactionRepository;
 import tr.edu.bilkent.bilsync.service.PostServices.PostService;
-import tr.edu.bilkent.bilsync.service.PostServices.SecondHandTradingPostService;
 
 import java.util.Date;
 import java.util.List;
@@ -165,7 +163,12 @@ public class TransactionService {
         return this.transactionRepository.findAllByPostId(postId);
     }
 
-
+    /**
+     * Retrieves a list of transactions involving the specified user as either the taker or giver.
+     *
+     * @param user The user for whom transactions are retrieved.
+     * @return List of transactions involving the specified user.
+     */
     public List<Transaction> getTransactionsByUser(UserEntity user) {
         // Retrieve transactions where the user is either taker or giver
         return transactionRepository.findByTakerIdOrGiverId(user.getId(), user.getId());

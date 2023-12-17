@@ -6,6 +6,9 @@ import tr.edu.bilkent.bilsync.repository.PostRepositories.DonationPostRepository
 
 import java.util.List;
 
+/**
+ * Service class for managing DonationPost entities.
+ */
 @Service
 public class DonationPostService {
 

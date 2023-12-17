@@ -4,9 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import tr.edu.bilkent.bilsync.entity.PostEntities.Vote;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
  * Repository interface for managing Vote entities.
  * It extends CrudRepository for basic CRUD operations and includes custom query methods.

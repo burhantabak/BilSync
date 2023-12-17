@@ -4,8 +4,10 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
-import java.util.Properties;
 
+/**
+ * Service class for handling email-related operations.
+ */
 @Service
 public class MailService {
     private final String senderEmail;
@@ -14,6 +16,10 @@ public class MailService {
     private final int smtpPort;
     private final Properties props;
     private final Session session;
+
+    /**
+     * Constructor for MailService initializing email-related parameters.
+     */
     public MailService(){
         senderEmail = "tuna.saygin@ug.bilkent.edu.tr";
         senderPassword = "0Y6Bnzf3";
@@ -22,6 +28,12 @@ public class MailService {
         props = createMessageProp();
         session = createMailSession(props);
     }
+
+    /**
+     * Creates and configures the properties for sending email messages.
+     *
+     * @return Properties object with email configuration.
+     */
     private Properties createMessageProp(){
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -32,6 +44,13 @@ public class MailService {
         System.out.println("CheckPoint-1 passed");
         return props;
     }
+
+    /**
+     * Creates a mail session with authentication properties.
+     *
+     * @param props The properties for configuring the mail session.
+     * @return The configured mail session.
+     */
     private Session createMailSession(Properties props){
         Session session = Session.getInstance(props, new Authenticator() {
             @Override

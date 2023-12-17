@@ -6,10 +6,13 @@ import tr.edu.bilkent.bilsync.entity.PostEntities.*;
 import tr.edu.bilkent.bilsync.service.CommentService;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
+/**
+ * Service class for managing various types of posts, comments, and related operations.
+ * Acts as a facade to interact with different post-related services.
+ */
 @Service
 public class PostService {
 
