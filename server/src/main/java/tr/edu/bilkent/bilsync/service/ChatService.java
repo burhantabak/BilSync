@@ -9,7 +9,6 @@ import tr.edu.bilkent.bilsync.repository.ChatRepository;
 import tr.edu.bilkent.bilsync.repository.ImageRepository;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,18 +29,29 @@ public class ChatService {
         this.imageRepository = imageRepository;
     }
 
-    public List<ChatMessageDto> getMessagesByChatId(Long chatId) {
+    public List<ChatMessageDto> getMessagesByChatId(Long chatId, UserEntity currentUser) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        if (chat.getUsers().stream().noneMatch(chatUser -> chatUser.getId() == currentUser.getId())){
+            throw new IllegalArgumentException("You are not a participant of this chat");
+        }
         List<ChatMessage> chatMessages = chat.getChatMessages();
         return chatMessages.stream().map(ChatMessageDto::new).toList();
     }
 
     public void createChat(ChatDto chatDto, UserEntity currentUser) {
-        List<Long> userIds = chatDto.getUserIds();
-        if (!chatDto.isGroupChat() && userIds.size() != 1) {
-            throw new IllegalArgumentException("Cannot create private chat with >2 members");
+        List<Long> userIds = chatDto.getUserIds().stream().distinct().toList();
+        if(userIds.stream().anyMatch(userId -> (userId == currentUser.getId()))){
+            throw new IllegalArgumentException("You cannot add yourself to a chat. You are automatically added to a chat you create, already!");
         }
-
+        if (!chatDto.isGroupChat()) {
+            if (userIds.size() != 1){
+                throw new IllegalArgumentException("Cannot create private chat with !=2 members");
+            }
+            UserEntity otherUser = userRepository.findById(userIds.get(0)).orElseThrow(() -> new IllegalArgumentException("User does not exist"));
+            if (chatRepository.findChatsByUsersContaining(currentUser).stream().filter(Chat::isGroupChat).anyMatch(chat -> chat.getUsers().stream().anyMatch(user -> user.getId() == otherUser.getId()))){
+                throw new IllegalArgumentException("Private chat with these users already exists!");
+            }
+        }
         String chatName = chatDto.getChatName();
         Chat chat = new Chat();
         chat.setGroupChat(chatDto.isGroupChat());
