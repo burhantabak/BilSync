@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useData } from '../Context/DataContext';
 import ImageInput from '../Forums/ForumComponents/ImageInput';
 import { uploadFileCall } from '../calling/imageCalling';
-import { editProfile } from '../calling/editProfileCalling';
+import { editProfile } from '../calling/editProFileCalling';
 
 const EditProfilePage = () => {
   //const [newProfilePicture, setNewProfilePicture] = useState(user.profilePicture);
