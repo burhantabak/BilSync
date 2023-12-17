@@ -6,7 +6,6 @@ import commentReportCall from '../calling/commentReportCall';
 import formatDate, { formatTime } from './HelperFunctions/DateFormat';
 
 export default function CommentComponent({commentList}){
-  console.log('commentList:', commentList);
   const {user} = useData();
   
   const handleReportClick = () => {

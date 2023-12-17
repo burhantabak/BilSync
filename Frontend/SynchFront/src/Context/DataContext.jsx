@@ -20,6 +20,8 @@ export const DataProvider = ({ children }) => {
   const [allUsers, setAllUsers] = useState([]);
   const [isPostsLoading, setIsPostsLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);  // Add transactions state
+  const [voteCounts, setVoteCounts] = useState({}); // New state to store vote counts
+
 
   const login = async (userName, password) =>{
 
@@ -87,6 +89,8 @@ export const DataProvider = ({ children }) => {
   }, [user]);
 
 
+ 
+
   // if(transactions.takerId == user.userId()&& transaction.status == PENDING TAKER APPROVAL){ display transactiosn } (button name = Approve As Taker. onCLick request; )
 
 
@@ -100,11 +104,11 @@ export const DataProvider = ({ children }) => {
 
       getAllUsers(user).then((users)=>{
         console.log("usersssssssssssssss:");
-  console.log(users);
+        console.log(users);
         console.log(data)
-  const updatedPostList = matchUserID(users, data,user).map(async (post) => {
+        const updatedPostList = matchUserID(users, data,user).map(async (post) => {
     // Fetch image for each post
-    const imageData = await getImage(post.imageName, user);
+        const imageData = await getImage(post.imageName, user);
     
     // Update the post object with the image data
     return { ...post, imageData };
@@ -117,12 +121,22 @@ export const DataProvider = ({ children }) => {
       console.log("posts with imagesss")
       console.log(postsWithImages);
 
+      const updatedVoteCounts = postsWithImages.reduce((acc, post) => {
+        acc[post.id] = post.votes; // Replace 'voteCount' with the actual field in your post object
+        return acc;
+      }, {});
+
+      setVoteCounts (updatedVoteCounts);
+
       // getImage(postsWithImages.profileImageName,user).then(result=>{
       //   const imageDataPosts = {...postsWithImages,authorProfileData: result}
       //   console.log("image Data posts")
       //   console.log(imageDataPosts)
       // })
       setPostList(postsWithImages);
+
+
+
     })
     .catch((error) => {
       console.error('Error fetching images:', error);
@@ -140,7 +154,7 @@ export const DataProvider = ({ children }) => {
     setUser(null);
   }
   
-  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers, transactions, allUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error, transactions]);
+  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers, transactions, allUsers,voteCounts}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error, transactions,voteCounts]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
