@@ -5,10 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import tr.edu.bilkent.bilsync.dto.ProfileDto;
 import tr.edu.bilkent.bilsync.dto.UserEntityDto;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
-import tr.edu.bilkent.bilsync.entity.UserType;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
 import java.util.List;
@@ -82,27 +80,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update user profile");
         }
     }
-
-
-
-    @GetMapping("/user/viewProfile")
-    public ResponseEntity<?> getUserProfile(@AuthenticationPrincipal UserEntity currentUser) {
-        try {
-            // Get user details
-            String bio = currentUser.getBio();
-            String name = currentUser.getName();
-            UserType userType = currentUser.getAccountType();
-
-            // Create a ProfileDto with the retrieved information
-            UserEntityDto userEntityDto = new UserEntityDto(currentUser.getId(), currentUser.getEmail(), name, currentUser.getProfileImageName(), currentUser.isBanned());
-            ProfileDto profileDto = new ProfileDto(userEntityDto, userType, bio);
-
-            return ResponseEntity.ok(profileDto);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to retrieve user profile");
-        }
-    }
-
+    //todo create endpoint for profile viewing
 
     @CrossOrigin
     @GetMapping("/admin/adminProfile")
