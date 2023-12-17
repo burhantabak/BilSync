@@ -61,7 +61,7 @@ function DropdownProfile({itemList, handleItemClick}){
     const navigate = useNavigate();
 
     return(
-      <Menu as={"div"} zIndex={100}>
+      <Menu as={"div"} zindex={100}>
         <Menu.Button>
           <Profile/>
         </Menu.Button>

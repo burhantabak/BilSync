@@ -21,7 +21,7 @@ export default function matchUserID(userList,postList){
               ...post,
               commentList: newCommentList,
               name: correspondingUser.name,
-              profileImageData: correspondingUser.imageData,
+        
               profileImageName: correspondingUser.profileImageName,
             };
           }

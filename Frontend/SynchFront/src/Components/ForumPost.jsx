@@ -5,19 +5,15 @@ import formatDate, { formatTime } from './HelperFunctions/DateFormat';
 
 
 export default function ForumPost({post,isLostnFound, isAnynomous}) {
-    console.log("entered Forum Post");
-    if(post==null){
-        return <h1>Loading</h1>
+    if(post){
+        return <h1>loading</h1>
     }
+    console.log("entered Forum Post");
     const [isStarred,setStarred] = useState(false);
     const [vote, setVotes] = useState(post.vote);
     const [isUpvote, setUpvote] = useState(false);
     const [isDownvote,setDownvote] = useState(false);
     const [commentList, setCommentList] = useState(post.commentList);
-
-    if(post== null){
-        return <h1>Not Loaded</h1>
-    }
 
     console.log("IS IT ANYNYMOUS", isAnynomous);
 

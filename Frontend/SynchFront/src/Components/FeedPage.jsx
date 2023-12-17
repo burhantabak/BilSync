@@ -21,7 +21,6 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
   return (
     <div className='mx-auto w-3/4 overflow-y-auto px-2 divide-y'>
         <SearchBar setResult={setSearchBarString} onCategoryChange={handleCategoryChange}/>
-        <ForumPost vote={1} title="First Forum Post" nameUser="Tuna Saygın"/>
         {//postList.filter((post)=>{return post.userName.includes(searchBarString)})
         
         postListData.filter((post)=>{
