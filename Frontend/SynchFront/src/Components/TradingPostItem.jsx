@@ -78,27 +78,27 @@ export default function TradingPostItem({post, isProfile}) {
         {!isProfile && <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
             {!post.imageData ? 
             <img alt='post-image' 
-            src='basys3.png'
+            src='https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'
              className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>:
               <img src={post.imageData} 
               alt={`${post.imageName}`}/>}
             <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
                 {post.price && <h2>{post.price}TL</h2>}
-                <div className='flex gap-5'>
+                {post.postType!=3 && <div className='flex gap-5'>
                 <button type="submit" onClick={handleBuyClick} disabled = {isSold} 
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                 {post.postType === 6 && isSold ? 'SOLD' : 
                 post.postType === 2 ? 'Take Donation' : 
-                post.postType === 1 ? 'Borrow' : 'Buy Now'}
+                post.postType === 1 ? 'Borrow' : null}
                 </button>
                 
-                </div>
+                </div>}
             </div>
         </div>}
         {isProfile  && <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
         {!post.imageData ? 
             <img alt='post-image' 
-            src='basys3.png'
+            src='https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'
              className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>:
               <img src={post.imageData} 
               alt={`${post.imageName}`}/>}

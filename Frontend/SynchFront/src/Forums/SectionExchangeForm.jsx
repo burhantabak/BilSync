@@ -68,10 +68,6 @@ export default function SectionExchangeForm() {
             <ImageInput imageFile={imageFile} setImageFile={setImageFile}/>
             <InputField value={title} type={"text"} name={"Add Title"} handleEvent={setTitle}/>
             <InputField value={description} type={"text"} name={"Add Description"} handleEvent={setDescription}/>
-            <div className='flex justify-between'>
-            <InputField value= {price} type={"number"} name={"Price"} handleEvent={setPrice}/>
-            <InputField value={iban} type={"text"} name={"IBAN"} handleEvent={setIban}/>
-            </div>
             <div className='flex justify-center mb-1'>
             <p className='text-red-600'>{errorMessage}</p>
             </div>

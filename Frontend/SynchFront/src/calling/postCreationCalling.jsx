@@ -120,8 +120,6 @@ export function createSectionExchangePost(post,user){
         "imageName": post.imageName,
         "hashtagList":post.tags,
         "isAnonymous": false,
-        "price": post.price,
-        "iban": post.iban,
       });
         console.log(raw)
         var requestOptions = {
