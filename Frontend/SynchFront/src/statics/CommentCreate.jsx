@@ -3,10 +3,12 @@
   import CreateComment from '../calling/commentCalling';
   import { useData } from '../Context/DataContext';
   import reportPostCalling from '../calling/reportsCalling';
+  import postVoteCaller from '../calling/postVoteCaller';
 
-  export default function CommentCreate({isUpvote, setUpvote,isDownvote , setDownvote, vote, postId, handlePostCreation,commentList}) {
+  export default function CommentCreate({isUpvote, setUpvote,isDownvote , setDownvote,  postId, handlePostCreation,commentList}) {
     const [commentInput, setCommentInput] = useState("");
     const {user} = useData();
+  const {voteCounts} = useData();
     const handleInput = (event)=>{
       setCommentInput(event.target.value);
     }
@@ -34,16 +36,44 @@
         }
       }
     };
+
+
+    const handleUpvote = () => {
+      postVoteCaller(postId, 'upvote', user)
+        .then((response) => {
+          // Handle successful upvote
+          console.log('Upvoted successfully');
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error('Error upvoting:', error.message);
+        });
+    };
+    
+    const handleDownvote = () => {
+      postVoteCaller(postId, 'downvote', user)
+        .then((response) => {
+          // Handle successful downvote
+          console.log('Downvoted successfully');
+
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error('Error downvoting:', error.message);
+        });
+    };
+
+
     return (
           <div className="flex justify-around w-full items-center pr-1 pl-1">
             <div className='font-bold grow-1 text-2xl flex justify-center items-center gap-2'>
-                  <button onClick={setUpvote}>
+                  <button onClick={handleUpvote}>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={isUpvote? 3:1.5} stroke="currentColor" className="w-6 h-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
                       </svg>
                   </button>
-                  <h2>{vote}</h2>
-                  <button onClick={setDownvote}>
+                  <h2>{voteCounts[postId]}</h2>
+                  <button onClick={handleDownvote}>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={isDownvote? 3:1.5} stroke="currentColor" className="w-6 h-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
                       </svg>
