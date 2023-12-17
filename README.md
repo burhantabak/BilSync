@@ -79,8 +79,8 @@ These commands should run postgresql on its default port.
 We have used maven. To compile the server codes, follow the steps below:
 
 * On the terminal, navigate to `server`
-* Run `./mvnw clean install` if you are in sh or run `mvnw.cmd clean install` or just `mvn clean install` if you have
-  maven installed.
+* Run `./mvnw clean install` if you are in sh or run `mvnw.cmd clean install` if you are using windows. Or just
+  run `mvn clean install` if you have maven installed.
 * Then, compile the code to a jar with `java -jar target/bilsync-server.jar`
 
 We have used JDK 21 for development and test environments.
