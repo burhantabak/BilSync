@@ -180,6 +180,23 @@ public class PostService {
     }
 
     /**
+     * Sets the taker ID of a trading post.
+     *
+     * @param post     The trading post to update.
+     * @param takerId  The taker ID to set.
+     * @return True if the operation is successful, false otherwise.
+     */
+    public boolean setTakerId(TradingPost post, Long takerId) {
+        try {
+            post.setTakerID(takerId);
+            createOrSavePost(post);
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * Adds posts to the main TreeSet by combining posts from various services.
      *
      * @param allPosts The main TreeSet containing all posts.
