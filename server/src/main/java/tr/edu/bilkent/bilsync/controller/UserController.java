@@ -74,7 +74,7 @@ public class UserController {
      * @return A welcome message for the user profile.
      */
     @CrossOrigin
-    @GetMapping("/userProfile")
+    @PostMapping("/userProfile")
     @PreAuthorize(value = "hasAuthority('ROLE_USER')")
     public String userProfile() {
         return "Welcome to User Profile";
@@ -89,8 +89,7 @@ public class UserController {
      * @return ResponseEntity indicating the result of the operation with an appropriate message.
      */
     @CrossOrigin
-    @GetMapping("/editProfile")
-    @PreAuthorize(value = "hasAuthority('ROLE_USER')")
+    @PostMapping("/editProfile")
     public ResponseEntity<?> editUserProfile(@AuthenticationPrincipal UserEntity currentUser,
                                              @RequestParam(required = false) String bio,
                                              @RequestParam(required = false) String profileImageName) {

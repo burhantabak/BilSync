@@ -102,7 +102,7 @@ public class TransactionService {
             if (giver == null) {
                 throw new EntityNotFoundException("Giver does not exist");
             } else if (tradingPost.getAuthorID() == currentUser.getId()) {
-                throw new IllegalStateException("It is not possible to buy the item that you are the seller of");
+                throw new IllegalStateException("It is not possible to trade the item that you are the lister of");
             }
             Transaction transaction = new Transaction();
             transaction.setTransactionAmount(price);
@@ -112,6 +112,7 @@ public class TransactionService {
             transaction.setMoneyFetchDate(new Date());
             transaction.setStatus(TransactionState.PENDING_GIVER_APPROVAL);
             postService.setHeld(postId, true);
+            postService.setTakerId(tradingPost,currentUser.getId());
             return transactionRepository.save(transaction);
         }
 
@@ -182,7 +183,12 @@ public class TransactionService {
         return this.transactionRepository.findAllByPostId(postId);
     }
 
-
+    /**
+     * Retrieves a list of transactions involving the specified user as either the taker or giver.
+     *
+     * @param user The user for whom transactions are retrieved.
+     * @return List of transactions involving the specified user.
+     */
     public List<Transaction> getTransactionsByUser(UserEntity user) {
         // Retrieve transactions where the user is either taker or giver
         return transactionRepository.findByTakerIdOrGiverId(user.getId(), user.getId());

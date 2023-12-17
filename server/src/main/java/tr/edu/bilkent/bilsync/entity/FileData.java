@@ -1,12 +1,15 @@
 package tr.edu.bilkent.bilsync.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.TableGenerator;
+import jakarta.persistence.Table;
 
-import jakarta.persistence.*;
-
+/**
+ * The FileData class represents information about a file, including its name, type, and file path.
+ * This class is mapped to a database table for persistent storage using JPA annotations.
+ */
 @Entity
 @Table
 public class FileData {
@@ -21,8 +24,18 @@ public class FileData {
     @Column(nullable = false)
     private String filePath;
 
+    /**
+     * Default constructor for the FileData class.
+     */
     public FileData() {}
 
+    /**
+     * Parameterized constructor for creating a FileData instance with specified name, type, and file path.
+     *
+     * @param name     The name of the file.
+     * @param type     The type or format of the file.
+     * @param filePath The file path indicating the location of the file.
+     */
     public FileData(String name, String type, String filePath) {
         this.name = name;
         this.type = type;

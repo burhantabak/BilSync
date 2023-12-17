@@ -51,7 +51,7 @@ export const DataProvider = ({ children }) => {
           console.log(registeredUser)
           console.log(user.userId)
           if(registeredUser){setUser({...user,profileImageName: registeredUser.profileImageName,
-             imageData: registeredUser.imageData, bio:registeredUser.bio})
+             imageData: registeredUser.imageData, bio:registeredUser.bio, accountType: registeredUser.accountType})
              console.log(user)}
           return imagedUsers;
         }
@@ -66,14 +66,14 @@ export const DataProvider = ({ children }) => {
           const transactions = await retrieveTransactions(user);
           console.log(transactions);
           console.log("TRANSACTIONNNNNNNNNNNNNNNNNNNNNNNNNNNN", transactions[0].id);
-  
+
           // Check if transactions is undefined or null
           if (transactions == null) {
             console.log('No transactions yet.');
             return;
           }
           setTransactions(transactions);
-  
+
           // Update your state with the retrieved transactions
           // Assuming the transactions are an array, update as needed
           console.log(transactions); // Ensure you see the transactions in the console
@@ -81,14 +81,14 @@ export const DataProvider = ({ children }) => {
           console.error('Error fetching transactions:', error);
         }
       };
-  
+
       fetchTransactions();
     }
   }, [user]);
 
 
   // if(transactions.takerId == user.userId()&& transaction.status == PENDING TAKER APPROVAL){ display transactiosn } (button name = Approve As Taker. onCLick request; )
-  
+
 
   const getThePosts = ()=>{
     setIsPostsLoading(true);
@@ -110,18 +110,18 @@ export const DataProvider = ({ children }) => {
     return { ...post, imageData };
   });
 
-
-
-
-
-
-
-
   // Wait for all image fetch operations to complete
   Promise.all(updatedPostList)
     .then((postsWithImages) => {
       // Set the updated post list with image data
+      console.log("posts with imagesss")
       console.log(postsWithImages);
+
+      // getImage(postsWithImages.profileImageName,user).then(result=>{
+      //   const imageDataPosts = {...postsWithImages,authorProfileData: result}
+      //   console.log("image Data posts")
+      //   console.log(imageDataPosts)
+      // })
       setPostList(postsWithImages);
     })
     .catch((error) => {
@@ -140,7 +140,7 @@ export const DataProvider = ({ children }) => {
     setUser(null);
   }
   
-  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers, transactions}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error, transactions]);
+  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers, transactions, allUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error, transactions]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

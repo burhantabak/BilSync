@@ -6,12 +6,22 @@ import tr.edu.bilkent.bilsync.controller.controllerEntities.AuthenticationRespon
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
+/**
+ * Service class for managing user authentication and registration.
+ */
 @Service
 public class AuthService {
     private final TokenService tokenService;
     private final UserRepository userRepository;
     private final MailService mailService;
 
+    /**
+     * Constructor for AuthService, injecting the required services and repository.
+     *
+     * @param tokenService   The service for token-related operations.
+     * @param userRepository The repository for UserEntity entities.
+     * @param mailService    The service for sending emails.
+     */
     public AuthService(TokenService tokenService,
                        UserRepository userRepository, MailService mailService) {
         this.tokenService = tokenService;
@@ -19,6 +29,12 @@ public class AuthService {
         this.mailService = mailService;
     }
 
+    /**
+     * Authenticates a user based on the provided credentials.
+     *
+     * @param request The authentication request body.
+     * @return AuthenticationResponse containing the authentication result.
+     */
     public AuthenticationResponse authenticate(AuthenticationRequestBody request){
         String adminEmail = "admin@bilkent.edu.tr";
         String adminPassword = "admin";
@@ -34,6 +50,12 @@ public class AuthService {
         return null;
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param userEntity The UserEntity to be registered.
+     * @return True if the registration is successful, false otherwise.
+     */
     public boolean register(UserEntity userEntity) {
         try {
             userRepository.save(userEntity);
@@ -56,12 +78,12 @@ public class AuthService {
         }
         //token creation
         String tokenCreated = tokenService.generateToken(claimedEmail);
-        String baseUrl = "http://127.0.0.1:5173";
+        String baseUrl = "http://localhost:5173";
         String endpoint = "/resetPassword?ticket=";
         String mailLink =  baseUrl+endpoint+tokenCreated;//here the token is returned
         //mail title
         String mailTitle = "Reset Password Link at BilSync";
-        String mailBody = "Hello,\n Here is your password reset link:\n" + mailLink +"\n Bilsync Team :)";
+        String mailBody = "Hello,\n\nHere is your password reset link. It will expire in 1 hour:\n" + mailLink +"\n\nBilsync Team :)";
         return mailService.sendMail(mailTitle,mailBody, claimedEmail);
     }
 
@@ -76,7 +98,7 @@ public class AuthService {
      * @return
      */
     public boolean changePassword(String token, String newPassword){
-        //prechecking the token
+        //pre-checking the token
         String username = tokenService.extractUsername(token);
         UserEntity user = userRepository.findByEmail(username);
         if(user == null){

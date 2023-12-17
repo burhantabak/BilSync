@@ -13,6 +13,7 @@ import tr.edu.bilkent.bilsync.service.UserInfoService;
 /**
  * Controller class for handling admin-related operations on users.
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/admin/users")
 public class AdminController {
@@ -37,7 +38,7 @@ public class AdminController {
      * @return ResponseEntity indicating the result of the operation with an appropriate message.
      */
     @CrossOrigin
-    @PutMapping("/{userId}/change-email")
+    @PostMapping("/{userId}/change-email")
     public ResponseEntity<String> changeEmail(@PathVariable long userId, @RequestBody String newEmail) {
         try {
             userInfoService.changeEmail(userId, newEmail);

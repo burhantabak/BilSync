@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a chat entity, storing information about chat messages, users, and chat properties.
+ * This class is annotated with JPA annotations for entity mapping.
+ */
 @Entity
 @Table(name = "chat")
 public class Chat {

@@ -1,6 +1,5 @@
 package tr.edu.bilkent.bilsync.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,26 +7,48 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.dto.UserDto;
 import tr.edu.bilkent.bilsync.entity.PasswordGenerator;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
-import tr.edu.bilkent.bilsync.service.MailService;
 import tr.edu.bilkent.bilsync.exception.EmailAlreadyExistsException;
 import tr.edu.bilkent.bilsync.exception.UserIsBannedException;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
+/**
+ * Service class for managing user information and related operations.
+ */
 @Service
 public class UserInfoService implements UserDetailsService {
     private final UserRepository repository;
     private final MailService mailService;
 
+    /**
+     * Constructor for UserInfoService, injecting the required repositories and services.
+     *
+     * @param repository   The repository for managing user entities.
+     * @param mailService  The service for sending emails.
+     */
     public UserInfoService(UserRepository repository, MailService mailService) {
         this.repository = repository;
         this.mailService = mailService;
     }
 
+    /**
+     * Loads user details by username.
+     *
+     * @param username The username of the user.
+     * @return UserDetails for the specified username.
+     * @throws UsernameNotFoundException If no user is found with the given username.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByEmail(username);
     }
 
+    /**
+     * Loads user details by user ID.
+     *
+     * @param id The ID of the user.
+     * @return UserDetails for the specified user ID.
+     * @throws UsernameNotFoundException If no user is found with the given user ID.
+     */
     public UserDetails loadUserById(long id) throws UsernameNotFoundException {
         return repository.findById(id);
     }
@@ -92,12 +113,12 @@ public class UserInfoService implements UserDetailsService {
         String password = PasswordGenerator.generateRandomPassword(passwordLength);
         user.setPassword(password);
 
-        String baseUrl = "http://127.0.0.1:5173";
+        String baseUrl = "http://localhost:5173";
         //String endpoint = "/auth/login";
 
         String mailTitle = "Welcome to BilSync";
         String mailBody = "Hello There,\n\nWe enjoy seeing you in our community. Here is your initial password:\n"
-                + password + "\n\nWe encourage to start Syncing with other Bilkenters! You may want to change your password first. Start your journey here: "
+                + password + "\n\nWe encourage to start Syncing with other Bilkenters! You may want to change your password first. Make sure to use the latest version of Google Chrome before starting your journey here: "
                 + baseUrl  + "\n\nBilSync DevTeam ";
         String recipientMail = userDto.getEmail();
         mailService.sendMail(mailTitle, mailBody, recipientMail);
@@ -105,6 +126,12 @@ public class UserInfoService implements UserDetailsService {
 
     }
 
+    /**
+     * Finds a user by ID.
+     *
+     * @param userId The ID of the user to find.
+     * @return The UserEntity object if found, null otherwise.
+     */
     public UserEntity findById(long userId)
     {
         return  repository.findById(userId);

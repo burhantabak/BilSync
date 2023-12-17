@@ -50,6 +50,7 @@ export default function AdminPanel() {
   const handleChangeEmailForm = ()=>{
     if(newEmail !== ""){
       changeEmail(showChangeEmailBox.id,newEmail,user)
+      setShowChangeEmailBox(null);
     }
   }
 

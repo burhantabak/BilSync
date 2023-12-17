@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 import tr.edu.bilkent.bilsync.entity.Comment;
 import tr.edu.bilkent.bilsync.repository.CommentRepository;
 
+/**
+ * Service class for managing Comment entities.
+ */
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;

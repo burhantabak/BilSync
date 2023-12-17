@@ -8,7 +8,6 @@ import tr.edu.bilkent.bilsync.entity.ReportType;
 import tr.edu.bilkent.bilsync.exception.NoRecordFoundException;
 import tr.edu.bilkent.bilsync.repository.ReportRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -86,6 +85,14 @@ public class ReportService {
         }
     }
 
+    /**
+     * Retrieves a previous report based on reporter ID, reported entity ID, and report type.
+     *
+     * @param reporterId        The ID of the user who reported.
+     * @param reportedEntityId The ID of the reported entity.
+     * @param reportType        The type of the report.
+     * @return The previous report with the specified criteria.
+     */
     public Report getPreviousReport(long reporterId, long reportedEntityId, ReportType reportType)
     {
         return  reportRepository.findByReporterIdAndReportedEntityIdAndReportType( reporterId,  reportedEntityId,  reportType);

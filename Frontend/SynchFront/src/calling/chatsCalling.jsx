@@ -74,3 +74,28 @@ export function sendMessage(chatId,messageBody, user,refreshChat){
     })
     .catch(error => console.log('error state: ', error));
 }
+export function createChat(userList,selectedUsers,chatName,user){
+  console.log(userList)
+  console.log(selectedUsers)
+  var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", `Bearer ${user.token}`);
+
+var raw = JSON.stringify({
+  "chatName": selectedUsers.length>1?chatName:"default",
+  "userIds": selectedUsers.map((selectedUser)=>{const result = userList.find((userItem)=>userItem.name == selectedUser);
+  console.log(result);return result.id}),
+  "isGroupChat": selectedUsers.length>1,
+});
+console.log(raw)
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+return fetch("http://localhost:8080/chat/create", requestOptions)
+  .then(response => {console.log(response);return response.text()})
+  .catch(error => console.log('error', error));
+}

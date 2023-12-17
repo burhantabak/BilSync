@@ -4,7 +4,6 @@ package tr.edu.bilkent.bilsync.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import tr.edu.bilkent.bilsync.entity.Transaction;
-import tr.edu.bilkent.bilsync.entity.UserEntity;
 
 import java.util.List;
 
@@ -30,5 +29,12 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
      */
     List<Transaction> findAllByPostId(Long postId);
 
+    /**
+     * Retrieves a list of transactions associated with a specific taker ID or giver ID.
+     *
+     * @param takerId The ID of the taker.
+     * @param giverId The ID of the giver.
+     * @return A list of transactions associated with the specified taker ID or giver ID.
+     */
     List<Transaction> findByTakerIdOrGiverId(Long takerId,Long giverId);
 }

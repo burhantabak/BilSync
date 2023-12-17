@@ -8,10 +8,12 @@ import tr.edu.bilkent.bilsync.repository.FileRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * Service class for managing file-related operations.
+ */
 @Service
 public class FileService {
     private final FileRepository fileRepository;
-    //TODO: Refine this :(
 
     /**
      * Constructor for FileService, injecting the required repository.

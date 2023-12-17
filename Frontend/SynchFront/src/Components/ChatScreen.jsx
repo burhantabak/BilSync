@@ -66,9 +66,9 @@ function MessageItem({messageData}){
     const {user} = useData();
     const isReceived = senderId == user.userId; 
     return(
-      <div className={`flex ${isReceived || "flex-row-reverse"} py-2 gap-2`}>
+      <div className={`flex ${!isReceived || "flex-row-reverse"} py-2 gap-2`}>
         <div className='h-8 w-8 rounded-full bg-gray-400'></div>
-        <div className={`max-w-md ${isReceived ? "bg-gray-400":"bg-primary-400"} text-white p-3 rounded-3xl`}>
+        <div className={`max-w-md ${!isReceived ? "bg-gray-400":"bg-primary-400"} text-white p-3 rounded-3xl`}>
             <p>{body}</p>
         </div>
       </div>
