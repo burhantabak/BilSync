@@ -65,7 +65,7 @@ export const DataProvider = ({ children }) => {
         console.log("usersssssssssssssss:");
   console.log(users);
         console.log(data)
-  const updatedPostList = matchUserID(users, data).map(async (post) => {
+  const updatedPostList = matchUserID(users, data,user).map(async (post) => {
     // Fetch image for each post
     const imageData = await getImage(post.imageName, user);
     
