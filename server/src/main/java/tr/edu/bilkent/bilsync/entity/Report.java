@@ -2,6 +2,11 @@ package tr.edu.bilkent.bilsync.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * The Report class represents a user-generated report on a particular entity, such as a user or a post.
+ * It includes information about the reporter, the reported entity, the report type, and a description.
+ * This class is mapped to a database table for persistent storage using JPA annotations.
+ */
 @Entity
 public class Report {
 
@@ -24,6 +29,9 @@ public class Report {
     @Column
     private String description;
 
+    /**
+     * Default constructor for the Report class.
+     */
     public Report() {}
 
     public Long getId() {

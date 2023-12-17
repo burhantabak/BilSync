@@ -5,6 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+/**
+ * Represents a vote entity for posts, storing information about the voter, post, and vote value.
+ * This class is annotated with JPA annotations for entity mapping.
+ */
 @Entity
 public class Vote {
     private long voterID;

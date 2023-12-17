@@ -6,6 +6,10 @@ import jakarta.persistence.Table;
 
 import java.sql.Timestamp;
 
+/**
+ * Represents a borrow and lend post entity, extending the TradingPost class.
+ * This class is annotated with JPA annotations for entity mapping.
+ */
 @Entity
 @Table(name = "borrow_and_lend_post")
 public class BorrowAndLendPost extends TradingPost {
@@ -15,6 +19,9 @@ public class BorrowAndLendPost extends TradingPost {
     @Column(nullable = false)
     private Timestamp endDate;
 
+    /**
+     * Default constructor for BorrowAndLendPost.
+     */
     public BorrowAndLendPost() {}
 
     public Timestamp getBeginDate() {

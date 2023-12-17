@@ -6,6 +6,9 @@ import tr.edu.bilkent.bilsync.repository.PostRepositories.NormalPostRepository;
 
 import java.util.List;
 
+/**
+ * Service class for managing NormalPost entities.
+ */
 @Service
 public class NormalPostService {
 

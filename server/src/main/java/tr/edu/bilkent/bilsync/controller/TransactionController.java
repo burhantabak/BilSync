@@ -1,4 +1,4 @@
-package tr.edu.bilkent.bilsync.controller.controllerEntities;
+package tr.edu.bilkent.bilsync.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

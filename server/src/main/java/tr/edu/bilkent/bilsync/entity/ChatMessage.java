@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
+/**
+ * Represents a chat message entity, storing information about the sender, message body, image, date, and associated chat.
+ * This class is annotated with JPA annotations for entity mapping.
+ */
 @Entity
 @Table(name = "message")
 public class ChatMessage {
