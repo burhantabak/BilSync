@@ -91,17 +91,24 @@ public class ChatService {
         return chatUser;
     }
 
-    public List<Chat> getChatsByUser(UserEntity user) {
-        return chatRepository.findChatsByUsersContaining(user);
+    public List<ChatDto> getChatsByUser(UserEntity user) {
+        return chatRepository.findChatsByUsersContaining(user).stream().map(chat -> {
+            ChatDto chatDto = new ChatDto(chat);
+            Long otherUserId = chatDto.getUserIds().stream().filter(id -> id != user.getId()).findFirst().orElseThrow(() -> new RuntimeException("Invalid request"));
+            UserEntity otherUser = userRepository.findById(otherUserId).orElseThrow(() -> new IllegalArgumentException("Invalid request"));
+            chatDto.setChatName(otherUser.getName());
+            return chatDto;
+        }).toList();
     }
 
     public void inviteUsers(Long chatId, List<Long> inviteeIds, UserEntity currentUser) {
-        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new IllegalArgumentException("Chat not found."));
+
         ChatUser adminUser = chat.getUsers().stream()
                 .filter(e -> e.getStatus() == ChatUserStatus.GROUP_ADMIN)
                 .filter(e -> e.getUser().getId() == currentUser.getId())
                 .findAny()
-                .orElseThrow(RuntimeException::new); // if current user is not the admin of the group, an exc is thrown
+                .orElseThrow(() -> new IllegalArgumentException("You are not the admin of this group"));
 
         Set<Long> memberIds = chat.getUsers()
                 .stream()
@@ -111,20 +118,23 @@ public class ChatService {
 
         for (Long userId : inviteeIds) {
             if (memberIds.contains(userId)) {
-                throw new RuntimeException("Member " + userId + " already in group");
+                throw new IllegalArgumentException("At least one member is already in group");
             }
         }
         inviteeIds
                 .stream()
                 .distinct()
                 .map(userRepository::findById)
-                .map(e -> e.orElseThrow(() -> new RuntimeException("User not found.")))
+                .map(e -> e.orElseThrow(() -> new IllegalArgumentException("User not found.")))
                 .forEach(e -> addUserToChat(chat, e, ChatUserStatus.PENDING_REQUEST));
         chatRepository.save(chat);
     }
 
     public ChatMessageDto sendMessageToChat(Long chatId, ChatMessageDto chatMessageDto, UserEntity currentUser) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        if (!userHasAccessToChat(currentUser, chat.getId())){
+            throw new IllegalArgumentException("You are not a participant of this chat.");
+        }
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setSender(currentUser);
         chatMessage.setBody(chatMessageDto.getBody());
