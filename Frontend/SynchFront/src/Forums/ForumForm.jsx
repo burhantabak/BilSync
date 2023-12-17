@@ -5,6 +5,8 @@ import InputField from './ForumComponents/InputField';
 import { uploadFileCall } from '../calling/imageCalling';
 import { createNormalPost } from '../calling/postCreationCalling';
 import { useData } from '../Context/DataContext';
+import { useNavigate } from "react-router-dom";
+
 export default function ForumForm() {
     const [hashtags,setHashtags] = useState([]);
     const [title,setTitle] = useState("");
@@ -13,6 +15,8 @@ export default function ForumForm() {
     const [errorMessage, setErrorMessage] = useState("");
     const [imageFile, setImageFile] = useState(null);
     const {user} = useData();
+    const navigate = useNavigate();
+
     const handlePostCreation = (event) => {
       event.preventDefault();
       let imageName = "";
@@ -33,6 +37,11 @@ export default function ForumForm() {
             createNormalPost(normalForumPost,user).then((result) => {
                 console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
             });
+
+            if(setIsCompleted){
+              navigate('/mainPage');
+          }
+
           });
       }
       else if(imageName !== "not uploaded")

@@ -5,6 +5,8 @@ import InputField from './ForumComponents/InputField';
 import { createLostnFoundPost } from '../calling/postCreationCalling';
 import { uploadFileCall } from '../calling/imageCalling';
 import { useData } from '../Context/DataContext';
+import { useNavigate } from "react-router-dom";
+
 export default function LostnFoundForm() {
     const [hashtags,setHashtags] = useState([]);
     const [title, setTitle] = useState("");
@@ -13,6 +15,8 @@ export default function LostnFoundForm() {
     const {user} = useData();
     const [description, setDescription] = useState("");
     const [imageFile, setImageFile] = useState(null);
+    const navigate = useNavigate();
+
     const handlePostCreation = (event) => {
         event.preventDefault();
         let imageName = "";
@@ -45,7 +49,11 @@ export default function LostnFoundForm() {
             console.log("Post object:", lostnFoundPost);
             createLostnFoundPost(lostnFoundPost,user).then((result) => {
                 console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
-            });}
+            });
+            if(setIsCompleted){
+                navigate('/mainPage');
+            }
+        }
         else{
             setErrorMessage(imageName)
         }

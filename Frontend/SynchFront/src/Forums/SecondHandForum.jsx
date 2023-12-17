@@ -4,7 +4,10 @@ import { HashtagInput } from './ForumComponents/HashtagInput';
 import InputField from './ForumComponents/InputField';
 import { createTradingPost } from '../calling/postCreationCalling';
 import { useData } from '../Context/DataContext';
+import { useNavigate } from "react-router-dom";  
 import { uploadFileCall } from '../calling/imageCalling';
+
+
 export default function SecondHandForum() {
     const [title, setTitle] = useState("");
     const [isSubmitted, setIsCompleted] = useState(false);
@@ -14,6 +17,7 @@ export default function SecondHandForum() {
     const [imageFile, setImageFile] = useState(null);
     const [price, setPrice] = useState(0);
     const [iban, setIban] = useState("");
+    const navigate = useNavigate();
     const [hashtags,setHashtags] = useState([]);
     const handlePostCreation = (event) => {
     event.preventDefault();
@@ -36,6 +40,11 @@ export default function SecondHandForum() {
             createTradingPost(post,user).then((result) => {
                 console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
             })
+
+            if(setIsCompleted){
+                navigate('/mainPage');
+            }
+
         });
     }
     else if(imageName !== "not uploaded")

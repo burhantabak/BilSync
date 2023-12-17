@@ -5,6 +5,8 @@ import InputField from './ForumComponents/InputField';
 import { useData } from '../Context/DataContext';
 import { uploadFileCall } from '../calling/imageCalling';
 import { createDonationPost } from '../calling/postCreationCalling';
+import { useNavigate } from 'react-router-dom';
+
 export default function DonationForm() {
     const [hashtags,setHashtags] = useState([]);
     const [title, setTitle] = useState("");
@@ -13,6 +15,8 @@ export default function DonationForm() {
     const {user} = useData();
     const [description, setDescription] = useState("");
     const [imageFile, setImageFile] = useState(null);
+    const navigate = useNavigate();
+
       const handlePostCreation = (event) => {
         event.preventDefault();
         let imageName = "";
@@ -43,7 +47,12 @@ export default function DonationForm() {
             console.log("Post object:", borrowPost);
             createDonationPost(borrowPost,user).then((result) => {
                 console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
-            });}
+            });
+            if(setIsCompleted){
+                navigate('/mainPage');
+            }
+        
+        }
         else{
             setErrorMessage(imageName)
         }

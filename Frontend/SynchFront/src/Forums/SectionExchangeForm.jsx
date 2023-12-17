@@ -5,6 +5,9 @@ import InputField from './ForumComponents/InputField';
 import { useData } from '../Context/DataContext';
 import { createSectionExchangePost } from '../calling/postCreationCalling';
 import { uploadFileCall } from '../calling/imageCalling';
+import { useNavigate } from 'react-router-dom';
+
+
 export default function SectionExchangeForm() {
     const [hashtags,setHashtags] = useState([]);
     const [title, setTitle] = useState("");
@@ -15,6 +18,8 @@ export default function SectionExchangeForm() {
     const [imageFile, setImageFile] = useState(null);
     const [price, setPrice] = useState(0);
     const [iban, setIban] = useState("");
+    const navigate = useNavigate();
+
     const handlePostCreation = (event) => {
         event.preventDefault();
         let imageName = "";
@@ -37,7 +42,13 @@ export default function SectionExchangeForm() {
     
             createSectionExchangePost(post,user).then((result) => {
                 console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
-            });}
+            });
+            
+            if(setIsCompleted){
+                navigate('/mainPage');
+            }   
+        
+        }
         else{
             setErrorMessage(imageName)
         }

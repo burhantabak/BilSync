@@ -6,6 +6,7 @@ import DateInput from './ForumComponents/DateInput';
 import { useData } from '../Context/DataContext';
 import { uploadFileCall } from '../calling/imageCalling';
 import { createBorrowingPost } from '../calling/postCreationCalling';
+import { useNavigate } from "react-router-dom";
 
 export default function BorrowForm() {
     const [hashtags,setHashtags] = useState([]);
@@ -17,6 +18,9 @@ export default function BorrowForm() {
     const [imageFile, setImageFile] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+
+    const navigate = useNavigate();
+
     const addTag= (event)=>{
         if (event.target.value !== "") {
             setHashtags([...hashtags, event.target.value]);
@@ -65,7 +69,11 @@ export default function BorrowForm() {
 
         createDonationPost(borrowPost,user).then((result) => {
             console.log(result);result === 200 ? setIsCompleted(true) : setErrorMessage(result);
-        });}
+        });
+        if(setIsCompleted){
+            navigate('/mainPage');
+        }
+    }
     else{
         setErrorMessage(imageName)
     }
