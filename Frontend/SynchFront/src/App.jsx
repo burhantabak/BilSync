@@ -20,6 +20,7 @@ import AddAccount from "./statics/AddAccount.jsx"
 import ReportsPage from "./Components/Reports.jsx"
 import EditProfilePage from "./statics/EditProfilePage.jsx"
 import TransactionPage from "./Components/Transaction.jsx"
+import MyTransactionPage from "./statics/MyTransactions.jsx"
 
 function App() {
   const handleBuyNow = () => {
@@ -53,6 +54,8 @@ function App() {
               <Route path="/admin/addAccount" element={<ProtectedRoute adminOnly><AddAccount/></ProtectedRoute>}/>
               <Route path="/admin/Reports" element = {<ProtectedRoute adminOnly><ReportsPage/></ProtectedRoute>}/>
               <Route path="/admin/adminPanel" element={<ProtectedRoute adminOnly><AdminPanel/></ProtectedRoute>}/>
+              <Route path="/myTransactions" element={<ProtectedRoute><MyTransactionPage/></ProtectedRoute>}/>
+
               <Route path="/aboutUs" element = {<AboutUs/>}/>
               <Route path="/*" element={<Navigate to="/login" replace={true} />}/>
             </Routes>
