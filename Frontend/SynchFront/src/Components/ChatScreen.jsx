@@ -20,7 +20,14 @@ export default function ChatScreen({chat,setSelectedChat}) {
         getChatById(chat.chatId,user).then(result=>{console.log("chatInfO:");console.log(result);setChatInfo(result)})
       }
     }
-    ,[chat])
+    ,[]);
+  useEffect(()=>{
+    const pollingInterval = 2500;
+    const pollingId = setInterval(()=>{
+      getChatById(chat.chatId,user).then(result=>{console.log(result);setChatInfo(result)});
+      return ()=>clearInterval(pollingId);
+    },pollingInterval)
+  },[])
     if(!chat || !chatInfo){
       return <h1>loading chat...</h1>
     }

@@ -51,16 +51,6 @@ export default function CommentComponent({commentList}){
     )
   }
 function CommentItem({isReplyComment, commenterName, commenterText,likeNo,handleReportClick,showReportBox,setShowReportBox,setReportReason,reportReason, commentId, commentDate}){
-  
-  // const [showReportBox, setShowReportBox] = useState(false);
-
-   //const handleReportClick = () => {
-  //   // Implement your logic for handling report click here
-  //   console.log('Report clicked for comment:', commenterText);
-
-  //   // Set showReportBox to true to open the modal
-  //   setShowReportBox(true);
-  // };
 
 
     const [isLiked, setisLiked] = useState(false);
