@@ -7,6 +7,9 @@ import getAllUsers from "../calling/userCalling";
 import matchUserID from "../calling/matchUserId";
 import { getChats } from "../calling/chatsCalling";
 import { getImage } from "../calling/imageCalling";
+import retrieveTransactions from "../calling/TransactionCaller.jsx/getAllTransactions";
+
+import { useEffect } from "react";
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
@@ -53,6 +56,36 @@ export const DataProvider = ({ children }) => {
       )
     });
   }
+
+  useEffect(() => {
+    if (user && user.token) {
+      const fetchTransactions = async () => {
+        try {
+          const transactions = await retrieveTransactions(user);
+          console.log(transactions);
+          console.log("TRANSACTIONNNNNNNNNNNNNNNNNNNNNNNNNNNN", transactions[0].id);
+  
+          // Check if transactions is undefined or null
+          if (transactions == null) {
+            console.log('No transactions yet.');
+            return;
+          }
+  
+          // Update your state with the retrieved transactions
+          // Assuming the transactions are an array, update as needed
+          console.log(transactions); // Ensure you see the transactions in the console
+        } catch (error) {
+          console.error('Error fetching transactions:', error);
+        }
+      };
+  
+      fetchTransactions();
+    }
+  }, [user]);
+
+  // if(transactions.takerId == user.userId()&& transaction.status == PENDING TAKER APPROVAL){ display transactiosn } (button name = Approve As Taker. onCLick request; )
+  
+
   const getThePosts = ()=>{
     setIsPostsLoading(true);
     console.log("get the posts called");
@@ -72,6 +105,13 @@ export const DataProvider = ({ children }) => {
     // Update the post object with the image data
     return { ...post, imageData };
   });
+
+
+
+
+
+
+
 
   // Wait for all image fetch operations to complete
   Promise.all(updatedPostList)
