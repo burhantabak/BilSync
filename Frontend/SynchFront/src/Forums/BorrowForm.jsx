@@ -20,17 +20,6 @@ export default function BorrowForm() {
     const [endDate, setEndDate] = useState(new Date());
 
     const navigate = useNavigate();
-
-    const addTag= (event)=>{
-        if (event.target.value !== "") {
-            setHashtags([...hashtags, event.target.value]);
-            event.target.value = "";
-            console.log(hashtags)
-          }
-    };
-    const removeTags = indexToRemove => {
-        setHashtags([...hashtags.filter((_, index) => index !== indexToRemove)]);
-      };
     const handlePostCreation = (event) => {
     event.preventDefault();
     let imageName = "";

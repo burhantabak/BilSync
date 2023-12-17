@@ -103,7 +103,7 @@ export const DataProvider = ({ children }) => {
     setUser(null);
   }
   
-  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
+  const value = useMemo(() => ({chatList,getTheChats,postList, user, login, logout, error, getThePosts,isPostsLoading,getTheUsers, allUsers}), [allUsers,isPostsLoading,postList,chatList,user,login,logout, error]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
