@@ -47,7 +47,7 @@ function Profile(){
   const {user} = useData();
     return(
       <div className='flex items-center'>
-          <div className='mr-2 rounded-full h-8 w-8 bg-gray-500'></div>
+          <img className='mr-2 rounded-full h-8 w-8 bg-gray-500' src={user.imageData? user.imageData: "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"}/>
           <h2 className='inline-block'> {user.name}</h2>
           <ChevronDownIcon className='w-5 h-5'/>
       </div>
