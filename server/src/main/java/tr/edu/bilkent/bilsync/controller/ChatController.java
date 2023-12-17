@@ -1,6 +1,7 @@
 package tr.edu.bilkent.bilsync.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import tr.edu.bilkent.bilsync.dto.ChatDto;
 import tr.edu.bilkent.bilsync.dto.ChatMessageDto;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
-import tr.edu.bilkent.bilsync.repository.UserRepository;
 import tr.edu.bilkent.bilsync.service.ChatService;
 
 import java.util.List;
@@ -26,18 +26,14 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    private final UserRepository userRepository;
-
     /**
      * Constructor for the ChatController class.
      *
      * @param chatService     The service responsible for handling chat-related operations.
-     * @param userRepository  The repository for user-related operations.
      */
     @Autowired
-    public ChatController(ChatService chatService, UserRepository userRepository) {
+    public ChatController(ChatService chatService) {
         this.chatService = chatService;
-        this.userRepository = userRepository;
     }
 
     /**
@@ -51,9 +47,13 @@ public class ChatController {
     public ResponseEntity<String> createChat(
             @RequestBody ChatDto chatDto,
             @AuthenticationPrincipal UserEntity currentUser) {
-        chatService.createChat(chatDto, currentUser);
-        return ResponseEntity.ok("Chat created successfully");
-    } // todo check if the same private chat exists
+        try{
+            chatService.createChat(chatDto, currentUser);
+            return ResponseEntity.ok("Chat created successfully");
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
     /**
      * Retrieves the list of chats for the authenticated user.
@@ -63,14 +63,13 @@ public class ChatController {
      */
     @GetMapping("/chats")
     public ResponseEntity<List<ChatDto>> getUserChats(@AuthenticationPrincipal UserEntity currentUser) {
-        List<ChatDto> userChats = chatService.getChatsByUser(currentUser).stream().map(chat -> {
-            ChatDto chatDto = new ChatDto(chat);
-            Long otherUserId = chatDto.getUserIds().stream().filter(id -> id != currentUser.getId()).findFirst().orElseThrow(() -> new RuntimeException("Invalid chat"));
-            UserEntity otherUser = userRepository.findById(otherUserId).orElseThrow(() -> new RuntimeException("Invalid Chat"));
-            chatDto.setChatName(otherUser.getName());
-            return chatDto;
-        }).toList();
-        return ResponseEntity.ok(userChats);
+        try {
+            List<ChatDto> userChats = chatService.getChatsByUser(currentUser);
+            return ResponseEntity.ok(userChats);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
     }
 
     /**
@@ -86,7 +85,11 @@ public class ChatController {
             @PathVariable Long chatId,
             @RequestBody List<Long> inviteeIds,
             @AuthenticationPrincipal UserEntity currentUser) {
-        chatService.inviteUsers(chatId, inviteeIds, currentUser);
+        try {
+            chatService.inviteUsers(chatId, inviteeIds, currentUser);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
         return ResponseEntity.ok("Invite sent successfully.");
     }
 
@@ -100,8 +103,12 @@ public class ChatController {
      */
     @PostMapping("/{chatId}/sendMessage")
     public ResponseEntity<String> sendMessageToChat(@PathVariable Long chatId, @RequestBody ChatMessageDto chatMessageDto, @AuthenticationPrincipal UserEntity currentUser) {
-        chatService.sendMessageToChat(chatId, chatMessageDto, currentUser);
-        return ResponseEntity.ok("Message sent successfully.");
+        try {
+            chatService.sendMessageToChat(chatId, chatMessageDto, currentUser);
+            return ResponseEntity.ok("Message sent successfully.");
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     /**
@@ -113,7 +120,7 @@ public class ChatController {
      */
     @GetMapping("/{chatId}")
     public ResponseEntity<List<ChatMessageDto>> getMessages(@PathVariable Long chatId, @AuthenticationPrincipal UserEntity currentUser) {
-        List<ChatMessageDto> messages = chatService.getMessagesByChatId(chatId);
+        List<ChatMessageDto> messages = chatService.getMessagesByChatId(chatId, currentUser);
         return ResponseEntity.ok(messages);
     }
 

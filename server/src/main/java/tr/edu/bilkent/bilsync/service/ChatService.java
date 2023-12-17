@@ -9,7 +9,6 @@ import tr.edu.bilkent.bilsync.repository.ChatRepository;
 import tr.edu.bilkent.bilsync.repository.ImageRepository;
 import tr.edu.bilkent.bilsync.repository.UserRepository;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,18 +29,29 @@ public class ChatService {
         this.imageRepository = imageRepository;
     }
 
-    public List<ChatMessageDto> getMessagesByChatId(Long chatId) {
+    public List<ChatMessageDto> getMessagesByChatId(Long chatId, UserEntity currentUser) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        if (!userHasAccessToChat(currentUser, chatId)){
+            throw new IllegalArgumentException("You are not a participant of this chat");
+        }
         List<ChatMessage> chatMessages = chat.getChatMessages();
         return chatMessages.stream().map(ChatMessageDto::new).toList();
     }
 
     public void createChat(ChatDto chatDto, UserEntity currentUser) {
-        List<Long> userIds = chatDto.getUserIds();
-        if (!chatDto.isGroupChat() && userIds.size() != 1) {
-            throw new IllegalArgumentException("Cannot create private chat with >2 members");
+        List<Long> userIds = chatDto.getUserIds().stream().distinct().toList();
+        if(userIds.stream().anyMatch(userId -> (userId == currentUser.getId()))){
+            throw new IllegalArgumentException("You cannot add yourself to a chat. You are automatically added to a chat you create, already!");
         }
-
+        if (!chatDto.isGroupChat()) {
+            if (userIds.size() != 1){
+                throw new IllegalArgumentException("Cannot create private chat with !=2 members");
+            }
+            UserEntity otherUser = userRepository.findById(userIds.get(0)).orElseThrow(() -> new IllegalArgumentException("User does not exist"));
+            if (chatRepository.findChatsByUsersContaining(currentUser).stream().filter(Chat::isGroupChat).anyMatch(chat -> chat.getUsers().stream().anyMatch(user -> user.getId() == otherUser.getId()))){
+                throw new IllegalArgumentException("Private chat with these users already exists!");
+            }
+        }
         String chatName = chatDto.getChatName();
         Chat chat = new Chat();
         chat.setGroupChat(chatDto.isGroupChat());
@@ -81,17 +91,24 @@ public class ChatService {
         return chatUser;
     }
 
-    public List<Chat> getChatsByUser(UserEntity user) {
-        return chatRepository.findChatsByUsersContaining(user);
+    public List<ChatDto> getChatsByUser(UserEntity user) {
+        return chatRepository.findChatsByUsersContaining(user).stream().map(chat -> {
+            ChatDto chatDto = new ChatDto(chat);
+            Long otherUserId = chatDto.getUserIds().stream().filter(id -> id != user.getId()).findFirst().orElseThrow(() -> new RuntimeException("Invalid request"));
+            UserEntity otherUser = userRepository.findById(otherUserId).orElseThrow(() -> new IllegalArgumentException("Invalid request"));
+            chatDto.setChatName(otherUser.getName());
+            return chatDto;
+        }).toList();
     }
 
     public void inviteUsers(Long chatId, List<Long> inviteeIds, UserEntity currentUser) {
-        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new IllegalArgumentException("Chat not found."));
+
         ChatUser adminUser = chat.getUsers().stream()
                 .filter(e -> e.getStatus() == ChatUserStatus.GROUP_ADMIN)
                 .filter(e -> e.getUser().getId() == currentUser.getId())
                 .findAny()
-                .orElseThrow(RuntimeException::new); // if current user is not the admin of the group, an exc is thrown
+                .orElseThrow(() -> new IllegalArgumentException("You are not the admin of this group"));
 
         Set<Long> memberIds = chat.getUsers()
                 .stream()
@@ -101,20 +118,23 @@ public class ChatService {
 
         for (Long userId : inviteeIds) {
             if (memberIds.contains(userId)) {
-                throw new RuntimeException("Member " + userId + " already in group");
+                throw new IllegalArgumentException("At least one member is already in group");
             }
         }
         inviteeIds
                 .stream()
                 .distinct()
                 .map(userRepository::findById)
-                .map(e -> e.orElseThrow(() -> new RuntimeException("User not found.")))
+                .map(e -> e.orElseThrow(() -> new IllegalArgumentException("User not found.")))
                 .forEach(e -> addUserToChat(chat, e, ChatUserStatus.PENDING_REQUEST));
         chatRepository.save(chat);
     }
 
     public ChatMessageDto sendMessageToChat(Long chatId, ChatMessageDto chatMessageDto, UserEntity currentUser) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
+        if (!userHasAccessToChat(currentUser, chat.getId())){
+            throw new IllegalArgumentException("You are not a participant of this chat.");
+        }
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setSender(currentUser);
         chatMessage.setBody(chatMessageDto.getBody());
