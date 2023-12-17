@@ -7,23 +7,24 @@ const MyTransactionPage = () => {
   const { user, transactions, getThePosts } = useData();
   const [isFetching, setIsFetching] = useState(false);
 
-  const handleApproveDeny = async (transactionId, action) => {
+  const handleApprove = async (transactionId) => {
     try {
       setIsFetching(true);
 
-      // Perform the action (approve/deny) for the given transaction
-      if (action === 'approve') {
-        // Assuming you have a function like approveTransaction in your calling
-        await approveTransaction(user, transactionId);
-      } else if (action === 'deny') {
-        // Assuming you have a function like takerApproval in your calling
-        await takerApproval(user, transactionId);
-      }
+      if (transactionId) {
+        if (user.userId === transactions.find((t) => t.id === transactionId)?.takerId) {
+          // Approve as Taker
+          await takerApproval(user, transactionId);
+        } else if (user.userId === transactions.find((t) => t.id === transactionId)?.giverId) {
+          // Approve as Giver
+          await approveTransaction(user, transactionId);
+        }
 
-      // Refresh posts after approval/deny
-      getThePosts();
+        // Refresh posts after approval
+        getThePosts();
+      }
     } catch (error) {
-      console.error('Error handling approval/deny:', error);
+      console.error('Error handling approval:', error);
     } finally {
       setIsFetching(false);
     }
@@ -47,7 +48,7 @@ const MyTransactionPage = () => {
             <div className="flex flex-row space-x-2">
               {transaction.takerId === user.userId && (
                 <button
-                  onClick={() => handleApproveDeny(transaction.id, 'approve')}
+                  onClick={() => handleApprove(transaction.id)}
                   className="rounded-md bg-green-500 text-white px-4 py-1 hover:bg-green-600"
                   disabled={transaction.status === 'Approved' || isFetching}
                 >
@@ -56,11 +57,11 @@ const MyTransactionPage = () => {
               )}
               {transaction.giverId === user.userId && (
                 <button
-                  onClick={() => handleApproveDeny(transaction.id, 'deny')}
-                  className="rounded-md bg-red-500 text-white px-4 py-1 hover:bg-red-600"
-                  disabled={transaction.status === 'Denied' || isFetching}
+                  onClick={() => handleApprove(transaction.id)}
+                  className="rounded-md bg-blue-500 text-white px-4 py-1 hover:bg-blue-600"
+                  disabled={transaction.status === 'Approved' || isFetching}
                 >
-                  Deny As Giver
+                  Approve As Giver
                 </button>
               )}
             </div>
