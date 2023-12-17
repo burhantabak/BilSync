@@ -12,16 +12,30 @@ import tr.edu.bilkent.bilsync.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+/**
+ * Controller class for handling user-related operations.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
     UserRepository userRepository;
 
+    /**
+     * Constructor for UserController, injecting the required UserRepository.
+     *
+     * @param userRepository The repository for accessing user data.
+     */
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Retrieves a list of all users.
+     *
+     * @return Iterable containing all users.
+     */
     @CrossOrigin
     @GetMapping("/users")
     public Iterable<UserEntity> listUsers(){
@@ -29,6 +43,11 @@ public class UserController {
         return users;
     }
 
+    /**
+     * Retrieves a list of all users with secure information.
+     *
+     * @return List of UserEntityDto containing secure user information.
+     */
     @CrossOrigin
     @GetMapping("/usersSecure")
     public List<UserEntityDto> listUsersSecure() {
@@ -41,6 +60,7 @@ public class UserController {
                         userEntity.getName(),
                         userEntity.getProfileImageName(),
                         userEntity.getBio(),
+                        userEntity.getAccountType(),
                         userEntity.isBanned()
                 ))
                 .collect(Collectors.toList());
@@ -48,6 +68,11 @@ public class UserController {
         return userDtoList;
     }
 
+    /**
+     * Retrieves the user profile information.
+     *
+     * @return A welcome message for the user profile.
+     */
     @CrossOrigin
     @GetMapping("/userProfile")
     @PreAuthorize(value = "hasAuthority('ROLE_USER')")
@@ -55,6 +80,14 @@ public class UserController {
         return "Welcome to User Profile";
     }
 
+    /**
+     * Edits the user profile based on the provided parameters.
+     *
+     * @param currentUser       The currently authenticated user.
+     * @param bio               The new bio to be set for the user.
+     * @param profileImageName  The new profile image name to be set for the user.
+     * @return ResponseEntity indicating the result of the operation with an appropriate message.
+     */
     @CrossOrigin
     @GetMapping("/editProfile")
     @PreAuthorize(value = "hasAuthority('ROLE_USER')")
@@ -78,6 +111,11 @@ public class UserController {
     }
     //todo create endpoint for profile viewing
 
+    /**
+     * Retrieves the admin profile information.
+     *
+     * @return A welcome message for the admin profile.
+     */
     @CrossOrigin
     @GetMapping("/admin/adminProfile")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

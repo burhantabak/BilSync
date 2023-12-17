@@ -17,6 +17,9 @@ import tr.edu.bilkent.bilsync.service.ChatService;
 
 import java.util.List;
 
+/**
+ * Controller class for handling chat-related operations, including WebSocket messaging.
+ */
 @Controller
 @RequestMapping("/chat")
 public class ChatController {
@@ -25,12 +28,25 @@ public class ChatController {
 
     private final UserRepository userRepository;
 
+    /**
+     * Constructor for the ChatController class.
+     *
+     * @param chatService     The service responsible for handling chat-related operations.
+     * @param userRepository  The repository for user-related operations.
+     */
     @Autowired
     public ChatController(ChatService chatService, UserRepository userRepository) {
         this.chatService = chatService;
         this.userRepository = userRepository;
     }
 
+    /**
+     * Creates a new chat.
+     *
+     * @param chatDto       The ChatDto containing information about the chat.
+     * @param currentUser   The authenticated user creating the chat.
+     * @return ResponseEntity indicating the result of the chat creation operation.
+     */
     @PostMapping("/create")
     public ResponseEntity<String> createChat(
             @RequestBody ChatDto chatDto,
@@ -39,6 +55,12 @@ public class ChatController {
         return ResponseEntity.ok("Chat created successfully");
     } // todo check if the same private chat exists
 
+    /**
+     * Retrieves the list of chats for the authenticated user.
+     *
+     * @param currentUser   The authenticated user.
+     * @return ResponseEntity containing the list of chat information.
+     */
     @GetMapping("/chats")
     public ResponseEntity<List<ChatDto>> getUserChats(@AuthenticationPrincipal UserEntity currentUser) {
         List<ChatDto> userChats = chatService.getChatsByUser(currentUser).stream().map(chat -> {
@@ -51,6 +73,14 @@ public class ChatController {
         return ResponseEntity.ok(userChats);
     }
 
+    /**
+     * Invites users to a group chat.
+     *
+     * @param chatId        The ID of the chat.
+     * @param inviteeIds    The list of user IDs to be invited.
+     * @param currentUser   The authenticated user inviting others.
+     * @return ResponseEntity indicating the result of the invitation operation.
+     */
     @PostMapping("/{chatId}/inviteUsers")
     public ResponseEntity<String> inviteUsersToGroup(
             @PathVariable Long chatId,
@@ -60,18 +90,41 @@ public class ChatController {
         return ResponseEntity.ok("Invite sent successfully.");
     }
 
+    /**
+     * Sends a message to a chat.
+     *
+     * @param chatId            The ID of the chat.
+     * @param chatMessageDto    The ChatMessageDto containing the message information.
+     * @param currentUser       The authenticated user sending the message.
+     * @return ResponseEntity indicating the result of the message sending operation.
+     */
     @PostMapping("/{chatId}/sendMessage")
     public ResponseEntity<String> sendMessageToChat(@PathVariable Long chatId, @RequestBody ChatMessageDto chatMessageDto, @AuthenticationPrincipal UserEntity currentUser) {
         chatService.sendMessageToChat(chatId, chatMessageDto, currentUser);
         return ResponseEntity.ok("Message sent successfully.");
     }
 
+    /**
+     * Retrieves messages from a chat.
+     *
+     * @param chatId        The ID of the chat.
+     * @param currentUser   The authenticated user requesting messages.
+     * @return ResponseEntity containing the list of messages in the chat.
+     */
     @GetMapping("/{chatId}")
     public ResponseEntity<List<ChatMessageDto>> getMessages(@PathVariable Long chatId, @AuthenticationPrincipal UserEntity currentUser) {
         List<ChatMessageDto> messages = chatService.getMessagesByChatId(chatId);
         return ResponseEntity.ok(messages);
     }
 
+    /**
+     * WebSocket endpoint for sending messages to a chat.
+     *
+     * @param chatId            The ID of the chat.
+     * @param chatMessageDto    The ChatMessageDto containing the message information.
+     * @param currentUser       The authenticated user sending the message.
+     * @return ChatMessageDto representing the sent message.
+     */
     @MessageMapping("/chat/{chatId}/sendMessage")
     @SendTo("/topic/chat/{chatId}")
     public ChatMessageDto sendMessageToChatWebSocket(@DestinationVariable Long chatId, @RequestBody ChatMessageDto chatMessageDto, @AuthenticationPrincipal UserEntity currentUser) {
@@ -85,6 +138,12 @@ public class ChatController {
         }
     }
 
+    /**
+     * WebSocket endpoint for subscribing to a chat.
+     *
+     * @param chatId        The ID of the chat.
+     * @param currentUser   The authenticated user subscribing to the chat.
+     */
     @MessageMapping("/subscribe/chat/{chatId}")
     public void subscribeToChat(@DestinationVariable Long chatId, @AuthenticationPrincipal UserEntity currentUser) {
 

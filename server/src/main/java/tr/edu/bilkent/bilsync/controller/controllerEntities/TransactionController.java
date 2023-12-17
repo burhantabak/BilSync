@@ -6,14 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import tr.edu.bilkent.bilsync.dto.TransactionDto;
 import tr.edu.bilkent.bilsync.entity.Transaction;
 import tr.edu.bilkent.bilsync.entity.TransactionState;
 import tr.edu.bilkent.bilsync.entity.UserEntity;
 import tr.edu.bilkent.bilsync.service.TransactionService;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -30,6 +28,11 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
+    /**
+     * Constructor for the TransactionController class.
+     *
+     * @param transactionService The service responsible for handling transaction-related operations.
+     */
     @Autowired
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
@@ -120,6 +123,12 @@ public class TransactionController {
         return handleTransactionUpdate(id, () -> transactionService.updateTransaction(id, TransactionState.DEPOSITED));
     }
 
+    /**
+     * Retrieves a list of transactions for a specific post.
+     *
+     * @param postId The ID of the post for which transactions are to be retrieved.
+     * @return A ResponseEntity containing the list of transactions for the specified post.
+     */
     @GetMapping("/by-post/{postId}")
     public ResponseEntity<List<Transaction>> getTransactionsByPostId(@PathVariable Long postId) {
         List<Transaction> transactions = transactionService.getTransactionsByPostId(postId);
