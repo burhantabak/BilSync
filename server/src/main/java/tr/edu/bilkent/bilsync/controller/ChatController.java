@@ -51,6 +51,7 @@ public class ChatController {
             chatService.createChat(chatDto, currentUser);
             return ResponseEntity.ok("Chat created successfully");
         } catch (IllegalArgumentException e){
+            System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

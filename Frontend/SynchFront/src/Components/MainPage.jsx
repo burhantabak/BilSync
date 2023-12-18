@@ -3,6 +3,7 @@ import FeedPage from './FeedPage';
 import { useData } from '../Context/DataContext';
 import ChatScreen from './ChatScreen.jsx';
 import { createChat, getChats } from '../calling/chatsCalling.jsx';
+import {useNavigate} from "react-router-dom";
 
 export default function MainPage() {
     const {postList,chatList,getThePosts,isPostsLoading,getTheChats,getTheUsers,allUsers} = useData();
@@ -10,6 +11,7 @@ export default function MainPage() {
     useEffect(()=> {getThePosts();getTheChats();getTheUsers();}
         ,[]
     );
+    const nav = useNavigate()
     const [filterTrading, setFilterTrading] = useState(true);
     const [filterForum, setFilterForum] = useState(true);
     const [filterLostnFound, setFilterLostnFound] = useState(true);
@@ -17,7 +19,13 @@ export default function MainPage() {
     const [searchInput, setSearchInput] = useState('');
     const [selectedUsers,setSelectedUsers] = useState([]);
     const [isCreateChatSelected,setIsCreateChatSelected] = useState(false);
-    
+    function handleChatChange(chat){
+        console.log(selectedChat)
+        if(selectedChat){
+            nav("/login")
+        }
+        setSelectedChat(chat)
+    }
     console.log("selected chat" + selectedChat)
   return (  
     <div className='flex w-full divide-x-2 mt-4'>
@@ -75,7 +83,7 @@ export default function MainPage() {
           </button>
         </div>
             {Array.isArray(chatList) && chatList.filter((chat) => chat.chatName.toLowerCase().includes(searchInput.toLowerCase())
-            ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=> setSelectedChat(chat)}/>)}
+            ).map((chat,index)=><ChatItem key={index} chat={chat} handleChat ={()=>handleChatChange(chat)}/>)}
         </div>
         <CreateChatModal setIsCreateChatSelected={setIsCreateChatSelected} allUsers={allUsers}
         isChatSelected={isCreateChatSelected} selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers}/>
@@ -117,11 +125,12 @@ function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsC
           }
         }
       };
-      const [groupName,setGroupName] = useState("");
+      // const [groupName,setGroupName] = useState("");
       const [nameInput, setNameInput] = useState("");
       const [isFocused, setIsFocused] = useState(false);
       const [errorMessage,setErrorMessage] = useState("");
       const [submitMessage,setSubmitMessage] = useState("");
+      const [groupName,setGroupName] = useState('')
       const searchResult = allUsers.filter((userItem)=>userItem.name.match(nameInput))
     return(
         <div>
@@ -181,6 +190,7 @@ function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsC
             <input
             name='hashtag'
             type="text"
+            onChange={((event)=>setGroupName(event.target.value))}
             placeholder="Press enter to add tags"
             className="bg-gray-50 border border-gray-300
             text-gray-900 sm:text-sm rounded-lg focus:outline focus:outline-2

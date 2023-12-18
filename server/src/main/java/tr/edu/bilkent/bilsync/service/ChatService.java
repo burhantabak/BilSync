@@ -145,9 +145,11 @@ public class ChatService {
     public List<ChatDto> getChatsByUser(UserEntity user) {
         return chatRepository.findChatsByUsersContaining(user).stream().map(chat -> {
             ChatDto chatDto = new ChatDto(chat);
-            Long otherUserId = chatDto.getUserIds().stream().filter(id -> id != user.getId()).findFirst().orElseThrow(() -> new RuntimeException("Invalid request"));
-            UserEntity otherUser = userRepository.findById(otherUserId).orElseThrow(() -> new IllegalArgumentException("Invalid request"));
-            chatDto.setChatName(otherUser.getName());
+            if (!chat.isGroupChat()){
+                Long otherUserId = chatDto.getUserIds().stream().filter(id -> id != user.getId()).findFirst().orElseThrow(() -> new RuntimeException("Invalid request"));
+                UserEntity otherUser = userRepository.findById(otherUserId).orElseThrow(() -> new IllegalArgumentException("Invalid request"));
+                chatDto.setChatName(otherUser.getName());
+            }
             return chatDto;
         }).toList();
     }

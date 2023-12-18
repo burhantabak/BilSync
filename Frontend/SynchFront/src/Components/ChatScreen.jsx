@@ -19,13 +19,17 @@ export default function ChatScreen({chat,setSelectedChat}) {
       {
         getChatById(chat.chatId,user).then(result=>{console.log("chatInfO:");console.log(result);setChatInfo(result)})
       }
+
     }
-    ,[]);
+    ,[chat]);
   useEffect(()=>{
     const pollingInterval = 2500;
     const pollingId = setInterval(()=>{
       if(chat){getChatById(chat.chatId,user).then(result=>{setChatInfo(result)});}
-      return ()=>clearInterval(pollingId);
+      return ()=> {
+          console.log("clearInterval will be called")
+          clearInterval(pollingId);
+      }
     },pollingInterval)
   },[])
     if(!chat || !chatInfo){
@@ -63,11 +67,19 @@ function MessageScreen({messages}){
 }
 function MessageItem({messageData}){
   const {body,senderId} = messageData;
-    const {user} = useData();
+
+    const {user,allUsers} = useData();
+    console.log(allUsers)
+    console.log(senderId)
+    const userName = allUsers.find((userItem)=>{return userItem.id == senderId}).name;
+    console.log(userName);
     const isReceived = senderId == user.userId; 
     return(
       <div className={`flex ${!isReceived || "flex-row-reverse"} py-2 gap-2`}>
-        <div className='h-8 w-8 rounded-full bg-gray-400'></div>
+        <div>
+            <div className='h-8 w-8 rounded-full bg-gray-400'></div>
+            <p className='font-light'>{userName}</p>
+        </div>
         <div className={`max-w-md ${!isReceived ? "bg-gray-400":"bg-primary-400"} text-white p-3 rounded-3xl`}>
             <p>{body}</p>
         </div>

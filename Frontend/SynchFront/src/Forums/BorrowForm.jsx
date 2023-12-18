@@ -29,12 +29,12 @@ export default function BorrowForm() {
             const borrowPost = {
                 title: title,
                 description: description,
-                imageName: imageName ? imageName : "",
+                imageName: name,
                 startDate:startDate.toISOString(),
                 tags: hashtags,
                 endDate:endDate.toISOString(),
             };
-        
+
             // Debugging: Log the post object
             console.log("Post object:", borrowPost);
     
