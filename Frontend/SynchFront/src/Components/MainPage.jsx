@@ -109,8 +109,9 @@ function ChatItem({chat,handleChat}){
         </div>
     );
 }
-function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsCreateChatSelected,allUsers}){
-    const {user} = useData();
+function CreateChatModal({isChatSelected, selectedUsers,setSelectedUsers, setIsCreateChatSelected}){
+    const {user,allUsers} = useData();
+    console.log(allUsers)
     const removeUser = (indexToRemove) => {
         setSelectedUsers([...selectedUsers.filter((_, index) => index !== indexToRemove)]);
       };
