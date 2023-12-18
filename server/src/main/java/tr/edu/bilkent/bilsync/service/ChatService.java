@@ -229,6 +229,6 @@ public class ChatService {
      */
     public boolean userHasAccessToChat(UserEntity currentUser, Long chatId) {
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found."));
-        return chat.getUsers().stream().filter(chatUser -> Objects.equals(chatUser.getId(), currentUser.getId())).count() == 1;
+        return chat.getUsers().stream().filter(chatUser -> Objects.equals(chatUser.getUser().getId(), currentUser.getId())).count() == 1;
     }
 }

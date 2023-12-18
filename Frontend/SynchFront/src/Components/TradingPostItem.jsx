@@ -15,7 +15,7 @@ export default function TradingPostItem({post, isProfile}) {
     const [isDownvote,setDownvote] = useState(false)
     const [commentList, setCommentList] = useState(post.commentList);
     const [transactionComplete, setTransactionComplete] = useState(false);
-    const [isSold, setIsSold] = useState(post.isHeld || false);
+    const [isSold, setIsSold] = useState((post.isHeld || post.resolved) || false);
     const {user} = useData();
     const navigate = useNavigate();
 
@@ -100,7 +100,7 @@ export default function TradingPostItem({post, isProfile}) {
         {!isProfile && <div className='w-1/2 px-3 py-2 flex divide-x gap-5'>
             {!post.imageData ? 
             <img alt='post-image' 
-            src='basys3.png'
+            src='https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'
              className='grow-2 my-2 mx-4 w-2/3 h-2/3 overflow-hidden'></img>:
               <img src={post.imageData} 
               alt={`${post.imageName}`}/>}

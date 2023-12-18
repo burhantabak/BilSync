@@ -88,7 +88,6 @@ export default function ForumForm() {
             <ImageInput imageFile={imageFile} setImageFile={setImageFile}/>
             <InputField type={"text"} name={"Add Title"} handleEvent={setTitle}/>
             <InputField type={"text"} name={"Add Description"} handleEvent={setDescription}/>
-            <RadioButton isAnonymity={isAnonymity} handleRadioChange={handleRadioChange}/>
             <div className='flex items-center mb-3'>
           <input
             checked={isAnonymity}

@@ -191,7 +191,7 @@ export function createNormalPost(post,user){
         "description": post.description,
         "imageName": post.imageName,
         "hashtagList":post.tags,
-        "isAnonymous": post.isAnonymous,
+        "isAnonymous": false,
       });
         console.log(raw)
         var requestOptions = {
