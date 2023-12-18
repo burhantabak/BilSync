@@ -164,7 +164,7 @@ export default function AdminPanel() {
               onClick={handleChangeEmailForm}
               className="mt-2 px-4 py-2 bg-blue-700 text-white rounded-md"
             >
-              Submit Report
+              Change Email
             </button>
          </div>
         </div>

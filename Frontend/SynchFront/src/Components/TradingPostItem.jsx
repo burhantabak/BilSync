@@ -107,12 +107,12 @@ export default function TradingPostItem({post, isProfile}) {
             <div className='grow-2 px-3 py-1 font-semibold flex flex-col justify-around'>
                 {post.price && <h2>{post.price}TL</h2>}
                 <div className='flex gap-5'>
-                <button type="submit" onClick={handleBuyClick} disabled = {isSold} 
-                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                {post.postType === 6 && isSold ? 'SOLD' : 
-                post.postType === 2 ? 'Take Donation' : 
-                post.postType === 1 ? 'Borrow' : 'Buy Now'}
-                </button>
+                    {post.postType !== 2 && <button type="submit" onClick={handleBuyClick} disabled={isSold}
+                             className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        {post.postType === 6 && isSold ? 'SOLD' :
+                            post.postType === 2 ? 'Take Donation' :
+                                post.postType === 1 ? 'Borrow' : 'Buy Now'}
+                    </button>}
                 
                 </div>
             </div>

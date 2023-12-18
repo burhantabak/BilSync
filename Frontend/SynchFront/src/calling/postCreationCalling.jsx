@@ -46,8 +46,6 @@ export function createBorrowingPost(post, user){
         "isAnonymous": false,
         "endDate":post.endDate,
         "beginDate": post.startDate,
-        "price": 12,
-        "iban": "TR 3903409409430049"
       });
         console.log(raw)
         var requestOptions = {
