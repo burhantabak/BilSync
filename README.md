@@ -31,9 +31,6 @@ thus, the Bilkent community needs a united page for Bilkenters only in which peo
   people in need of them.
 - People will be able to message in private rooms, managing communication more quickly than trying to find someone in
   WhatsApp groups for hours.
-- Instead of instructors having their inboxes filled with student questions, they can talk with students more freely
-  here. Different from the direct messaging feature, the students can send what they want through a private request to
-  the instructor. This will save time and space usage for each instructor and student.
 
 ## Goals
 
