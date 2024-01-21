@@ -7,37 +7,30 @@
 
   const ProfilePage = () => {
     const [profilePicture, setProfilePicture] = useState("https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png");
-    const { postList, isPostsLoading, getThePosts, user } = useData();
+    const { postList, isPostsLoading, getThePosts, user, getTheUsers } = useData();
     const [userType, setUserType] = useState(user?user.accountType:"");
-
+    console.log("Checkpoint user " , user);
     const navigate = useNavigate();
-   
-    
-
-  
     const [userPosts, setUserPosts] = useState([]); // Add this line to define userPosts state
-
     const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(false); // New state for user posts loading
+    
+    useEffect(() => {
+      // Call getThePosts and getUsers  only when the component mounts
+      getTheUsers(); // solved problem for real time data fethicng
+      getThePosts();
+    }, []); // Empty dependency array
+
     useEffect(() => {
       if (postList.length) { // Only run if posts are fetched
-        console.log("Checkpoint useeffectseocnd" , postList);
         setIsLoadingUserPosts(true); // Set loading state
         const userPosts = postList.filter((post) => post.authorID === user.userId);
         console.log("Checkpoint userposts" , userPosts);
         setUserPosts(userPosts); // Update user posts state
         setIsLoadingUserPosts(false); // Reset loading state
-
       }
-    }, [postList]); // Update useEffect dependency
-
-
-
+    }, [postList, user]); // Update useEffect dependency
     
     console.log("Checkpoint ppostlisst" , postList);
-    console.log("Example Post:", postList[0]);
-    console.log("Example Post:", postList[1]);
-    console.log("Example Post:", postList[2]);
-
 
     const handleEditProfile = () => {
       navigate("/editProfile");
@@ -45,15 +38,10 @@
 
     const handleStarPost = (postId) => {
     };
-    console.log(postList);
 
-    console.log(postList);
-    console.log("userPosts: ", userPosts);
-    console.log("are we okay" , postList[0]);
-    console.log("are we okay" , postList[1]);
-    console.log("Gijdillag react test 1" , postList[2]);
-    console.log("Gijdillag react test 2" , postList[2]);
-    console.log("Are we here" , user.bio);
+    console.log("Why user bio is undefined? : " , user.bio);
+
+    // when there is no picture, it fucks up
 
 
     const starredPosts = userPosts.filter((post) => post.isStarred);
@@ -91,7 +79,6 @@
           <div className="space-y-4">
             {/* Post Cards */}
             {userPosts.map((post) => (
-                console.log("are we here?"),
                 console.log(post),   
                 console.log(post.id),
                 console.log("are we here?"),

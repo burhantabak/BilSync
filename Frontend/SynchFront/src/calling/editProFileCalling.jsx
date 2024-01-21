@@ -3,7 +3,10 @@ export function editProfile(profileImageName, bio, user){
     const endpoint = '/user/editProfile';
     const formdata = new FormData();
     formdata.append('bio', bio);
-    formdata.append('profileImageName', profileImageName);
+
+    if (profileImageName !== null) {
+      formdata.append('profileImageName', profileImageName);
+    }
 
     const urlWithParams = `${baseUrl}${endpoint}`;
     return fetch(urlWithParams, {

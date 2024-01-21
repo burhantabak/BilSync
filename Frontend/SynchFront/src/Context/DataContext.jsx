@@ -63,91 +63,79 @@ export const DataProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (user && user.token) {
+    if (user && user.token && !transactions.length) {
       const fetchTransactions = async () => {
         try {
-          const transactions = await retrieveTransactions(user);
-          console.log(transactions);
-          console.log("TRANSACTIONNNNNNNNNNNNNNNNNNNNNNNNNNNN", transactions[0].id);
-
+          const fetchedTransactions = await retrieveTransactions(user);
+  
+          console.log('Transactions:', fetchedTransactions);
+  
           // Check if transactions is undefined or null
-          if (transactions == null) {
+          if (!fetchedTransactions || fetchedTransactions.length === 0) {
             console.log('No transactions yet.');
             return;
           }
-          setTransactions(transactions);
-
-          // Update your state with the retrieved transactions
-          // Assuming the transactions are an array, update as needed
-          console.log(transactions); // Ensure you see the transactions in the console
+  
+          setTransactions(fetchedTransactions);
         } catch (error) {
           console.error('Error fetching transactions:', error);
         }
       };
-
+  
       fetchTransactions();
     }
-  }, [user]);
-
+  }, [user, transactions]);
 
  
 
   // if(transactions.takerId == user.userId()&& transaction.status == PENDING TAKER APPROVAL){ display transactiosn } (button name = Approve As Taker. onCLick request; )
 
 
-  const getThePosts = ()=>{
+  const getThePosts = async () => {
     setIsPostsLoading(true);
     console.log("get the posts called");
-    getAllPosts(user).then(data=>{
-      if(data >= 400){
+  
+    try {
+      const data = await getAllPosts(user);
+  
+      if (data >= 400) {
         setUser(null);
+        return; // Exit early if there's an issue with fetching posts
       }
-
-      getAllUsers(user).then((users)=>{
-        console.log("usersssssssssssssss:");
-        console.log(users);
-        console.log(data)
-        const updatedPostList = matchUserID(users, data,user).map(async (post) => {
-    // Fetch image for each post
-        const imageData = await getImage(post.imageName, user);
-    
-    // Update the post object with the image data
-    return { ...post, imageData };
-  });
-
-  // Wait for all image fetch operations to complete
-  Promise.all(updatedPostList)
-    .then((postsWithImages) => {
-      // Set the updated post list with image data
-      console.log("posts with imagesss")
-      console.log(postsWithImages);
-
-      const updatedVoteCounts = postsWithImages.reduce((acc, post) => {
+  
+      const users = await getAllUsers(user);
+      console.log("Users?:");
+      console.log(users);
+      console.log(data);
+  
+      const updatedPostList = await Promise.all(
+        matchUserID(users, data, user).map(async (post) => {
+          // Fetch image for each post
+          const imageData = await getImage(post.imageName, user);
+  
+          // Update the post object with the image data
+          return { ...post, imageData };
+        })
+      );
+  
+      // Update vote counts
+      const updatedVoteCounts = updatedPostList.reduce((acc, post) => {
         acc[post.id] = post.votes; // Replace 'voteCount' with the actual field in your post object
         return acc;
       }, {});
-
-      setVoteCounts (updatedVoteCounts);
-
-      // getImage(postsWithImages.profileImageName,user).then(result=>{
-      //   const imageDataPosts = {...postsWithImages,authorProfileData: result}
-      //   console.log("image Data posts")
-      //   console.log(imageDataPosts)
-      // })
-      setPostList(postsWithImages);
-
-
-
-    })
-    .catch((error) => {
-      console.error('Error fetching images:', error);
-    });
-
-      })
-      console.log("mathcing user ID::::")
+  
+      setVoteCounts(updatedVoteCounts);
+  
+      // Update post list with image data
+      setPostList(updatedPostList);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    } finally {
+      console.log("matching user ID::::");
       setIsPostsLoading(false);
-    });
-  }
+    }
+  };
+  
   const getTheChats = ()=>{
     getChats(user).then(result=>{if(result){console.log("chatt");console.log(result);setChatList(result)}});
   } 

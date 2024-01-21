@@ -1,5 +1,9 @@
 export default async function getAllUsers(user) {
     try {
+
+      if (!user || !user.token) {
+        throw new Error('User or user token is missing.');
+      }
       var myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${user.token}`);
     

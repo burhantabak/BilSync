@@ -1,7 +1,5 @@
 
-const BASE_URL = 'http://localhost:8080'; // Adjust this based on your backend URL
-
-
+const BASE_URL = 'http://localhost:8080'; 
 
 const retrieveTransactions = (user) => {
 
@@ -17,7 +15,12 @@ const retrieveTransactions = (user) => {
       console.log(response);
 
       return response.json();
-    } else {
+      
+    }
+    else if (response.status === 400) {
+      console.log('No transactions yet.');
+      return []; } // Return an empty array for a 400 status
+    else {
       throw new Error('Transactions could not be loaded . Please try again.');
     }
   }).catch((error) => {
