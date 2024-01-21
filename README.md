@@ -78,7 +78,7 @@ We have used maven. To compile the server codes, follow the steps below:
 * On the terminal, navigate to `server`
 * Run `./mvnw clean install` if you are in sh or run `mvnw.cmd clean install` if you are using windows. Or just
   run `mvn clean install` if you have maven installed.
-* Then, compile the code to a jar with `java -jar target/bilsync-server.jar`
+* Then, run the jar with `java -jar target/bilsync-0.0.1-SNAPSHOT.jar`
 
 We have used JDK 21 for development and test environments.
 
