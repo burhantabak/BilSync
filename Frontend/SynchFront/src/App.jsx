@@ -21,6 +21,8 @@ import ReportsPage from "./Components/Reports.jsx"
 import EditProfilePage from "./statics/EditProfilePage.jsx"
 import TransactionPage from "./Components/Transaction.jsx"
 import MyTransactionPage from "./statics/MyTransactions.jsx"
+import  UserProfile  from "./statics/UserProfile.jsx"
+
 
 function App() {
   const handleBuyNow = () => {
@@ -42,6 +44,7 @@ function App() {
                 <MainPage/>
                 </ProtectedRoute>}/>
 
+              <Route path="/profile/:authorID" element = {<ProtectedRoute userOnly={true} adminOnly={false}><UserProfile/></ProtectedRoute>}/>
               <Route path="/commentScreen" element={<CommentScreen/>}/>
               <Route path="/editAccount" element={<ProtectedRoute userOnly={true} adminOnly={false}><EditAccount/></ProtectedRoute>}/>
               <Route path="/editProfile" element={<ProtectedRoute userOnly={true} adminOnly={false}><EditProfilePage/></ProtectedRoute>}/>

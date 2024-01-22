@@ -64,7 +64,7 @@ import { ArrowLeftIcon } from '@heroicons/react/20/solid';
                     {/* Team Member 3 */}
                     <div className="text-center">
                         <img
-                            src="https://media.licdn.com/dms/image/D4D03AQE9ip_PWaWaCA/profile-displayphoto-shrink_800_800/0/1702173044193?e=1707955200&v=beta&t=ozf-9tLZhMY5ZlOj0wJY8PC-fPxaoZf89ueyTUyHnME"
+                            src="https://media.licdn.com/dms/image/D4D03AQHDAo6KQDzkHw/profile-displayphoto-shrink_800_800/0/1705103913186?e=1711584000&v=beta&t=r3DWF2kaQyIu7zyy2rO_RD_h7yPAKV6If-18VdPAax0"
                             alt="Team Member 3"
                             className="rounded-full w-32 h-32 mx-auto mb-2"
                         />

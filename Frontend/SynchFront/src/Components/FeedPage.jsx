@@ -11,9 +11,7 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
     console.log('Selected Category:', category);
 
   };
-  console.log("PostLissssttttt::::")
   useEffect(()=>{
-    console.log("entered postlist assignment")
     setPostListData(postList);
   },[postList])
 
@@ -23,7 +21,7 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
         {//postList.filter((post)=>{return post.userName.includes(searchBarString)})
         
         postListData.filter((post)=>{
-          console.log('Filtering - Post:', post, 'Selected Category:', selectedCategory);
+          //console.log('Filtering - Post:', post, 'Selected Category:', selectedCategory);
 
           const searchString = searchBarString;
           let categoryType;
@@ -36,7 +34,6 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
           }
           else if(selectedCategory === "By Hashtag"){
             categoryType =  post.hashtagList.map((hashtag)=>{return hashtag}).join(" ");;
-            console.log('Hashtag List:', categoryType);
           }
           else{
             categoryType = post.title;
@@ -48,7 +45,6 @@ export default function FeedPage({postList, filterTrading, filterForum, filterLo
         
         
         .map((post,index)=>{
-            console.log(post)
             // if(post.isTrading &&filterTrading){return <TradingPostItem key={index} post={p ost}/>}
             // else if(post.isLostnFound && filterForum){return <ForumPost key={index} post={post} isLostnFound={true}/>}
             // if(filterForum &&filterLostnFound){ return <ForumPost key={index} post={post} isLostnFound={false}/>}

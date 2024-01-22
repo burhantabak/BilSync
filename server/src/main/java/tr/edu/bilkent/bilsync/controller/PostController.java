@@ -55,6 +55,7 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User does not exist");
         long userId = user.getId();
         post.setAuthorID(userId);
+        post.setAuthorName(user.getName());
 
         if(user.isBanned())
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is banned");

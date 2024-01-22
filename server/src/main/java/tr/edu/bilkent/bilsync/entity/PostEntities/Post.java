@@ -27,6 +27,9 @@ public class Post {
     @Column(nullable = false)
     private long authorID;
 
+    @Column(nullable = false)
+    private String authorName;
+
     @Column(length = 3000, nullable = false)
     private String description;
 
@@ -92,6 +95,13 @@ public class Post {
     public long getAuthorID() {
         return authorID;
     }
+
+    public String getAuthorName() { return authorName;}
+    public void setAuthorName (String authorName) {
+        this.authorName = authorName;
+    }
+
+
 
     public void setAuthorID(long authorID) {
         this.authorID = authorID;

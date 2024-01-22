@@ -16,9 +16,14 @@ export default function TradingPostItem({post, isProfile}) {
     const [commentList, setCommentList] = useState(post.commentList);
     const [transactionComplete, setTransactionComplete] = useState(false);
     const [isSold, setIsSold] = useState((post.isHeld || post.resolved) || false);
-    const {user} = useData();
+    const {user, allUsers} = useData();
     const navigate = useNavigate();
 
+    const foundUser = allUsers.find((user) => user.id == post.authorID);
+  
+
+
+    console.log("pot author id", post.authorID);
     const handleBuyNow = (postId) => {
         // Handle the buy now action, e.g., setTransactionComplete(true)
         // Update the state or perform other actions based on postId
@@ -27,6 +32,15 @@ export default function TradingPostItem({post, isProfile}) {
 
       };
 
+      const handleProfileClick = () => {
+        const clickedUser = allUsers.find((user) => user.id === post.authorID);
+        console.log("clickedUserId in handleProfileClick:", clickedUser); 
+        const userName = clickedUser.name;
+        console.log("CLIKED ON THE USER NAMEEEE", userName);
+      
+        // Use React Router params to pass authorID
+        navigate(`/profile/${userName}`);
+      };
     
 
       const handleBuyClick2 = () => {
@@ -59,9 +73,6 @@ export default function TradingPostItem({post, isProfile}) {
             // Handle the case where the transaction failed
           });
 
-        
-          
-
         if(post.postType!==2){navigate(`/transaction/${post.id}`, );}
         else{navigate('/myTransactions')}
       };
@@ -70,7 +81,16 @@ export default function TradingPostItem({post, isProfile}) {
     <div className='mx-5 my-4 flex flex-col items-center bg-gray-100 rounded-lg divide-y'>
         <div className='flex justify-between w-full items-center px-2'>
                 <div className='flex items-center'>
+                  {user.imageData ? (
+                    <img
+                        src={foundUser.imageData}
+                        alt='user-profile'
+                        className='rounded-full bg-gray-300 w-10 h-10 mr-3'
+                        onClick={handleProfileClick}
+                    />
+                  ):  (
                     <div className='rounded-full bg-gray-300 w-5 h-5 mr-3'></div>
+                )}
                     <div>
                     <p className='font-semibold'>{post.name}</p>
                     <small>

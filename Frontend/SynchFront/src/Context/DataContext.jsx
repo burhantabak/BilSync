@@ -94,25 +94,19 @@ export const DataProvider = ({ children }) => {
   const getThePosts = async () => {
     setIsPostsLoading(true);
     console.log("get the posts called");
-  
     try {
       const data = await getAllPosts(user);
-  
       if (data >= 400) {
         setUser(null);
         return; // Exit early if there's an issue with fetching posts
       }
   
       const users = await getAllUsers(user);
-      console.log("Users?:");
-      console.log(users);
-      console.log(data);
   
       const updatedPostList = await Promise.all(
         matchUserID(users, data, user).map(async (post) => {
           // Fetch image for each post
           const imageData = await getImage(post.imageName, user);
-  
           // Update the post object with the image data
           return { ...post, imageData };
         })
