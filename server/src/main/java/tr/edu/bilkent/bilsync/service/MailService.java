@@ -21,9 +21,9 @@ public class MailService {
      * Constructor for MailService initializing email-related parameters.
      */
     public MailService(){
-        senderEmail = "tuna.saygin@ug.bilkent.edu.tr";
-        senderPassword = "0Y6Bnzf3";
-        smtpHost = "asmtp.bilkent.edu.tr";
+        senderEmail = "bilsyncapp@gmail.com";
+        senderPassword = "cgaeqhlgtupekakf";
+        smtpHost = "smtp.gmail.com";
         smtpPort=587;
         props = createMessageProp();
         session = createMailSession(props);
